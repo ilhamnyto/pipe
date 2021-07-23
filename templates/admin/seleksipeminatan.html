@@ -1,0 +1,134 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Seleksi Peminatan</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-8 col-md-12 col-sm-12 mb-5 mb-xl-0">
+    <div class="card batch-card p-4">
+      <div class="row">
+        <div class="col d-flex flex-column">
+          <h2>Pembukaan Batch Pendaftaran Peminatan</h2>
+          <form action="/api/batch-create" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="batchnum">Batch</label>
+              <input
+                type="number"
+                name="batchnum"
+                min="{{ minbatch }}"
+                class="form-control"
+                value="{{ minbatch }}"
+                placeholder="{{ minbatch }}"
+                disabled
+              />
+            </div>
+            
+            <button type="submit" class="submit-button">
+              <span>Open</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 col-md-12 col-sm-12">
+    {% if batchstatus.isAvailable %}
+        <div
+        class="
+          card
+          batch-card batch__status
+          p-4
+          status-enable
+          d-flex
+          flex-column
+          align-items-center
+          justify-content-center
+        "
+      >
+        <div class="row">
+          <div class="col d-flex flex-column align-items-center">
+            <i class="bx bxs-calendar-week"></i>
+            <div class="batch__text my-4 d-flex flex-column align-items-center">
+              <span class="batch__num">Batch {{ latestbatch }}</span>
+              <span class="batch__desc">Open</span>
+            </div>
+            <form action="/api/batch-status" method="POST">
+              {% csrf_token %}
+              <button class="st-btn btn btn-sm btn-light px-5 py-2" value="disable" name="status">Close</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+        <div
+        class="
+          card
+          batch-card batch__status
+          p-4
+          status-disable
+          d-flex
+          flex-column
+          align-items-center
+          justify-content-center
+        "
+      >
+        <div class="row">
+          <div class="col d-flex flex-column align-items-center">
+            <i class="bx bxs-calendar-week"></i>
+            <div class="batch__text my-4 d-flex flex-column align-items-center">
+              <span class="batch__num">Batch {{ latestbatch }}</span>
+              <span class="batch__desc">Closed</span>
+            </div>
+            <form action="/api/batch-status" method="POST">
+              {% csrf_token %}
+              <button class="st-btn btn btn-sm btn-light px-5 py-2" value="enable" name="status">Open</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col">
+    <div class="card p-5 batch-card">
+      <div class="row">
+        <div class="col">
+          <h2>Batch Pendaftaran</h2>
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="dttable" width="100%">
+              <thead>
+                <tr>
+                  <th>Batch</th>
+                  <th>Jumlah Pendaftar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for b in batchdata %}
+                  <tr>
+                    <td>{{b.batch__batchnum}}</td>
+                    <td>{{b.mahasiswa}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#dttable").DataTable();
+  });
+</script>
+{% endblock %}

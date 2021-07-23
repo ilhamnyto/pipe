@@ -1,0 +1,99 @@
+{% block main %}
+
+<div class="row">
+  <div class="col">
+    <div class="card warn-card px-4 pt-4 pb-5">
+      <div class="row">
+        <h3 class="mb-2">Upload File</h3>
+        <p>
+          File yang perlu diunggah berupa file berisi data hasil seleksi
+          peminatan dan data dosen peminatan dengan format csv.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-xl-5 mx-auto col-md-12 col-sm-12">
+    <div class="card p-5">
+      <div class="row">
+        <div class="col">
+          <form
+            action="/api/upload-data"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %} {% if message %}
+            <span class="text-danger d-block mb-4">{{message}}</span>
+            {% endif %}
+            <div class="form-group">
+              <label for="angkatan">Angkatan</label>
+              <select name="angkatan" id="" class="form-select">
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="datamahasiswa">Data Hasil Seleksi Peminatan</label>
+              <div class="file-upload">
+                <div class="file-select">
+                  <div class="file-select-name" id="filemahasiswaname">
+                    No file chosen...
+                  </div>
+                  <div class="file-select-button" id="fileName">
+                    Choose File
+                  </div>
+
+                  <input type="file" name="datamahasiswa" id="filemahasiswa" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="datamahasiswa">Data Dosen Peminatan</label>
+              <div class="file-upload">
+                <div class="file-select">
+                  <div class="file-select-name" id="filedosenname">
+                    No file chosen...
+                  </div>
+                  <div class="file-select-button" id="fileName">
+                    Choose File
+                  </div>
+
+                  <input type="file" name="datadosen" id="filedosen" />
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="submit-button mt-5"
+              name="truncate"
+              value="no"
+            >
+              <span>Upload</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const mfiles = document.getElementById("filemahasiswa");
+  const mfilename = document.getElementById("filemahasiswaname");
+  mfiles.addEventListener("change", (event) => {
+    mfilename.innerText = event.target.files[0].name;
+  });
+
+  const dfiles = document.getElementById("filedosen");
+  const dfilename = document.getElementById("filedosenname");
+  dfiles.addEventListener("change", (event) => {
+    dfilename.innerText = event.target.files[0].name;
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Dashboard Pembina Lab Riset</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 col-xl-3 col-sm-12 mt-4 mt-sm mt-xl-0">
+    <div class="card peminatan-card">
+      <div class="row">
+        <div class="col p-4 d-flex flex-column align-items-center">
+          <i class="bx bxs-group"></i>
+          {% if user.peminatan %}
+          <span class="keahlian">{{user.peminatan.kelompokkeahlian}}</span>
+          <span class="peminatan">{{user.peminatan.peminatanname}}</span>
+          {% else %}
+          <span class="keahlian">-</span>
+          <span class="peminatan">Belum ada peminatan</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-12 col-sm-12">
+    <div class="card score-card p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bxs-user-pin" undefined></i>
+          <span class="sc-title">Jumlah Mahasiswa</span>
+          <span class="sc-desc">{{mahasiswa}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-12 col-sm-12 my-4 my-md-4 my-xl-0">
+    <div class="card score-card p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bxs-user-pin" undefined></i>
+          <span class="sc-title">Jumlah Dosen</span>
+          <span class="sc-desc">{{dosen}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-12 col-sm-12">
+    <div class="card score-card p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bxs-user-pin" undefined></i>
+          <span class="sc-title">Kuota</span>
+          <span class="sc-desc">{{ user.peminatan.kuota }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

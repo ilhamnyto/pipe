@@ -1,0 +1,171 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Hasil Seleksi Peminatan</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="tablehasil" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>NIM</th>
+                  <th>Nama</th>
+                  <th>Pilihan 1</th>
+                  <th>Skor Pilihan 1</th>
+                  <th>Pilihan 2</th>
+                  <th>Skor Pilihan 2</th>
+                  <th>Peminatan</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in result %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{r.studentid.numberid}}</td>
+                  <td>{{r.studentid.fullname}}</td>
+                  <td>{{r.pilihan1.peminatanname}}</td>
+                  <td>{{r.score1}}</td>
+                  <td>{{r.pilihan2.peminatanname}}</td>
+                  <td>{{r.score2}}</td>
+                  <td>
+                    <span class="font-weight-bold">
+                      {{r.result.peminatanname}}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+            
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5 mb-3">
+  <div class="col">
+    <h1>Peminatan</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="tablepeminatan" width="100%">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Nama Peminatan</th>
+                  <th>Jumlah Pendaftar</th>
+                  <th>Jumlah Pilihan 1</th>
+                  <th>Jumlah Pilihan 2</th>
+                  <th>Pilihan 1</th>
+                  <th>Pilihan 2</th>
+                  <th>Nilai Tertinggi</th>
+                  <th>Nilai Terendah</th>
+                  <th>Nilai Rata-rata</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Enterprise Data Engineering</td>
+                  <td>3</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>100%</td>
+                  <td>0%</td>
+                  <td>0</td>
+                  <td>TBD</td>
+                  <td>TBD</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Enterprise Intelligent System Development</td>
+                  <td>9</td>
+                  <td>1</td>
+                  <td>8</td>
+                  <td>100%</td>
+                  <td>12.5%</td>
+                  <td>0</td>
+                  <td>TBD</td>
+                  <td>TBD</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5 mb-3">
+  <div class="col">
+    <h1>Kelompok Keahlian</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="tablekk" width="100%">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Nama Kelompok</th>
+                  <th>Jumlah Peminat</th>
+                  <th>Jumlah Diterima</th>
+                  <th>Rasio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>ESD</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>ESA</td>
+                  <td>10</td>
+                  <td>9</td>
+                  <td>90%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#tablehasil").DataTable();
+    $("#tablepeminatan").DataTable();
+    $("#tablekk").DataTable();
+  });
+</script>
+{% endblock %}

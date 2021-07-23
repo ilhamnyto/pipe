@@ -1,0 +1,108 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Pendaftaran Peminatan</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-7 col-md-12 col-sm-12">
+    <div class="card pengajuan-card p-4">
+      <div class="row">
+        <div class="col d-flex flex-column">
+          <h2>Daftar Peminatan - Batch {{batch.batchnum}}</h2>
+          <form action="/api/daftar-peminatan" method="POST">
+            {% csrf_token %}
+            {% if error %}
+            <span class="text-danger">Pilihan 1 dan pilihan 2 tidak boleh sama.</span>
+            {% elif not serverstatus.isAvailable %}
+            <span class="text-danger">Pendaftaran Peminatan pada batch ini belum dibuka atau sudah ditutup.</span>
+            {% endif %}
+
+            <div class="form-group">
+              <label for="pilihan1">Peminatan Pilihan 1</label>
+
+              {% if seleksistatus or not serverstatus.isAvailable %}
+                <select name="pilihan1" id="" class="form-select" disabled>
+                <option value="">{{ seleksistatus.0.pilihan1.peminatancode }} - {{ seleksistatus.0.pilihan1.peminatanname }}</option>
+                {% else %}
+                <select name="pilihan1" id="" class="form-select">
+              {% endif %}
+                <option value="">Pilihan 1</option>
+                {% for p in peminatan %}
+                  <option value="{{p.peminatancode}}">{{p.peminatancode}} - {{p.peminatanname}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="pilihan2">Peminatan Pilihan 2</label>
+              {% if seleksistatus or not serverstatus.isAvailable %}
+                <select name="pilihan2" id="" class="form-select" disabled>
+                <option value="">{{ seleksistatus.0.pilihan2.peminatancode }} - {{ seleksistatus.0.pilihan2.peminatanname }}</option>
+                {% else %}
+                <select name="pilihan2" id="" class="form-select">
+              {% endif %}
+                <option value="">Pilihan 2</option>
+                {% for p in peminatan %}
+                <option value="{{p.peminatancode}}">{{p.peminatancode}} - {{p.peminatanname}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <input type="hidden" name="batch" value="{{batch.id}}">
+            {% if seleksistatus or not serverstatus.isAvailable %}
+            <button type="submit" class="submit-button btn-secondary" disabled>
+              <span>Daftar</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+            {% else %}
+            <button type="submit" class="submit-button">
+              <span>Daftar</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-5 col-md-12 col-sm-12 mt-4 mt-sm mt-xl-0">
+    <div class="card pengajuan__process p-4">
+      <div class="row">
+        <div class="col">
+          <h2>Status Pengajuan</h2>
+          <ul class="process__status">
+            <li>
+              <div class="circle done">1</div>
+              <div class="desc">
+                <span class="title">Proses</span>
+                {% if seleksistatus %}
+                <span class="text">Proses seleksi mahasiswa.</span>
+                {% else %}
+                <span class="text">Pendaftaran seleksi.</span>
+                {% endif %}
+              </div>
+            </li>
+
+            <li>
+              {% if seleksistatus.0.result %}
+              <div class="circle done">2</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">Kamu lolos di peminatan {{seleksistatus.0.result.peminatancode}} - {{seleksistatus.0.result.peminatanname}}</span>
+              </div>
+              {% else %}
+              <div class="circle on-process">2</div>
+              <div class="desc">
+                <span class="text">Selesai</span>
+              </div>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

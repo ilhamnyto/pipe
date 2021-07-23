@@ -1,0 +1,115 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Data Mahasiswa</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-4 ml-auto mb-4 d-flex justify-content-end">
+    <form action="/api/truncate-data" method="POST">
+      {% csrf_token %}
+      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="NILAI">
+        <i class="bx bxs-trash mr-2"></i>Truncate Data
+      </button>
+    </form>
+  
+    <a href="/data-mahasiswa/add" class="text-white btn btn-sm btn-primary py-2">
+      <i class="bx bxs-user-plus mr-2"></i>Insert Data
+    </a>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="dttable" width="100%">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>NIM<</th>
+                  <th>Nama</th>
+                  <th>RPB</th>
+                  <th>PROBSTAT</th>
+                  <th>BASDAT</th>
+                  <th>DWBI</th>
+                  <th>OOP</th>
+                  <th>APSI</th>
+                  <th>ALPRO</th>
+                  <th>WEB</th>
+                  <th>EA</th>
+                  <th>MANLAY</th>
+                  <th>SE</th>
+                  <th>SCM</th>
+                  <th>AKUNTANSI</th>
+                  <th>MANPROSI</th>
+                  <th>DESJAR</th>
+                  <th>MANJARKOM</th>
+                  <th>SISOP</th>
+                  <th>KSI</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for nilai in nilailist %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{nilai.nim}}</td>
+                  <td>{{nilai.name}}</td>
+                  <td>{{nilai.rpb}}</td>
+                  <td>{{nilai.probstat}}</td>
+                  <td>{{nilai.basdat}}</td>
+                  <td>{{nilai.dwbi}}</td>
+                  <td>{{nilai.oop}}</td>
+                  <td>{{nilai.apsi}}</td>
+                  <td>{{nilai.alpro}}</td>
+                  <td>{{nilai.web}}</td>
+                  <td>{{nilai.ea}}</td>
+                  <td>{{nilai.manlay}}</td>
+                  <td>{{nilai.se}}</td>
+                  <td>{{nilai.scm}}</td>
+                  <td>{{nilai.akuntansi}}</td>
+                  <td>{{nilai.manprosi}}</td>
+                  <td>{{nilai.desjar}}</td>
+                  <td>{{nilai.manjarkom}}</td>
+                  <td>{{nilai.sisop}}</td>
+                  <td>{{nilai.ksi}}</td>
+      
+                  <td class="d-flex align-items-center">
+                    <form action="/api/delete-data" method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="id" value="{{nilai.id}}" />
+                      <button
+                        class="btn btn-sm btn-primary mx-2"
+                        name="data"
+                        value="NILAI"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                    <a class="btn btn-sm btn-danger" href="/data-mahasiswa/edit/{{nilai.id}}"
+                      >Edit</a
+                    >
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#dttable").DataTable();
+  });
+</script>
+{% endblock %}

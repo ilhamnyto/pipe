@@ -1,0 +1,87 @@
+{% load static %} {% block main %}
+<div class="row mb-3">
+  <div class="col-md-2 mx-auto d-flex justify-content-between">
+    <a href="/bi-dashboard" class="t-link t-active">Overview</a>
+    <a href="/bi-dashboard/peminatan" class="t-link">Peminatan</a>
+    <a href="/bi-dashboard/nilai" class="t-link">Nilai</a>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-xl-2 ml-auto">
+    <div class="form-group">
+      <select name="angkatan" id="" class="form-select">
+        <option value="2017">2017</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-xl-12 col-sm-12 col-md-12">
+    <div class="row">
+      <div class="col-xl-3">
+        <div class="row mb-4">
+          <div class="col">
+            <div class="card min-height py-4 px-5">
+              <div class="row">
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <h2>Dosen tiap Peminatan</h2>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <canvas id="dosenpeminatan"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="card min-height py-4 px-5">
+              <div class="row">
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <h2>Dosen tiap Kelompok Keahlian</h2>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <canvas id="kelompokkeahlian"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-9 my-4 my-xl-0">
+        <div class="card p-4" style="height: 32.3rem">
+          <div class="row">
+            <div class="col">
+              <h2>Perbandingan Jumlah Mahasiswa dengan Kuota Peminatan</h2>
+            </div>
+          </div>
+          <div class="row" style="height: 100%">
+            <div class="col px-5 py-3">
+              <canvas id="mahasiswakuota" style="height: 100%"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0-rc.1/chartjs-plugin-datalabels.min.js"></script>
+<script src="{% static 'assets/js/chart.js' %}"></script>
+
+{% endblock %}

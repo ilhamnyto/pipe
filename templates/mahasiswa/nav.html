@@ -1,0 +1,38 @@
+{% block nav %}
+<nav class="nav" id="nav-bar">
+  <div>
+    <div class="nav__logo">
+      <i class="bx bxs-binoculars nav__icon"></i>
+      <span class="nav__logo-name">PIPE</span>
+    </div>
+
+    <div class="nav__list">
+      <a href="/" class="nav__link active">
+        <i class="bx bxs-home nav__icon"></i>
+        <span class="nav__name">Dashboard</span>
+      </a>
+
+      <div class="dropmenu">
+        <span class="nav__link dropdown__link">
+          <i class="bx bxs-group nav__icon"></i>
+          Peminatan
+          <i class="bx bx-chevron-down dropdown__icon"></i
+        ></span>
+        <ul class="dropdown__menu">
+          <li class="dropdown__item">
+            <a href="/daftar-peminatan" class="drop__link">Daftar Peminatan</a>
+          </li>
+          <li class="dropdown__item">
+            <a href="pindah-peminatan" class="drop__link">Pindah Peminatan</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <a href="/api/auth/logout" class="nav__link">
+    <i class="bx bx-log-out nav__icon"></i>
+    <span class="nav__name">Log Out</span>
+  </a>
+</nav>
+{% endblock %}

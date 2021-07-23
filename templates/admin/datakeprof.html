@@ -1,0 +1,75 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Data Keprofesian</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-4 ml-auto mb-4 d-flex justify-content-end">
+    <form action="/api/truncate-data" method="POST">
+      {% csrf_token %}
+      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="DOSEN">
+        <i class="bx bxs-trash mr-2"></i>Truncate Data
+      </button>
+    </form>
+  
+    <a href="/data-keprof/add" class="text-white btn btn-sm btn-primary py-2">
+      <i class="bx bxs-user-plus mr-2"></i>Insert Data
+    </a>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="dttable" width="100%">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>NIM<</th>
+                  <th>Nama</th>
+                  <th>Keprofesian</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>1202174326</td>
+                  <td>Ilham Nuryanto</td>
+                  <td>Enterprise Intelligent System Development</td>
+                  <td class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-primary mx-2">Delete</button>
+                    <button class="btn btn-sm btn-danger">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>1202174327</td>
+                  <td>Reva Fidela</td>
+                  <td>System Architecture and Governance</td>
+                  <td class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-primary mx-2">Delete</button>
+                    <button class="btn btn-sm btn-danger">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#dttable").DataTable();
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seleksi Peminatan | Welcome</title>
+    <link
+      href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+  </head>
+  <body>
+    <main class="m-login">
+      <div class="row">
+        <div
+          class="
+            col-xl-7 col-md-7 col-sm-12
+            d-none
+            p-5
+            d-md-flex
+            flex-column
+            justify-content-center
+            align-items-center
+            light-bg
+          "
+        >
+          <div class="text">
+            <div class="logo">
+              <i class="bx bxs-binoculars"></i>
+              <span>PIPE</span>
+            </div>
+            <h1 class="title">
+              Seleksi Peminatan <br />
+              Lebih Mudah Dengan <span class="text-blue">PIPE FRI</span>
+            </h1>
+          </div>
+          <div class="images">
+            <img src="{% static 'assets/img/bg.png' %}" alt="" />
+          </div>
+        </div>
+
+        <div
+          class="
+            col-xl-5 col-md-5 col-sm-12
+            p-5
+            d-flex
+            justify-content-center
+            align-items-center
+          "
+        >
+          <div class="box">
+            <div class="logo d-md-none d-block">
+              <i class="bx bxs-binoculars"></i>
+              <span>PIPE</span>
+            </div>
+            <div class="text">
+              <h1>Welcome to PIPE</h1>
+              <span>Masuk menggunakan akun SSO</span>
+            </div>
+            <form action="/api/auth/login" method="POST" class="mt-5">
+              {% csrf_token %} {% if error %}
+              <span class="font-weight-bold text-danger"
+                >{{error}}</span
+              >
+              {% endif %}
+
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  id=""
+                  class="form-control"
+                  placeholder="Username"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  id=""
+                  class="form-control"
+                  placeholder="Password"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn form-control login">
+                Masuk
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

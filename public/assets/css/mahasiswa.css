@@ -1,0 +1,162 @@
+:root {
+  /* COLOR SCHEMES */
+
+  --first-color: #303d60;
+  --second-color: #75a1de;
+  --second-low-color: #75a1de65;
+  --third-color: #9fc8fe;
+  --bg-color: #f9f9f9;
+  --danger-color: #ef6565;
+  --dark-color: #202020;
+  --light-color: #f5faff;
+
+  /* TYPOGRAPHY */
+
+  --main-font: "Poppins";
+  --h1-size: 28px;
+  --h2-size: 16px;
+  --normal-size: 12px;
+}
+
+.pengajuan-card,
+.pengajuan__process {
+  height: 24rem;
+}
+
+.pengajuan-card h2,
+.pengajuan__process h2,
+.batch-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 0.4rem;
+}
+
+.form-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--second-low-color);
+}
+
+.submit-button span {
+  margin-right: 3rem;
+}
+
+.submit-button {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  border-radius: 0.4rem;
+  color: var(--light-color);
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+  border: none;
+  background: var(--second-color);
+  display: block;
+  margin-left: auto;
+  margin-top: 2rem;
+}
+
+.process__status li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.7rem;
+  overflow: hidden;
+}
+
+.process__status .circle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--light-color);
+  margin-right: 2rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20rem;
+}
+
+.process__status .title {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.process__status .text {
+  font-size: 10px;
+}
+
+.process__status .desc {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 768px) {
+  .process__status .title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .process__status .text {
+    font-size: 14px;
+  }
+}
+
+.on-process {
+  background: #b3b3b3;
+}
+
+.done {
+  background: var(--second-color);
+}
+
+.borderless td {
+  border: none;
+}
+
+.borderless th {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.batch-card {
+  min-height: 22rem;
+}
+
+.batch__status i {
+  font-size: 7rem;
+  color: var(--light-color);
+}
+
+.batch__text {
+  color: var(--light-color);
+}
+
+.batch__num {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 0.4rem;
+}
+
+.batch__desc {
+  font-size: 14px;
+}
+
+.batch__status button {
+  padding: 0.5rem 2.5rem;
+}
+
+.danger {
+  background: var(--danger-color) !important;
+}
+
+.red {
+  background: #e76666 !important;
+}

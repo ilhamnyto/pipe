@@ -1,0 +1,262 @@
+{% load static %} {% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Pindah Peminatan</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-7 col-md-12 col-sm-12">
+    <div class="card pengajuan-card p-4">
+      <div class="row">
+        <div class="col d-flex flex-column">
+          <h2>Pengajuan Tukar Peminatan</h2>
+          <form
+            action="/api/pindah-peminatan"
+            method="POST"
+            onsubmit="submission(event)"
+          >
+            {% csrf_token %} {% if not user.peminatan %}
+            <span class="text-danger">Kamu belum memilih peminatan.</span>
+            {% endif %}
+            <div class="form-group">
+              {% if tukar %}
+              <input
+                type="text"
+                name="mahasiswadua"
+                class="form-control"
+                placeholder="{{tukar.0.mahasiswa1.fullname}} - {{tukar.0.mahasiswa1.peminatan.peminatanname}}"
+                disabled
+              />
+              {% else %}
+              <label for="mahasiswasatu">Mahasiswa 1</label>
+              <input
+                type="text"
+                name="mahasiswasatu"
+                id=""
+                class="form-control"
+                disabled
+                placeholder="{{ user.fullname}} - {{ user.peminatan.peminatanname }}"
+              />
+              {% endif %}
+            </div>
+
+            <div class="form-group" style="width: 100%">
+              <label for="mahasiswadua">Mahasiswa 2</label>
+              {% if not user.peminatan %}
+              <input
+                type="text"
+                name="mahasiswadua"
+                class="form-control"
+                placeholder="Nama Mahasiswa"
+                disabled
+              />
+              {% elif tukar %}
+              <input
+                type="text"
+                name="mahasiswadua"
+                class="form-control"
+                placeholder="{{tukar.0.mahasiswa2.fullname}} - {{tukar.0.mahasiswa2.peminatan.peminatanname}}"
+                disabled
+              />
+              {% else %}
+              <input
+                type="text"
+                name="mahasiswadua"
+                id="myAutocomplete"
+                class="form-control"
+                autocomplete="off"
+                placeholder="Nama Mahasiswa"
+                style="width: 100%"
+              />
+              {% endif %}
+            </div>
+            {% if not user.peminatan %}
+            <button type="submit" class="submit-button btn-secondary" disabled>
+              <span>Ajukan</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+            {% elif tukar %}
+            <button type="submit" class="submit-button danger" name="reset" value="true">
+              <span>Reset</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+            {% else %}
+            <button type="submit" class="submit-button">
+              <span>Ajukan</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-5 col-md-12 col-sm-12 mt-4 mt-sm mt-xl-0">
+    <div class="card pengajuan__process p-4">
+      <div class="row">
+        <div class="col">
+          <h2>Status Pengajuan</h2>
+          <ul class="process__status">
+            {% if tukar.0.status == 'Pengajuan I' %}
+            <li>
+              <div class="circle done">1</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Asal</span>
+                <span class="text">Sedang diajukan.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle on-process">2</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Tujuan</span>
+                <span class="text">-</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle on-process">3</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">-</span>
+              </div>
+            </li>
+            {% elif tukar.0.status == 'Pengajuan II' %}
+            <li>
+              <div class="circle done">1</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Asal</span>
+                <span class="text">Disetujui</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">2</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Tujuan</span>
+                <span class="text">Sedang diajukan.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle on-process">3</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">-</span>
+              </div>
+            </li>
+            {% elif tukar.0.status == 'Disetujui'%}
+            <li>
+              <div class="circle done">1</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Asal</span>
+                <span class="text">Disetujui.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">2</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Tujuan</span>
+                <span class="text">Disetujui.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">3</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">Tukar peminatan berhasil.</span>
+              </div>
+            </li>
+            {% elif tukar.0.status == 'Ditolak I'%}
+            <li>
+              <div class="circle done">1</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Asal</span>
+                <span class="text">Ditolak.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">2</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Tujuan</span>
+                <span class="text">Tidak diproses.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">3</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">Tukar peminatan gagal.</span>
+              </div>
+            </li>
+            {% elif tukar.0.status == 'Ditolak II'%}
+            <li>
+              <div class="circle done">1</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Asal</span>
+                <span class="text">Disetujui.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">2</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Tujuan</span>
+                <span class="text">Tidak disetujui.</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle done">3</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">Tukar peminatan gagal.</span>
+              </div>
+            </li>
+            {% else %}
+            <li>
+              <div class="circle on-process">1</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Asal</span>
+                <span class="text">-</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle on-process">2</div>
+              <div class="desc">
+                <span class="title">Persetujuan Pembina Lab Tujuan</span>
+                <span class="text">-</span>
+              </div>
+            </li>
+            <li>
+              <div class="circle on-process">3</div>
+              <div class="desc">
+                <span class="title">Selesai</span>
+                <span class="text">-</span>
+              </div>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap-4-autocomplete/dist/bootstrap-4-autocomplete.min.js"
+  crossorigin="anonymous"
+></script>
+<script>
+  const src = {{userdata|safe}};
+
+  $("#myAutocomplete").autocomplete({
+    source: src,
+    highlightClass: "text-danger",
+    treshold: 1,
+  });
+
+  function submission(e) {
+    document.getElementById('myAutocomplete').value = {{userdata|safe}}[document.getElementById("myAutocomplete").value]
+  }
+</script>
+
+{% endblock %}

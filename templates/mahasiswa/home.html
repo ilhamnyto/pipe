@@ -1,0 +1,47 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Dashboard Mahasiswa</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 col-xl-9 col-sm-12">
+    <div class="card p-5 profile-card left-bg">
+      <div class="row">
+        <div class="col d-flex">
+          <div class="profile__images">
+            <img
+              src="https://images.telkomuniversity.ac.id/pmb/1718/PAS_FOTO/11455749670_PAS_FOTO_1.jpg"
+              alt=""
+            />
+          </div>
+          <ul class="profile__desc">
+            <li>{{ user.fullname }}</li>
+            <li>{{user.numberid}}</li>
+            <li>{{user.studyprogram}}</li>
+            <li>{{user.studentclass}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 col-xl-3 col-sm-12 mt-4 mt-sm mt-xl-0">
+    <div class="card peminatan-card">
+      <div class="row">
+        <div class="col p-4 d-flex flex-column align-items-center">
+          <i class="bx bxs-group"></i>
+          {% if user.peminatan %}
+          <span class="keahlian">{{user.peminatan.kelompokkeahlian}}</span>
+          <span class="peminatan">{{user.peminatan.peminatanname}}</span>
+          {% else %}
+          <span class="keahlian">-</span>
+          <span class="peminatan">Belum ada peminatan</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+:root {
+  /* COLOR SCHEMES */
+
+  --first-color: #303d60;
+  --second-color: #75a1de;
+  --third-color: #9fc8fe;
+  --bg-color: #f9f9f9;
+  --danger-color: #ef6565;
+  --dark-color: #202020;
+  --light-color: #f5faff;
+
+  /* TYPOGRAPHY */
+
+  --main-font: "Poppins";
+  --h1-size: 28px;
+  --h2-size: 16px;
+  --normal-size: 12px;
+}
+
+/* BASE */
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  opacity: 0.3;
+}
+::-moz-placeholder {
+  opacity: 0.3;
+  /* Firefox 19+ */
+}
+:-ms-input-placeholder {
+  opacity: 0.3;
+  /* IE 10+ */
+}
+:-moz-placeholder {
+  opacity: 0.3;
+  /* Firefox 18- */
+}
+
+*,
+::after,
+::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--main-font);
+  color: var(--first-color);
+}
+
+h1 {
+  font-weight: 700;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* component */
+
+.login {
+  background-color: var(--third-color);
+  padding: 0.9rem 1.5rem;
+  color: var(--light-color);
+  font-size: 12px;
+  margin-top: 1.5rem;
+  font-weight: 600;
+}
+
+.m-login {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.m-login .row {
+  min-height: 100vh;
+}
+
+.light-bg {
+  background: var(--light-color);
+}
+
+.m-login .images {
+  width: 72%;
+}
+
+.text-blue {
+  color: var(--second-color);
+}
+
+.title {
+  margin-bottom: 5rem;
+  line-height: 1.4;
+}
+
+.logo {
+  font-size: 1.5rem;
+  margin-bottom: 5rem;
+  display: grid;
+  grid-template-columns: min-content min-content;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.logo span {
+  font-weight: 700;
+}
+
+.logo i {
+  margin-right: 0.4rem;
+  color: var(--second-color);
+}
+
+.form-group {
+  margin: 1rem 0;
+}
+
+.form-group .form-control {
+  padding: 0.7rem 0.8rem;
+}
+
+.form-group label {
+  font-size: var(--normal-size);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  background: #000;
+}
+
+.box {
+  width: 70%;
+}

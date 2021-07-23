@@ -1,0 +1,76 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Dashboard Admin</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-3 col-md-12 col-sm-12">
+    <div class="card score-card p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bxs-user-pin"></i>
+          <span class="sc-title">Peminatan</span>
+          <span class="sc-desc">{{peminatan}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-12 col-sm-12">
+    <div class="card score-card p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bxs-user-pin"></i>
+          <span class="sc-title">Jumlah Mahasiswa</span>
+          <span class="sc-desc">{{mahasiswa}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-12 col-sm-12 my-4 my-md-4 my-xl-0">
+    <div class="card score-card p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bxs-user-pin"></i>
+          <span class="sc-title">Jumlah Dosen</span>
+          <span class="sc-desc">{{dosen}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-xl-3 col-md-12 col-sm-12 mt-4 mt-md-0 mt-xl-0">
+    {% if login.isAvailable %}
+    <div class="card status-card status-enable p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bx-log-in"></i>
+          <span class="st-title my-3">User Login : Enabled</span>
+          <form action="/api/login-status" method="POST">
+            {% csrf_token %}
+            <button class="st-btn btn btn-sm btn-light px-4 py-2" value="disable" name="status">Disable</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="card status-card status-disable p-3">
+      <div class="row">
+        <div class="col d-flex flex-column align-items-center">
+          <i class="bx bx-log-in"></i>
+          <span class="st-title my-3">User Login : Disabled</span>
+          <form action="/api/login-status" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="st-btn btn btn-sm btn-light px-4 py-2" value="enable" name="status">Enable</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
