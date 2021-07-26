@@ -36,4 +36,4 @@ pip install requirements.txt
 python manage.py runserver
 ```
 
-[Live Demo](https://pipe-redesign.herokuapp.com/)
+[Live Demo](https://pipe-v2.herokuapp.com/)
