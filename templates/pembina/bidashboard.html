@@ -17,71 +17,16 @@
   </div>
 </div>
 
-<div class="row mb-4">
-  <div class="col-xl-12 col-sm-12 col-md-12">
-    <div class="row">
-      <div class="col-xl-3">
-        <div class="row mb-4">
-          <div class="col">
-            <div class="card min-height py-4 px-5">
-              <div class="row">
-                <div class="col">
-                  <div class="row">
-                    <div class="col">
-                      <h2>Dosen tiap Peminatan</h2>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <canvas id="dosenpeminatan"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="card min-height py-4 px-5">
-              <div class="row">
-                <div class="col">
-                  <div class="row">
-                    <div class="col">
-                      <h2>Dosen tiap Kelompok Keahlian</h2>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <canvas id="kelompokkeahlian"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-9 my-4 my-xl-0">
-        <div class="card p-4" style="height: 32.3rem">
-          <div class="row">
-            <div class="col">
-              <h2>Perbandingan Jumlah Mahasiswa dengan Kuota Peminatan</h2>
-            </div>
-          </div>
-          <div class="row" style="height: 100%">
-            <div class="col px-5 py-3">
-              <canvas id="mahasiswakuota" style="height: 100%"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
+<div id="content">
+  <div class="row mt-5">
+    <div class="col d-flex justify-content-center">
+      <img src="{% static 'assets/img/loading.gif' %}" alt="loading" />
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0-rc.1/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@1"></script>
 <script src="{% static 'assets/js/chart.js' %}"></script>
 
 {% endblock %}

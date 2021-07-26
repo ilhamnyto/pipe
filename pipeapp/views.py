@@ -134,9 +134,6 @@ def hasilseleksi(request):
   haha = pd.read_sql('SELECT * FROM pipeapp_seleksi', con=engine).filter(['result_id', 'pilihan1_id', 'pilihan2_id', 'score1', 'score2'])
   hihi = pd.read_sql('SELECT * FROM pipeapp_peminatan', con=engine).filter(['peminatancode', 'peminatanname', 'kelompokkeahlian', 'kuota'])
   nana = haha.merge(hihi, left_on='result_id', right_on='peminatancode')
-  print(haha)
-  print(hihi)
-  print(nana)
 
   return render(request, 'hasilseleksi.html', {'user': user, "result": result})
 

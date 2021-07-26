@@ -27,55 +27,10 @@
 </div>
 <!-- peminatan -->
 
-<div class="container">
-  <div class="row">
-    <div class="col-xl-4 col-md-12 col-sm-12 ml-auto">
-      <div class="row">
-        <div class="col">
-          <div class="card py-4 px-5">
-            <div class="row">
-              <div class="col">
-                <h2>Pemenuhan Kuota</h2>
-              </div>
-            </div>
-            <div class="row mt-3 py-4 p-relative">
-              <p class="position-absolute middle" id="pemenuhan-number">50%</p>
-              <canvas id="pemenuhan" height="200px"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mt-4 mb-4">
-        <div class="col">
-          <div class="card py-4 px-5 position-relative">
-            <div class="row">
-              <div class="col">
-                <h2>Rata-rata Mahasiswa Bimbingan Per Dosen</h2>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col d-flex justify-content-center">
-                <p id="ratio" class="medium"></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-4 col-md-12 col-sm 12 mr-auto">
-      <div class="card py-4 px-5" style="height: 39rem">
-        <div class="row">
-          <div class="col">
-            <h2>Jumlah Mahasiswa Terhadap Kuota</h2>
-          </div>
-        </div>
-        <div class="row" style="height: 100%">
-          <div class="col" style="height: 100%">
-            <canvas id="mahasiswakuota" height="100%"></canvas>
-          </div>
-        </div>
-      </div>
+<div id="content">
+  <div class="row mt-5">
+    <div class="col d-flex justify-content-center">
+      <img src="{% static 'assets/img/loading.gif' %}" alt="loading" />
     </div>
   </div>
 </div>

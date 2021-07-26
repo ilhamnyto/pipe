@@ -78,26 +78,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pipe.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-# PROD
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'ansuuvuk',
-#         'USER': 'ansuuvuk',
-#         'PASSWORD': 'vRiu0CQWb1VpwCYQeqb0A4-Yu7DfSNPo',
-#         'HOST': 'queenie.db.elephantsql.com',
-#         'PORT': '5432'
-#     }
-# }
-
-# DEV
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'df52anouucpo1v',
+
+        'USER': 'xflrotuhigtqrv',
+
+        'PASSWORD': '7ce85844eb725ce394364f3f08bc1948fc5c60056fd51083d78a0d054cb05231',
+
+        'HOST': 'ec2-52-1-20-236.compute-1.amazonaws.com',
+
+        'PORT': '5432',
     }
 }
 

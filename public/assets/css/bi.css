@@ -1,6 +1,4 @@
 :root {
-  /* COLOR SCHEMES */
-
   --first-color: #303d60;
   --second-color: #75a1de;
   --third-color: #9fc8fe;
@@ -9,8 +7,6 @@
   --dark-color: #202020;
   --light-color: #f5faff;
 }
-
-/* input file */
 
 .file-upload {
   display: block;
@@ -76,8 +72,6 @@
   opacity: 0.65;
 }
 
-/* bi */
-
 .big {
   font-size: 5rem;
   margin-top: 2rem;
@@ -129,7 +123,6 @@
 }
 
 .t-active {
-  /* box-shadow: 0 10px 8px -10px rgba(0, 0, 0, 0.4); */
   background: var(--second-color);
   color: var(--light-color);
   border-radius: 0.2rem;

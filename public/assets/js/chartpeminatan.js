@@ -1,194 +1,268 @@
 var myChart, chart;
-var cta = document.getElementById("mahasiswakuota").getContext("2d");
-var ctx = document.getElementById("pemenuhan");
 
 fetch("/api/bi/datapeminatan")
   .then((res) => {
     return res.json();
   })
   .then((data) => {
-    myChart = new Chart(cta, {
-      type: "bar",
-      data: {
-        labels: ["EISD"],
-        datasets: [
-          {
-            label: "Mahasiswa",
-            borderRadius: 2,
-            data: [data["eisd"]["mahasiswa"]],
-            backgroundColor: "#2B73D7",
-            fontColor: "white",
-          },
-          {
-            label: "Kuota",
-            tension: 0,
-            backgroundColor: "#FF6384",
-            data: [data["eisd"]["kuota"]],
-          },
-        ],
-      },
-      options: {
-        maintainAspectRatio: false,
-        legend: {
-          display: true,
-          position: "bottom",
-          labels: {
-            fontColor: "#8898AA",
-          },
-        },
-        scales: {
-          yAxes: [
+    console.log(data);
+    if (data["EDE"] != null) {
+      document.getElementById("content").innerHTML = `
+      <div class="container">
+      <div class="row">
+        <div class="col-xl-4 col-md-12 col-sm-12 ml-auto">
+          <div class="row">
+            <div class="col">
+              <div class="card py-4 px-5">
+                <div class="row">
+                  <div class="col">
+                    <h2>Pemenuhan Kuota</h2>
+                  </div>
+                </div>
+                <div class="row mt-3 py-4 p-relative">
+                  <p class="position-absolute middle" id="pemenuhan-number">
+                    50%
+                  </p>
+                  <canvas id="pemenuhan" height="200px"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4 mb-4">
+            <div class="col">
+              <div class="card py-4 px-5 position-relative">
+                <div class="row">
+                  <div class="col">
+                    <h2>Rata-rata Mahasiswa Bimbingan Per Dosen</h2>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col d-flex justify-content-center">
+                    <p id="ratio" class="medium"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="col-xl-4 col-md-12 col-sm 12 mr-auto">
+          <div class="card py-4 px-5" style="height: 39rem">
+            <div class="row">
+              <div class="col">
+                <h2>Jumlah Mahasiswa Terhadap Kuota</h2>
+              </div>
+            </div>
+            <div class="row" style="height: 100%">
+              <div class="col" style="height: 100%">
+                <canvas id="mahasiswakuota" height="100%"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      `;
+      var cta = document.getElementById("mahasiswakuota").getContext("2d");
+      var ctx = document.getElementById("pemenuhan");
+      myChart = new Chart(cta, {
+        type: "bar",
+        data: {
+          labels: ["EISD"],
+          datasets: [
             {
-              gridLines: {
-                display: true,
-              },
-              ticks: {
-                beginAtZero: true,
-                max:
-                  data["eisd"]["kuota"] > data["eisd"]["mahasiswa"]
-                    ? data["eisd"]["kuota"]
-                    : data["eisd"]["mahasiswa"],
-              },
+              label: "Mahasiswa",
+              borderRadius: 2,
+              data: [data["EISD"]["mahasiswa"]],
+              borderColor: "#2b73d7",
+              borderWidth: 2,
+              backgroundColor: "#2b73d783",
+              fontColor: "white",
+            },
+            {
+              label: "Kuota",
+              tension: 0,
+              borderColor: "#FF6384",
+              borderWidth: 2,
+              backgroundColor: "#ff638583",
+              data: [data["EISD"]["kuota"]],
             },
           ],
-          xAxes: [
-            {
-              stacked: true,
-              gridLines: {
-                display: false,
-              },
-              ticks: {
-                fontColor: "black",
-              },
+        },
+        options: {
+          maintainAspectRatio: false,
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+              fontColor: "#8898AA",
             },
-          ],
-        },
-
-        tooltips: {
-          enabled: true,
-          mode: "index",
-          intersect: true,
-        },
-      },
-    });
-
-    chart = new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: ["Terisi", "Kosong"],
-        datasets: [
-          {
-            label: "Gauge",
-            data: [
-              (
-                (data["eisd"]["mahasiswa"] / data["eisd"]["kuota"]) *
-                100
-              ).toFixed(1) > 100
-                ? 100
-                : (
-                    (data["eisd"]["mahasiswa"] / data["eisd"]["kuota"]) *
-                    100
-                  ).toFixed(1),
-              (
-                (data["eisd"]["mahasiswa"] / data["eisd"]["kuota"]) *
-                100
-              ).toFixed(1) > 100
-                ? 0
-                : 100 -
-                  (
-                    (data["eisd"]["mahasiswa"] / data["eisd"]["kuota"]) *
-                    100
-                  ).toFixed(1),
+          },
+          scales: {
+            yAxes: [
+              {
+                gridLines: {
+                  display: true,
+                },
+                ticks: {
+                  beginAtZero: true,
+                  max:
+                    data["EISD"]["kuota"] > data["EISD"]["mahasiswa"]
+                      ? data["EISD"]["kuota"]
+                      : data["EISD"]["mahasiswa"],
+                },
+              },
             ],
-            backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+            xAxes: [
+              {
+                stacked: true,
+                gridLines: {
+                  display: false,
+                },
+                ticks: {
+                  fontColor: "black",
+                },
+              },
+            ],
           },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          datalabels: {
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            borderColor: "#ffffff",
-            color: function (context) {
-              return context.dataset.backgroundColor;
-            },
-            font: function (context) {
-              var w = context.chart.width;
-              return {
-                size: w < 512 ? 18 : 20,
-              };
-            },
+
+          tooltips: {
+            enabled: true,
+            mode: "index",
+            intersect: true,
           },
         },
-        legend: {
-          display: false,
+      });
+
+      chart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: ["Terisi", "Kosong"],
+          datasets: [
+            {
+              label: "Gauge",
+              data: [
+                (
+                  (data["EISD"]["mahasiswa"] / data["EISD"]["kuota"]) *
+                  100
+                ).toFixed(1) > 100
+                  ? 100
+                  : (
+                      (data["EISD"]["mahasiswa"] / data["EISD"]["kuota"]) *
+                      100
+                    ).toFixed(1),
+                (
+                  (data["EISD"]["mahasiswa"] / data["EISD"]["kuota"]) *
+                  100
+                ).toFixed(1) > 100
+                  ? 0
+                  : 100 -
+                    (
+                      (data["EISD"]["mahasiswa"] / data["EISD"]["kuota"]) *
+                      100
+                    ).toFixed(1),
+              ],
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+            },
+          ],
         },
-        tooltips: {
-          enabled: true,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            datalabels: {
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              borderColor: "#ffffff",
+              color: function (context) {
+                return context.dataset.backgroundColor;
+              },
+              font: function (context) {
+                var w = context.chart.width;
+                return {
+                  size: w < 512 ? 18 : 20,
+                };
+              },
+            },
+          },
+          legend: {
+            display: false,
+          },
+          tooltips: {
+            enabled: true,
+          },
         },
-      },
-    });
-
-    document.getElementById("pemenuhan-number").innerHTML = `${(
-      (data["eisd"]["mahasiswa"] / data["eisd"]["kuota"]) *
-      100
-    ).toFixed(1)} %`;
-    document.getElementById("ratio").innerHTML = `${parseInt(
-      data["eisd"]["bimbingan"]
-    )}`;
-
-    document.getElementById("peminatan").addEventListener("change", (event) => {
-      myChart.data.datasets[0].data = [
-        data[event.target.value.toLowerCase()]["mahasiswa"],
-      ];
-      myChart.data.datasets[1].data = [
-        data[event.target.value.toLowerCase()]["kuota"],
-      ];
-      myChart.options.scales.yAxes[0].ticks.max =
-        data[event.target.value.toLowerCase()]["kuota"];
-
-      chart.data.datasets[0].data = [
-        (
-          (data[event.target.value.toLowerCase()]["mahasiswa"] /
-            data[event.target.value.toLowerCase()]["kuota"]) *
-          100
-        ).toFixed(1) > 100
-          ? 100
-          : (
-              (data[event.target.value.toLowerCase()]["mahasiswa"] /
-                data[event.target.value.toLowerCase()]["kuota"]) *
-              100
-            ).toFixed(1),
-        (
-          (data[event.target.value.toLowerCase()]["mahasiswa"] /
-            data[event.target.value.toLowerCase()]["kuota"]) *
-          100
-        ).toFixed(1) > 100
-          ? 0
-          : 100 -
-            (
-              (data[event.target.value.toLowerCase()]["mahasiswa"] /
-                data[event.target.value.toLowerCase()]["kuota"]) *
-              100
-            ).toFixed(1),
-      ];
-
-      document.getElementById("ratio").innerHTML = `${parseInt(
-        data[event.target.value.toLowerCase()]["bimbingan"]
-      )}`;
+      });
 
       document.getElementById("pemenuhan-number").innerHTML = `${(
-        (data[event.target.value.toLowerCase()]["mahasiswa"] /
-          data[event.target.value.toLowerCase()]["kuota"]) *
+        (data["EISD"]["mahasiswa"] / data["EISD"]["kuota"]) *
         100
       ).toFixed(1)} %`;
       document.getElementById("ratio").innerHTML = `${parseInt(
-        data[event.target.value.toLowerCase()]["bimbingan"]
+        data["EISD"]["bimbingan"]
       )}`;
 
-      myChart.update();
-      chart.update();
-    });
+      document
+        .getElementById("peminatan")
+        .addEventListener("change", (event) => {
+          myChart.data.datasets[0].data = [
+            data[event.target.value]["mahasiswa"],
+          ];
+          myChart.data.datasets[1].data = [data[event.target.value]["kuota"]];
+          myChart.options.scales.yAxes[0].ticks.max =
+            data[event.target.value]["kuota"] >
+            data[event.target.value]["mahasiswa"]
+              ? data[event.target.value]["kuota"]
+              : data[event.target.value]["mahasiswa"];
+
+          chart.data.datasets[0].data = [
+            (
+              (data[event.target.value]["mahasiswa"] /
+                data[event.target.value]["kuota"]) *
+              100
+            ).toFixed(1) > 100
+              ? 100
+              : (
+                  (data[event.target.value]["mahasiswa"] /
+                    data[event.target.value]["kuota"]) *
+                  100
+                ).toFixed(1),
+            (
+              (data[event.target.value]["mahasiswa"] /
+                data[event.target.value]["kuota"]) *
+              100
+            ).toFixed(1) > 100
+              ? 0
+              : 100 -
+                (
+                  (data[event.target.value]["mahasiswa"] /
+                    data[event.target.value]["kuota"]) *
+                  100
+                ).toFixed(1),
+          ];
+
+          document.getElementById("ratio").innerHTML = `${parseInt(
+            data[event.target.value]["bimbingan"]
+          )}`;
+
+          document.getElementById("pemenuhan-number").innerHTML = `${(
+            (data[event.target.value]["mahasiswa"] /
+              data[event.target.value]["kuota"]) *
+            100
+          ).toFixed(1)} %`;
+          document.getElementById("ratio").innerHTML = `${parseInt(
+            data[event.target.value]["bimbingan"]
+          )}`;
+
+          myChart.update();
+          chart.update();
+        });
+    } else {
+      document.getElementById("content").innerHTML = `
+      <div class="row mt-5">
+      <div class="col">
+        <h3 class="text-center">Belum ada data.</h3>
+      </div>
+    </div>
+  `;
+    }
   });

@@ -51,7 +51,13 @@
         <div class="col d-flex flex-column align-items-center">
           <i class="bx bxs-user-pin" undefined></i>
           <span class="sc-title">Kuota</span>
-          <span class="sc-desc">{{ user.peminatan.kuota }}</span>
+          <span class="sc-desc">
+            {% if user.peminatan.kuota %}
+            {{ user.peminatan.kuota }}
+            {% else %}
+            0
+            {% endif %}
+          </span>
         </div>
       </div>
     </div>

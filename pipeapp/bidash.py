@@ -1,5 +1,7 @@
 
-from django.shortcuts import redirect
+import json
+from pipeapp.models import Profile
+from django.shortcuts import redirect, render
 import pandas as pd
 import re
 from django.http import JsonResponse
@@ -7,8 +9,9 @@ from .dburl import engine
 
 
 def uploadfile(request):
+  user = Profile.objects.get(username=request.session['user_login'])
   if request.method == "POST":
-    try:
+    # try:
       datamahasiswa = pd.read_csv(request.FILES['datamahasiswa'])
       dosen = pd.read_csv(request.FILES['datadosen'])
       d_mahasiswa = datamahasiswa.filter(['nim', 'nama', 'kelas'])
@@ -31,374 +34,204 @@ def uploadfile(request):
         elif peminatan == 'Enterprise Infrastructure Management':
           return 'EIM'
 
-      jumlahdosen = dosen.groupby(['Peminatan']).size().reset_index(name='counts')
-      jumlahdosen.columns = ['peminatan_name', 'jumlah_dosen']
-
       d_peminatan = pd.DataFrame({
           "peminatan_id": list(map(codeNaming, list(datamahasiswa['peminatan'].unique()))),
           "peminatan_name": list(datamahasiswa['peminatan'].unique())
       })
 
-      d_peminatan = d_peminatan.merge(jumlahdosen, on='peminatan_name', how='left')
-
-      d_peminatan['kuota'] = list(map(lambda x: x * 10, list(d_peminatan['jumlah_dosen'])))
-
-      d_pilihan = pd.DataFrame({
-          "pilihan_id": ['P1', 'P2'],
-          "keterangan": ['Pilihan 1', 'Pilihan 2']
+      d_keahlian = pd.DataFrame({
+          "keahlian_id": ['CYBERNETICS', 'EIS'],
+          "keahlian_name": ['CYBERNETICS', 'ENTERPRISE AND INDUSTRIAL SYSTEM']
       })
 
-      d_hasil = pd.DataFrame({
-          "hasil_id": ['LP1', 'LP2', 'NB'],
-          "keterangan": ['Lolos Pilihan Pertama', 'Lolos Pilihan Kedua', 'Tidak Lolos Keduanya']
+      def keahlianNaming(peminatan):
+        if peminatan == 'Enterprise Intelligent System Development' or peminatan == 'Enterprise Data Engineering':
+          return 'CYBERNETICS'
+        elif peminatan == 'Enterprise Resource Planning' or peminatan == 'System Architecture and Governance' or peminatan == 'Enterprise Infrastructure Management':
+          return 'EIS'
+
+      seleksi = datamahasiswa.groupby(['peminatan']).size().reset_index(name='counts')
+      seleksi.columns = ['peminatan', 'jumlah_mahasiswa']
+      jumlahdosen = dosen.groupby(['Peminatan']).size().reset_index(name='counts')
+      jumlahdosen.columns = ['peminatan', 'jumlah_dosen']
+      jumlahdosen['jumlah_kuota'] = jumlahdosen['jumlah_dosen'] * 10
+
+      seleksi = seleksi.merge(jumlahdosen, on='peminatan')
+      f_seleksi = pd.DataFrame({
+          "peminatan_id": list(map(codeNaming, list(seleksi['peminatan'].unique()))),
+          "keahlian_id": list(map(keahlianNaming, list(seleksi['peminatan'].unique()))),
+          "jumlah_mahasiswa": seleksi['jumlah_mahasiswa'],
+          "jumlah_dosen": seleksi['jumlah_dosen'],
+          "jumlah_kuota": seleksi['jumlah_kuota'],
+      })
+      f_seleksi['acad_id'] = f'{acadid}{str(int(acadid)+1)}' 
+
+      nilailist = datamahasiswa.drop(['nim', 'nama', 'peminatan', 'peminatan_1', 'peminatan_2', 'kelas'], axis=1)
+
+      def courseNaming(course):
+        if course == 'oop' :
+          return 'Pemrograman Berorientasikan Objek'
+        if course == 'rpb' :
+          return 'Rekayasa Proses Bisnis'
+        if course == 'pi' :
+          return 'Perancangan Interaksi'
+        if course == 'apsi' :
+          return 'Analisis dan Perancangan Interaksi'
+        if course == 'web' :
+          return 'Pengembangan Aplikasi Website'
+        if course == 'statistik' :
+          return 'Statistika Industri'
+        if course == 'matdis' :
+          return 'Matematika Diskrit'
+        if course == 'alpro' :
+          return 'Algoritma Pemrograman'
+        if course == 'strukdat' :
+          return 'Struktur Data'
+        if course == 'se' :
+          return 'Sistem Enterprise'
+        if course == 'po' :
+          return 'Perilaku Organisasi'
+        if course == 'scm' :
+          return 'Manaajemen Rantai Pasok'
+        if course == 'ea' :
+          return 'Arsitektur Enterprise'
+        if course == 'basdat' :
+          return 'Sistem Basis Data'
+        if course == 'manjarkom' :
+          return 'Manahemen Jaringan Komputer'
+        if course == 'sisop' :
+          return 'Sistem Operasi'
+        if course == 'msdm' :
+          return 'Manajemen Sumber Daya Manusia'
+        if course == 'desjar' :
+          return 'Desain Jaringan'
+        if course == 'manprosi' :
+          return 'Manajemen Proyek Sistem Informasi'
+      
+      d_course = pd.DataFrame({
+          'course_id': list(nilailist.columns),
+          'course_name': list(map(courseNaming, list(nilailist.columns)))
       })
 
-      def hasilNaming(pilihan1, pilihan2, hasil):
-        if pilihan1 == hasil:
-          return 'LP1'
-        elif pilihan2 == hasil:
-          return 'LP2'
-        else:
-          return 'NB'
+      def nilaiMapping(nilai):
+        if nilai == 0:
+          return 'grade_E'
+        if nilai == 1:
+          return 'grade_D'
+        if nilai == 2:
+          return 'grade_C'
+        if nilai == 2.5:
+          return 'grade_BC'
+        if nilai == 3:
+          return 'grade_B'
+        if nilai == 3.5:
+          return 'grade_AB'
+        if nilai == 4:
+          return 'grade_A'
+      
+      for score in list(nilailist.columns):
+        nilailist[score] = list(map(nilaiMapping, list(nilailist[score])))
+      f_list = pd.DataFrame(columns=['course_id', 'acad_id', 'grade_A', 'grade_AB', 'grade_B', 'grade_BC', 'grade_C', 'grade_D', 'grade_E'])
 
-      dd = datamahasiswa.filter(['nim', 'peminatan', 'peminatan_1', 'peminatan_2'])
-      dd.columns = ['student_id', 'peminatan_id', 'peminatan_1', 'peminatan_2']
 
-      dd['peminatan_id'] = list(map(codeNaming, list(dd['peminatan_id'])))
-      dd['peminatan_1'] = list(map(codeNaming, list(dd['peminatan_1'])))
-      dd['peminatan_2'] = list(map(codeNaming, list(dd['peminatan_2'])))
+      for score in list(nilailist.columns):
+        n = nilailist.groupby([score]).size().reset_index(name='counts')
+        n['id'] = 'a'
+        n = n.pivot(index='id', columns=score, values='counts')
+        n['course_id'] = score
+        n['acad_id'] = f'{acadid}{str(int(acadid)+1)}'
+        f_list = f_list.append(n)
 
-      dd['hasil_id'] = list(map(hasilNaming, list(dd['peminatan_1']), list(dd['peminatan_2']), list(dd['peminatan_id']) ))
+      f_list = f_list.fillna(0)
 
-      data1 = pd.DataFrame(columns=['student_id', 'acad_id', 'peminatan_id', 'pilihan_id', 'hasil_id', 'score'])
-      data2 = pd.DataFrame(columns=['student_id', 'acad_id', 'peminatan_id', 'pilihan_id', 'hasil_id', 'score'])
-
-      data1 = data1.append(dd)
-      data2 = data2.append(dd)
-
-      data1['acad_id'] = f'{acadid}{str(int(acadid)+1)}'
-      data2['acad_id'] = f'{acadid}{str(int(acadid)+1)}'
-
-      data1['pilihan_id'] = 'P1'
-      data2['pilihan_id'] = 'P2'
-
-      for ind in list(data1[data1['peminatan_1'] == 'EISD'].index):
-        data1.loc[ind, 'score'] = datamahasiswa.iloc[ind]['oop'] + datamahasiswa.iloc[ind]['apsi'] + datamahasiswa.iloc[ind]['alpro'] + datamahasiswa.iloc[ind]['web']
-
-      for ind in list(data1[data1['peminatan_1'] == 'EDE'].index):
-        data1.loc[ind, 'score'] = datamahasiswa.iloc[ind]['rpb'] + datamahasiswa.iloc[ind]['basdat']
-
-      for ind in list(data1[data1['peminatan_1'] == 'SAG'].index):
-        data1.loc[ind, 'score'] = datamahasiswa.iloc[ind]['rpb'] + datamahasiswa.iloc[ind]['ea'] + datamahasiswa.iloc[ind]['apsi']
-
-      for ind in list(data1[data1['peminatan_1'] == 'ERP'].index):
-        data1.loc[ind, 'score'] = datamahasiswa.iloc[ind]['se'] + datamahasiswa.iloc[ind]['scm'] + datamahasiswa.iloc[ind]['manprosi']
-
-      for ind in list(data1[data1['peminatan_1'] == 'EIM'].index):
-        data1.loc[ind, 'score'] = datamahasiswa.iloc[ind]['desjar'] + datamahasiswa.iloc[ind]['manjarkom'] + datamahasiswa.iloc[ind]['sisop']
-
-      for ind in list(data2[data2['peminatan_2'] == 'EISD'].index):
-        data2.loc[ind, 'score'] = datamahasiswa.iloc[ind]['oop'] + datamahasiswa.iloc[ind]['apsi'] + datamahasiswa.iloc[ind]['alpro'] + datamahasiswa.iloc[ind]['web']
-
-      for ind in list(data2[data2['peminatan_2'] == 'EDE'].index):
-        data2.loc[ind, 'score'] = datamahasiswa.iloc[ind]['rpb'] + datamahasiswa.iloc[ind]['basdat']
-
-      for ind in list(data2[data2['peminatan_2'] == 'SAG'].index):
-        data2.loc[ind, 'score'] = datamahasiswa.iloc[ind]['rpb'] + datamahasiswa.iloc[ind]['ea'] + datamahasiswa.iloc[ind]['apsi']
-
-      for ind in list(data2[data2['peminatan_2'] == 'ERP'].index):
-        data2.loc[ind, 'score'] = datamahasiswa.iloc[ind]['se'] + datamahasiswa.iloc[ind]['scm'] + datamahasiswa.iloc[ind]['manprosi']
-
-      for ind in list(data2[data2['peminatan_2'] == 'EIM'].index):
-        data2.loc[ind, 'score'] = datamahasiswa.iloc[ind]['desjar'] + datamahasiswa.iloc[ind]['manjarkom'] + datamahasiswa.iloc[ind]['sisop']
-
-      data1 = data1.drop(['peminatan_id', 'peminatan_2'], axis=1)
-      data1.columns = ['student_id', 'acad_id', 'pilihan_id', 'hasil_id', 'score', 'peminatan_id']
-      data2 = data2.drop(['peminatan_id', 'peminatan_1'], axis=1)
-      data2.columns = ['student_id', 'acad_id', 'pilihan_id', 'hasil_id', 'score', 'peminatan_id']
-
-      f_pendaftaran = data1.append(data2)
-
-      check_pendaftaran = pd.read_sql('SELECT * FROM "F_Pendaftaran_Peminatan"', con=engine)
-      check_mahasiswa = pd.read_sql('SELECT * FROM "D_Student"', con=engine)
+      check_seleksi = pd.read_sql('SELECT * FROM "F_Seleksi"', con=engine)
       check_peminatan = pd.read_sql('SELECT * FROM "D_Peminatan"', con=engine)
-      check_pilihan = pd.read_sql('SELECT * FROM "D_Pilihan"', con=engine)
-      check_hasil = pd.read_sql('SELECT * FROM "D_Hasil"', con=engine)
+      check_keahlian = pd.read_sql('SELECT * FROM "D_Keahlian"', con=engine)
       check_acad = pd.read_sql('SELECT * FROM "D_Acad_Year"', con=engine)
+      check_course = pd.read_sql('SELECT * FROM "D_Course"', con=engine)
+      check_score = pd.read_sql('SELECT * FROM "F_Nilai"', con=engine)
 
-      in_pendaftaran = f_pendaftaran[(~f_pendaftaran.student_id.isin(check_pendaftaran.student_id)) & (~f_pendaftaran.pilihan_id.isin(check_pendaftaran.pilihan_id))]
-      in_mahasiswa = d_mahasiswa[~d_mahasiswa.student_id.isin(check_mahasiswa.student_id)]
+      in_seleksi = f_seleksi[(~f_seleksi.peminatan_id.isin(check_seleksi.peminatan_id)) & (~f_seleksi.keahlian_id.isin(check_seleksi.keahlian_id))]
       in_peminatan = d_peminatan[~d_peminatan.peminatan_id.isin(check_peminatan.peminatan_id)]
-      in_pilihan = d_pilihan[~d_pilihan.pilihan_id.isin(check_pilihan.pilihan_id)]
-      in_hasil = d_hasil[~d_hasil.hasil_id.isin(check_hasil.hasil_id)]
+      in_keahlian = d_keahlian[~d_keahlian.keahlian_id.isin(check_keahlian.keahlian_id)]
       in_acad = d_tahunakademik[~d_tahunakademik.acad_id.isin(check_acad.acad_id)]
+      in_course = d_course[~d_course.course_id.isin(check_course.course_id)]
+      in_nilai = f_list[(~f_list.acad_id.isin(check_score.acad_id)) & (~f_list.course_id.isin(check_score.course_id))]
 
-      in_mahasiswa.to_sql('D_Student', con=engine, index=False, if_exists="append", method='multi')
+      in_keahlian.to_sql('D_Keahlian', con=engine, index=False, if_exists="append", method='multi')
       in_peminatan.to_sql('D_Peminatan', con=engine, index=False, if_exists="append", method='multi')
-      in_pilihan.to_sql('D_Pilihan', con=engine, index=False, if_exists="append", method='multi')
-      in_hasil.to_sql('D_Hasil', con=engine, index=False, if_exists="append", method='multi')
       in_acad.to_sql('D_Acad_Year', con=engine, index=False, if_exists="append", method='multi')
-      in_pendaftaran.to_sql('F_Pendaftaran_Peminatan', con=engine, index=False, if_exists="append", method='multi')
-
+      in_course.to_sql('D_Course', con=engine, index=False, if_exists="append", method='multi')
+      in_seleksi.to_sql('F_Seleksi', con=engine, index=False, if_exists="append", method='multi')
+      in_nilai.to_sql('F_Nilai', con=engine, index=False, if_exists="append", method='multi')
 
       return redirect('bidata')
-    except Exception:
-      return JsonResponse({"message": "File tidak sesuai dengan ketentuan."})
+    # except Exception:
+    #   return render(request, 'bidata.html', {'user': user, "message": "File tidak sesuai dengan ketentuan."})
 
 
 def getdatapeminatan(request):
-
-  return JsonResponse({
-    "eisd": {
-      "mahasiswa": 123,
-      "dosen": 12,
-      "kuota": 120,
-      "bimbingan": f'{123/12:.1f}'
-    },
-    "ede": {
-      "mahasiswa": 67,
-      "dosen": 9,
-      "kuota": 90,
-      "bimbingan": f'{67/9:.1f}'
-    },
-    "erp": {
-      "mahasiswa": 39,
-      "dosen": 5,
-      "kuota": 50,
-      "bimbingan": f'{39/5:.1f}'
-    },
-    "sag": {
-      "mahasiswa": 95,
-      "dosen": 15,
-      "kuota": 150,
-      "bimbingan": f'{95/15:.1f}'
-    },
-    "eim": {
-      "mahasiswa": 43,
-      "dosen": 6,
-      "kuota": 60,
-      "bimbingan": f'{43/6:.1f}'
-    },
-  })
+  seleksi = pd.read_sql('SELECT * FROM "F_Seleksi"', con=engine)
+  seleksilist = json.loads(seleksi.to_json(orient="records"))
+  resp = {}
+  for sl in seleksilist:
+    resp[sl['peminatan_id']] = {
+      "mahasiswa": sl['jumlah_mahasiswa'],
+      "dosen": sl['jumlah_dosen'],
+      "kuota": sl['jumlah_kuota'],
+      "bimbingan": f"{sl['jumlah_mahasiswa'] / sl['jumlah_dosen']:.1f}"
+    }
+  return JsonResponse(resp, safe=False)
 
 def getdataoverall(request):
+  seleksi = pd.read_sql('SELECT * FROM "F_Seleksi"', con=engine)
+  keahlian = seleksi.filter(['keahlian_id', 'jumlah_dosen']).groupby(['keahlian_id']).sum().reset_index()
+  seleksilist = json.loads(seleksi.to_json(orient="records"))
+  keahlianlist = json.loads(keahlian.to_json(orient="records"))
+  print(keahlian)
+  dosenpeminatan = {}
+  dosenkeahlian = {}
+  kuotamahasiswa = {}
+    
+  for dosen in seleksilist:
+    dosenpeminatan[dosen['peminatan_id']] = dosen['jumlah_dosen']
+    kuotamahasiswa[dosen['peminatan_id']] = {
+      "mahasiswa": dosen['jumlah_mahasiswa'],
+      "kuota": dosen['jumlah_kuota']
+    }
 
-  return JsonResponse({
-    "eisd": {
-      "mahasiswa": 123,
-      "dosen": 12,
-      "kuota": 120,
-      "bimbingan": f'{123/12:.1f}'
-    },
-    "ede": {
-      "mahasiswa": 67,
-      "dosen": 9,
-      "kuota": 90,
-      "bimbingan": f'{67/9:.1f}'
-    },
-    "erp": {
-      "mahasiswa": 39,
-      "dosen": 5,
-      "kuota": 50,
-      "bimbingan": f'{39/5:.1f}'
-    },
-    "sag": {
-      "mahasiswa": 95,
-      "dosen": 15,
-      "kuota": 150,
-      "bimbingan": f'{95/15:.1f}'
-    },
-    "eim": {
-      "mahasiswa": 43,
-      "dosen": 6,
-      "kuota": 60,
-      "bimbingan": f'{43/6:.1f}'
-    },
-  })
+  for dosen in keahlianlist:
+    dosenkeahlian[dosen['keahlian_id']] = dosen['jumlah_dosen']
+
+  
+  return JsonResponse({"dosenpeminatan" : dosenpeminatan,"dosenkeahlian" : dosenkeahlian,  "kuotamahasiswa": kuotamahasiswa}, safe=False)
 
 def getdatanilai(request):
+  nilai = pd.read_sql('SELECT * FROM "F_Nilai"', con=engine)
+  nilailist = json.loads(nilai.to_json(orient="records"))
+  overall = nilai.drop(['course_id', 'acad_id'], axis=1).sum(axis=0)
+  resp = {}
+  for score in nilailist:
+    resp[score['course_id']] = {
+      "A": score['grade_A'],
+      "AB": score['grade_AB'],
+      "B": score['grade_B'],
+      "BC": score['grade_BC'],
+      "C": score['grade_C'],
+      "D": score['grade_D'],
+      "E": score['grade_E'],
+    }
+    
+    resp['all'] = {
+        "A": int(overall['grade_A']),
+      "AB": int(overall['grade_AB']),
+      "B": int(overall['grade_B']),
+      "BC": int(overall['grade_BC']),
+      "C": int(overall['grade_C']),
+      "D": int(overall['grade_D']),
+      "E": int(overall['grade_E']),
+    }
 
-  return JsonResponse({
-    "all": {
-      "A": 300,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 10,
-      "D": 4,
-      "E": 20
-    },
-    "oop": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 10,
-      "D": 42,
-      "E": 5
-    },
-    "rpb": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 10,
-      "D": 41,
-      "E": 5
-    },
-    "pi": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 120,
-      "D": 4,
-      "E": 5
-    },
-    "apsi": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 120,
-      "D": 4,
-      "E": 5
-    },
-    "web": {
-      "A": 10,
-      "AB": 42,
-      "B": 410,
-      "BC": 10,
-      "C": 10,
-      "D": 4,
-      "E": 5
-    },
-    "statistik": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 10,
-      "D": 42,
-      "E": 5
-    },
-    "matdis": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 110,
-      "D": 4,
-      "E": 5
-    },
-    "alpro": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 10,
-      "D": 42,
-      "E": 5
-    },
-    "strukdat": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 110,
-      "D": 4,
-      "E": 5
-    },
-    "se": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 110,
-      "D": 4,
-      "E": 5
-    },
-    "po": {
-      "A": 10,
-      "AB": 42,
-      "B": 420,
-      "BC": 10,
-      "C": 10,
-      "D": 4,
-      "E": 5
-    },
-    "scm": {
-      "A": 10,
-      "AB": 42,
-      "B": 401,
-      "BC": 10,
-      "C": 10,
-      "D": 4,
-      "E": 5
-    },
-    "ea": {
-      "A": 10,
-      "AB": 422,
-      "B": 40,
-      "BC": 10,
-      "C": 10,
-      "D": 4,
-      "E": 5
-    },
-    "basdat": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 110,
-      "D": 4,
-      "E": 5
-    },
-    "manjarkom": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 120,
-      "D": 4,
-      "E": 5
-    },
-    "sisop": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 110,
-      "D": 4,
-      "E": 5
-    },
-    "msdm": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 10,
-      "C": 103,
-      "D": 4,
-      "E": 5
-    },
-    "desjar": {
-      "A": 10,
-      "AB": 42,
-      "B": 410,
-      "BC": 10,
-      "C": 10,
-      "D": 42,
-      "E": 5
-    },
-    "manprosi": {
-      "A": 10,
-      "AB": 42,
-      "B": 40,
-      "BC": 101,
-      "C": 102,
-      "D": 42,
-      "E": 55
-    },
-  })
+  return JsonResponse(resp, safe=False)
 
   
