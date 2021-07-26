@@ -105,24 +105,23 @@ def importData(request):
   user = Profile.objects.get(username=request.session['user_login'])
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
-      # try:
+      try:
         dosen = pd.read_excel(request.FILES['file'])
         dosen.columns = map(str.lower, dosen.columns)
         Dosen.objects.all().delete()
         dosen.to_sql('pipeapp_dosen', con=engine, index=False, if_exists="append", method='multi')
         return redirect('datadosen')
-      # except Exception:
-      #   return render(request, 'tambahdosen.html', {'user': user, "error"})
+      except Exception:
+        return render(request, 'tambahdosen.html', {'user': user, "error" : "File tidak sesuai."})
     elif request.POST['data'] == 'NILAI':
-      # try:
+      try:
         nilai = pd.read_excel(request.FILES['file'])
         nilai.columns = map(str.lower, nilai.columns)
         Nilai.objects.all().delete()
         nilai.to_sql('pipeapp_nilai', con=engine, index=False, if_exists="append", method='multi')
         return redirect('datamahasiswa')
-      # except Exception:
-      #   print('error')
-      #   return redirect('datamahasiswa')
+      except Exception:
+        return render(request, 'tambahnilai.html', {'user': user, "error" : "File tidak sesuai"})
 
     elif request.POST['data'] == 'PEMINATAN':
 
