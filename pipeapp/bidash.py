@@ -11,7 +11,7 @@ from .dburl import engine
 def uploadfile(request):
   user = Profile.objects.get(username=request.session['user_login'])
   if request.method == "POST":
-    # try:
+    try:
       datamahasiswa = pd.read_csv(request.FILES['datamahasiswa'])
       dosen = pd.read_csv(request.FILES['datadosen'])
       d_mahasiswa = datamahasiswa.filter(['nim', 'nama', 'kelas'])
@@ -165,9 +165,9 @@ def uploadfile(request):
       in_seleksi.to_sql('F_Seleksi', con=engine, index=False, if_exists="append", method='multi')
       in_nilai.to_sql('F_Nilai', con=engine, index=False, if_exists="append", method='multi')
 
-      return redirect('bidata')
-    # except Exception:
-    #   return render(request, 'bidata.html', {'user': user, "message": "File tidak sesuai dengan ketentuan."})
+      return render(request, 'bidata.html', {'user': user, "message": "Proses ETL berhasil dilakukan."})
+    except Exception:
+      return render(request, 'bidata.html', {'user': user, "error": "File tidak sesuai dengan ketentuan."})
 
 
 def getdatapeminatan(request):

@@ -167,28 +167,27 @@ fetch("/api/bi/datapeminatan")
           ],
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            datalabels: {
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-              borderColor: "#ffffff",
-              color: function (context) {
-                return context.dataset.backgroundColor;
+          tooltips: {
+            callbacks: {
+              label: function (tooltipItem, data) {
+                var dataset = data.datasets[tooltipItem.datasetIndex];
+                var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+                var total = meta.total;
+                var currentValue = dataset.data[tooltipItem.index];
+                var percentage = parseFloat(
+                  ((currentValue / total) * 100).toFixed(1)
+                );
+                return currentValue + " (" + percentage + "%)";
               },
-              font: function (context) {
-                var w = context.chart.width;
-                return {
-                  size: w < 512 ? 18 : 20,
-                };
+              title: function (tooltipItem, data) {
+                return data.labels[tooltipItem[0].index];
               },
             },
           },
+          responsive: true,
+          maintainAspectRatio: false,
           legend: {
             display: false,
-          },
-          tooltips: {
-            enabled: true,
           },
         },
       });

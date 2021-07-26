@@ -32,7 +32,7 @@ def login(request):
           profile = getprofile.json()
           posisi = getposisi.json()
           
-          if posisi[0]['role'] == 'MAHASISWA':
+          if posisi and posisi[0]['role'] == 'MAHASISWA':
             users = Profile(
               numberid= profile['numberid'],
               username=request.POST['username'],
