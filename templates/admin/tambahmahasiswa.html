@@ -1,6 +1,6 @@
-{% block main %}
+{% load static %}
 
-{% if nilai %}
+{% block main %} {% if nilai %}
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
     <h1>Nilai Mahasiswa</h1>
@@ -11,92 +11,209 @@
     <div class="card p-5">
       <div class="row">
         <div class="col">
-          <form
-            action="/api/update-data"
-            method="POST"
-          >
-          {% csrf_token %}
-          <input type="hidden" name="id" value="{{nilai.id}}">
-          <div class="form-group">
-            <label for="name">NIM</label>
-            <input type="text" name="nim" class="form-control" placeholder="NIM Mahasiswa" value="{{nilai.nim}}">
-          </div>
-          <div class="form-group">
-            <label for="name">Nama</label>
-            <input type="text" name="name" class="form-control" placeholder="Nama Mahasiswa" value="{{nilai.name}}">
-          </div>
-          <div class="form-group">
-            <label for="rpb">RPB</label>
-            <input type="text" name="rpb" class="form-control" placeholder="Nilai RPB" value="{{nilai.rpb}}">
-          </div>
-          <div class="form-group">
-            <label for="probstat">PROBSTAT</label>
-            <input type="text" name="probstat" class="form-control" placeholder="Nilai PROBSTAT" value="{{nilai.probstat}}"> 
-          </div>
-          <div class="form-group">
-            <label for="basdat">BASDAT</label>
-            <input type="text" name="basdat" class="form-control" placeholder="Nilai BASDAT" value="{{nilai.basdat}}">
-          </div>
-          <div class="form-group">
-            <label for="dwbi">DWBI</label>
-            <input type="text" name="dwbi" class="form-control" placeholder="Nilai DWBI" value="{{nilai.dwbi}}">
-          </div>
-          <div class="form-group">
-            <label for="oop">OOP</label>
-            <input type="text" name="oop" class="form-control" placeholder="Nilai OOP" value="{{nilai.oop}}">
-          </div>
-          <div class="form-group">
-            <label for="apsi">APSI</label>
-            <input type="text" name="apsi" class="form-control" placeholder="Nilai APSI" value="{{nilai.apsi}}">
-          </div>
-          <div class="form-group">
-            <label for="alpro">ALPRO</label>
-            <input type="text" name="alpro" class="form-control" placeholder="Nilai ALPRO" value="{{nilai.alpro}}">
-          </div>
-          <div class="form-group">
-            <label for="web">WEB</label>
-            <input type="text" name="web" class="form-control" placeholder="Nilai WEB" value="{{nilai.web}}">
-          </div>
-          <div class="form-group">
-            <label for="ea">EA</label>
-            <input type="text" name="ea" class="form-control" placeholder="Nilai EA" value="{{nilai.ea}}">
-          </div>
-          <div class="form-group">
-            <label for="manlay">MANLAY</label>
-            <input type="text" name="manlay" class="form-control" placeholder="Nilai MANLAY" value="{{nilai.manlay}}">
-          </div>
-          <div class="form-group">
-            <label for="se">SE</label>
-            <input type="text" name="se" class="form-control" placeholder="Nilai SE" value="{{nilai.se}}">
-          </div>
-          <div class="form-group">
-            <label for="scm">SCM</label>
-            <input type="text" name="scm" class="form-control" placeholder="Nilai SCM" value="{{nilai.scm}}">
-          </div>
-          <div class="form-group">
-            <label for="akuntansi">AKUNTANSI</label>
-            <input type="text" name="akuntansi" class="form-control" placeholder="Nilai AKUNTANSI" value="{{nilai.akuntansi}}">
-          </div>
-          <div class="form-group">
-            <label for="manprosi">MANPROSI</label>
-            <input type="text" name="manprosi" class="form-control" placeholder="Nilai MANPROSI" value="{{nilai.manprosi}}">
-          </div>
-          <div class="form-group">
-            <label for="desjar">DESJAR</label>
-            <input type="text" name="desjar" class="form-control" placeholder="Nilai DESJAR" value="{{nilai.desjar}}">
-          </div>
-          <div class="form-group">
-            <label for="manjarkom">MANJARKOM</label>
-            <input type="text" name="manjarkom" class="form-control" placeholder="Nilai MANJARKOM" value="{{nilai.manjarkom}}">
-          </div>
-          <div class="form-group">
-            <label for="sisop">SISOP</label>
-            <input type="text" name="sisop" class="form-control" placeholder="Nilai SISOP" value="{{nilai.sisop}}">
-          </div>
-          <div class="form-group">
-            <label for="ksi">KSI</label>
-            <input type="text" name="ksi" class="form-control" placeholder="Nilai KSI" value="{{nilai.ksi}}">
-          </div>
+          <form action="/api/update-data" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{nilai.id}}" />
+            <div class="form-group">
+              <label for="name">NIM</label>
+              <input
+                type="text"
+                name="nim"
+                class="form-control"
+                placeholder="NIM Mahasiswa"
+                value="{{nilai.nim}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="name">Nama</label>
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                placeholder="Nama Mahasiswa"
+                value="{{nilai.name}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="rpb">RPB</label>
+              <input
+                type="text"
+                name="rpb"
+                class="form-control"
+                placeholder="Nilai RPB"
+                value="{{nilai.rpb}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="probstat">PROBSTAT</label>
+              <input
+                type="text"
+                name="probstat"
+                class="form-control"
+                placeholder="Nilai PROBSTAT"
+                value="{{nilai.probstat}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="basdat">BASDAT</label>
+              <input
+                type="text"
+                name="basdat"
+                class="form-control"
+                placeholder="Nilai BASDAT"
+                value="{{nilai.basdat}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="dwbi">DWBI</label>
+              <input
+                type="text"
+                name="dwbi"
+                class="form-control"
+                placeholder="Nilai DWBI"
+                value="{{nilai.dwbi}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="oop">OOP</label>
+              <input
+                type="text"
+                name="oop"
+                class="form-control"
+                placeholder="Nilai OOP"
+                value="{{nilai.oop}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="apsi">APSI</label>
+              <input
+                type="text"
+                name="apsi"
+                class="form-control"
+                placeholder="Nilai APSI"
+                value="{{nilai.apsi}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="alpro">ALPRO</label>
+              <input
+                type="text"
+                name="alpro"
+                class="form-control"
+                placeholder="Nilai ALPRO"
+                value="{{nilai.alpro}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="web">WEB</label>
+              <input
+                type="text"
+                name="web"
+                class="form-control"
+                placeholder="Nilai WEB"
+                value="{{nilai.web}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="ea">EA</label>
+              <input
+                type="text"
+                name="ea"
+                class="form-control"
+                placeholder="Nilai EA"
+                value="{{nilai.ea}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="manlay">MANLAY</label>
+              <input
+                type="text"
+                name="manlay"
+                class="form-control"
+                placeholder="Nilai MANLAY"
+                value="{{nilai.manlay}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="se">SE</label>
+              <input
+                type="text"
+                name="se"
+                class="form-control"
+                placeholder="Nilai SE"
+                value="{{nilai.se}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="scm">SCM</label>
+              <input
+                type="text"
+                name="scm"
+                class="form-control"
+                placeholder="Nilai SCM"
+                value="{{nilai.scm}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="akuntansi">AKUNTANSI</label>
+              <input
+                type="text"
+                name="akuntansi"
+                class="form-control"
+                placeholder="Nilai AKUNTANSI"
+                value="{{nilai.akuntansi}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="manprosi">MANPROSI</label>
+              <input
+                type="text"
+                name="manprosi"
+                class="form-control"
+                placeholder="Nilai MANPROSI"
+                value="{{nilai.manprosi}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="desjar">DESJAR</label>
+              <input
+                type="text"
+                name="desjar"
+                class="form-control"
+                placeholder="Nilai DESJAR"
+                value="{{nilai.desjar}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="manjarkom">MANJARKOM</label>
+              <input
+                type="text"
+                name="manjarkom"
+                class="form-control"
+                placeholder="Nilai MANJARKOM"
+                value="{{nilai.manjarkom}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="sisop">SISOP</label>
+              <input
+                type="text"
+                name="sisop"
+                class="form-control"
+                placeholder="Nilai SISOP"
+                value="{{nilai.sisop}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="ksi">KSI</label>
+              <input
+                type="text"
+                name="ksi"
+                class="form-control"
+                placeholder="Nilai KSI"
+                value="{{nilai.ksi}}"
+              />
+            </div>
 
             <button
               type="submit"
@@ -114,7 +231,6 @@
   </div>
 </div>
 
-
 {% else %}
 
 <div class="row">
@@ -128,106 +244,17 @@
       <div class="row">
         <div class="col">
           <form
-            action="/api/insert-data"
+            action="/api/import-data"
+            enctype="multipart/form-data"
             method="POST"
           >
-          {% csrf_token %}
-            <div class="form-group">
-              <label for="name">NIM</label>
-              <input type="text" name="nim" class="form-control" placeholder="NIM Mahasiswa">
-            </div>
-            <div class="form-group">
-              <label for="name">Nama</label>
-              <input type="text" name="name" class="form-control" placeholder="Nama Mahasiswa">
-            </div>
-            <div class="form-group">
-              <label for="rpb">RPB</label>
-              <input type="text" name="rpb" class="form-control" placeholder="Nilai RPB">
-            </div>
-            <div class="form-group">
-              <label for="probstat">PROBSTAT</label>
-              <input type="text" name="probstat" class="form-control" placeholder="Nilai PROBSTAT">
-            </div>
-            <div class="form-group">
-              <label for="basdat">BASDAT</label>
-              <input type="text" name="basdat" class="form-control" placeholder="Nilai BASDAT">
-            </div>
-            <div class="form-group">
-              <label for="dwbi">DWBI</label>
-              <input type="text" name="dwbi" class="form-control" placeholder="Nilai DWBI">
-            </div>
-            <div class="form-group">
-              <label for="oop">OOP</label>
-              <input type="text" name="oop" class="form-control" placeholder="Nilai OOP">
-            </div>
-            <div class="form-group">
-              <label for="apsi">APSI</label>
-              <input type="text" name="apsi" class="form-control" placeholder="Nilai APSI">
-            </div>
-            <div class="form-group">
-              <label for="alpro">ALPRO</label>
-              <input type="text" name="alpro" class="form-control" placeholder="Nilai ALPRO">
-            </div>
-            <div class="form-group">
-              <label for="web">WEB</label>
-              <input type="text" name="web" class="form-control" placeholder="Nilai WEB">
-            </div>
-            <div class="form-group">
-              <label for="ea">EA</label>
-              <input type="text" name="ea" class="form-control" placeholder="Nilai EA">
-            </div>
-            <div class="form-group">
-              <label for="manlay">MANLAY</label>
-              <input type="text" name="manlay" class="form-control" placeholder="Nilai MANLAY">
-            </div>
-            <div class="form-group">
-              <label for="se">SE</label>
-              <input type="text" name="se" class="form-control" placeholder="Nilai SE">
-            </div>
-            <div class="form-group">
-              <label for="scm">SCM</label>
-              <input type="text" name="scm" class="form-control" placeholder="Nilai SCM">
-            </div>
-            <div class="form-group">
-              <label for="akuntansi">AKUNTANSI</label>
-              <input type="text" name="akuntansi" class="form-control" placeholder="Nilai AKUNTANSI">
-            </div>
-            <div class="form-group">
-              <label for="manprosi">MANPROSI</label>
-              <input type="text" name="manprosi" class="form-control" placeholder="Nilai MANPROSI">
-            </div>
-            <div class="form-group">
-              <label for="desjar">DESJAR</label>
-              <input type="text" name="desjar" class="form-control" placeholder="Nilai DESJAR">
-            </div>
-            <div class="form-group">
-              <label for="manjarkom">MANJARKOM</label>
-              <input type="text" name="manjarkom" class="form-control" placeholder="Nilai MANJARKOM">
-            </div>
-            <div class="form-group">
-              <label for="sisop">SISOP</label>
-              <input type="text" name="sisop" class="form-control" placeholder="Nilai SISOP">
-            </div>
-            <div class="form-group">
-              <label for="ksi">KSI</label>
-              <input type="text" name="ksi" class="form-control" placeholder="Nilai KSI">
-            </div>
-
-            <button
-              type="submit"
-              class="submit-button mt-5"
-              name="data"
-              value="NILAI"
-            >
-              <span>Tambah</span>
-              <i class="bx bxs-chevrons-right"></i>
-            </button>
-          </form>
-            <p class="br my-5"><span>or</span></p>
-          <form action="/api/import-data" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
             <div class="form-group">
-              <input type="file" name="file" class="form-control">
+              <input type="file" name="file" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <a href="{% static 'assets/template/nilaimahasiswa.xlsx' %}">Download Template</a>
             </div>
 
             <button
@@ -240,12 +267,205 @@
               <i class="bx bxs-chevrons-right"></i>
             </button>
           </form>
+          <p class="br my-5"><span>or</span></p>
+
+          <form action="/api/insert-data" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="name">NIM</label>
+              <input
+                type="text"
+                name="nim"
+                class="form-control"
+                placeholder="NIM Mahasiswa"
+              />
+            </div>
+            <div class="form-group">
+              <label for="name">Nama</label>
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                placeholder="Nama Mahasiswa"
+              />
+            </div>
+            <div class="form-group">
+              <label for="rpb">RPB</label>
+              <input
+                type="text"
+                name="rpb"
+                class="form-control"
+                placeholder="Nilai RPB"
+              />
+            </div>
+            <div class="form-group">
+              <label for="probstat">PROBSTAT</label>
+              <input
+                type="text"
+                name="probstat"
+                class="form-control"
+                placeholder="Nilai PROBSTAT"
+              />
+            </div>
+            <div class="form-group">
+              <label for="basdat">BASDAT</label>
+              <input
+                type="text"
+                name="basdat"
+                class="form-control"
+                placeholder="Nilai BASDAT"
+              />
+            </div>
+            <div class="form-group">
+              <label for="dwbi">DWBI</label>
+              <input
+                type="text"
+                name="dwbi"
+                class="form-control"
+                placeholder="Nilai DWBI"
+              />
+            </div>
+            <div class="form-group">
+              <label for="oop">OOP</label>
+              <input
+                type="text"
+                name="oop"
+                class="form-control"
+                placeholder="Nilai OOP"
+              />
+            </div>
+            <div class="form-group">
+              <label for="apsi">APSI</label>
+              <input
+                type="text"
+                name="apsi"
+                class="form-control"
+                placeholder="Nilai APSI"
+              />
+            </div>
+            <div class="form-group">
+              <label for="alpro">ALPRO</label>
+              <input
+                type="text"
+                name="alpro"
+                class="form-control"
+                placeholder="Nilai ALPRO"
+              />
+            </div>
+            <div class="form-group">
+              <label for="web">WEB</label>
+              <input
+                type="text"
+                name="web"
+                class="form-control"
+                placeholder="Nilai WEB"
+              />
+            </div>
+            <div class="form-group">
+              <label for="ea">EA</label>
+              <input
+                type="text"
+                name="ea"
+                class="form-control"
+                placeholder="Nilai EA"
+              />
+            </div>
+            <div class="form-group">
+              <label for="manlay">MANLAY</label>
+              <input
+                type="text"
+                name="manlay"
+                class="form-control"
+                placeholder="Nilai MANLAY"
+              />
+            </div>
+            <div class="form-group">
+              <label for="se">SE</label>
+              <input
+                type="text"
+                name="se"
+                class="form-control"
+                placeholder="Nilai SE"
+              />
+            </div>
+            <div class="form-group">
+              <label for="scm">SCM</label>
+              <input
+                type="text"
+                name="scm"
+                class="form-control"
+                placeholder="Nilai SCM"
+              />
+            </div>
+            <div class="form-group">
+              <label for="akuntansi">AKUNTANSI</label>
+              <input
+                type="text"
+                name="akuntansi"
+                class="form-control"
+                placeholder="Nilai AKUNTANSI"
+              />
+            </div>
+            <div class="form-group">
+              <label for="manprosi">MANPROSI</label>
+              <input
+                type="text"
+                name="manprosi"
+                class="form-control"
+                placeholder="Nilai MANPROSI"
+              />
+            </div>
+            <div class="form-group">
+              <label for="desjar">DESJAR</label>
+              <input
+                type="text"
+                name="desjar"
+                class="form-control"
+                placeholder="Nilai DESJAR"
+              />
+            </div>
+            <div class="form-group">
+              <label for="manjarkom">MANJARKOM</label>
+              <input
+                type="text"
+                name="manjarkom"
+                class="form-control"
+                placeholder="Nilai MANJARKOM"
+              />
+            </div>
+            <div class="form-group">
+              <label for="sisop">SISOP</label>
+              <input
+                type="text"
+                name="sisop"
+                class="form-control"
+                placeholder="Nilai SISOP"
+              />
+            </div>
+            <div class="form-group">
+              <label for="ksi">KSI</label>
+              <input
+                type="text"
+                name="ksi"
+                class="form-control"
+                placeholder="Nilai KSI"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="submit-button mt-5"
+              name="data"
+              value="NILAI"
+            >
+              <span>Tambah</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}
