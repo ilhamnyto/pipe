@@ -11,7 +11,7 @@ def daftarpeminatan(request):
       batch = Batch.objects.last()
       seleksistatus = Seleksi.objects.filter(studentid=user.numberid)
       serverstatus = StatusServer.objects.get(name='Batch Pendaftaran')
-      return render(request, 'daftar.html', {'role': user, 'peminatan': peminatan, 'batch': batch, 'seleksistatus': seleksistatus, "serverstatus": serverstatus, 'error': True})
+      return render(request, 'daftar.html', {'user': user, 'peminatan': peminatan, 'batch': batch, 'seleksistatus': seleksistatus, "serverstatus": serverstatus, 'error': True})
     else:
       batch = Batch.objects.get(id=request.POST['batch'])
       pilihan1 = Peminatan.objects.get(peminatancode=request.POST['pilihan1'])
