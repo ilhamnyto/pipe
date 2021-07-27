@@ -22,13 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '0brts2ia9d28rkz0%(e(s!f@i3*ahswkm3xa3r)a)ou&za7d4l'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -76,7 +70,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pipe.wsgi.application'
-
 
 
 DATABASES = {

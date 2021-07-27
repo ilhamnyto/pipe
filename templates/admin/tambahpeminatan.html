@@ -1,0 +1,164 @@
+{% load static %} {% block main %} {% if dosen %}
+<div class="row">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <h1>Update Peminatan</h1>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <div class="card p-5">
+      <div class="row">
+        <div class="col">
+          <form action="/api/update-data" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="name">Kode Peminatan</label>
+              <input
+                type="text"
+                name="kodepeminatan"
+                class="form-control"
+                placeholder="Kode Peminatan"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="name">Nama Peminatan</label>
+              <input
+                type="text"
+                name="namapeminatan"
+                class="form-control"
+                placeholder="Nama Peminatan"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="keprofesian">Keprofesian</label>
+              <input
+                type="text"
+                name="keprofesian"
+                class="form-control"
+                placeholder="Keprofesian"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="submit-button mt-5"
+              name="data"
+              value="PEMINATAN"
+            >
+              <span>Tambah</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+
+<div class="row">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <h1>Import Data Peminatan</h1>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <div class="card p-5">
+      <div class="row">
+        <div class="col">
+          <form
+            action="/api/import-data"
+            enctype="multipart/form-data"
+            method="POST"
+          >
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="file">Data Peminatan</label>
+              <input type="file" name="file" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <a href="{% static 'assets/template/keprof.xlsx' %}"
+                >Download Template</a
+              >
+            </div>
+
+            <button
+              type="submit"
+              class="submit-button mt-5"
+              name="data"
+              value="KEPROF"
+            >
+              <span>Import Data</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <h1>Tambah Peminatan</h1>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <div class="card p-5">
+      <div class="row">
+        <div class="col">
+          <form action="/api/update-data" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="name">Kode Peminatan</label>
+              <input
+                type="text"
+                name="kodepeminatan"
+                class="form-control"
+                placeholder="Kode Peminatan"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="name">Nama Peminatan</label>
+              <input
+                type="text"
+                name="namapeminatan"
+                class="form-control"
+                placeholder="Nama Peminatan"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="keprofesian">Keprofesian</label>
+              <input
+                type="text"
+                name="keprofesian"
+                class="form-control"
+                placeholder="Keprofesian"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="submit-button mt-5"
+              name="data"
+              value="PEMINATAN"
+            >
+              <span>Tambah</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %} {% endblock %}

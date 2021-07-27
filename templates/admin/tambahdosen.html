@@ -1,5 +1,4 @@
-{% load static %} 
-{% block main %} {% if dosen %}
+{% load static %} {% block main %} {% if dosen %}
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
     <h1>Tambah Dosen</h1>
@@ -21,6 +20,7 @@
                 class="form-control"
                 placeholder="Nama Dosen"
                 value="{{dosen.name}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -31,6 +31,7 @@
                 class="form-control"
                 placeholder="Kelompok Keahlian"
                 value="{{dosen.kelompok}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -41,6 +42,7 @@
                 class="form-control"
                 placeholder="Peminatan"
                 value="{{dosen.peminatan}}"
+                required
               />
             </div>
 
@@ -64,7 +66,7 @@
 
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
-    <h1>Tambah Dosen</h1>
+    <h1>Import Data Dosen</h1>
   </div>
 </div>
 <div class="row mt-3">
@@ -79,10 +81,13 @@
           >
             {% csrf_token %}
             <div class="form-group">
-              <input type="file" name="file" class="form-control" />
+              <label for="file">Data Dosen</label>
+              <input type="file" name="file" class="form-control" required />
             </div>
             <div class="form-group">
-              <a href="{% static 'assets/template/dosen.xlsx' %}">Download Template</a>
+              <a href="{% static 'assets/template/dosen.xlsx' %}"
+                >Download Template</a
+              >
             </div>
 
             <button
@@ -95,8 +100,22 @@
               <i class="bx bxs-chevrons-right"></i>
             </button>
           </form>
-          <p class="br my-5"><span>or</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="row mt-5">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <h1>Tambah Data Dosen</h1>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <div class="card p-5">
+      <div class="row">
+        <div class="col">
           <form action="/api/insert-data" method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -106,6 +125,7 @@
                 name="name"
                 class="form-control"
                 placeholder="Nama Dosen"
+                required
               />
             </div>
             <div class="form-group">
@@ -115,6 +135,7 @@
                 name="kelompok"
                 class="form-control"
                 placeholder="Kelompok Keahlian"
+                required
               />
             </div>
             <div class="form-group">
@@ -124,6 +145,7 @@
                 name="peminatan"
                 class="form-control"
                 placeholder="Peminatan"
+                required
               />
             </div>
 

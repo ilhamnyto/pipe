@@ -1,0 +1,140 @@
+:root {
+  --first-color: #303d60;
+  --second-color: #75a1de;
+  --third-color: #9fc8fe;
+  --bg-color: #f9f9f9;
+  --danger-color: #ef6565;
+  --dark-color: #202020;
+  --light-color: #f5faff;
+}
+
+.file-upload {
+  display: block;
+  text-align: center;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+}
+.file-upload .file-select {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 0.2rem;
+  border: 2px solid var(--third-color);
+  color: var(--first-color);
+  cursor: pointer;
+  height: 45px;
+  line-height: 40px;
+  text-align: left;
+  background: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+.file-upload .file-select .file-select-button {
+  background: var(--second-color);
+  color: var(--light-color);
+  padding: 0 10px;
+  display: inline-block;
+  height: 45px;
+  line-height: 40px;
+}
+.file-upload .file-select .file-select-name {
+  line-height: 40px;
+  display: inline-block;
+  padding: 0 10px;
+}
+.file-upload .file-select:hover {
+  border-color: var(--second-color);
+  transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+}
+.file-upload .file-select:hover .file-select-button {
+  background: var(--second-color);
+  color: var(--light-color);
+  transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+}
+
+.file-upload .file-select input[type="file"] {
+  z-index: 100;
+  cursor: pointer;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.file-upload .file-select.file-select-disabled {
+  opacity: 0.65;
+}
+
+.big {
+  font-size: 5rem;
+  margin-top: 2rem;
+  font-weight: bold;
+}
+
+.medium {
+  font-size: 4rem;
+  margin-top: 3.5rem;
+  font-weight: bold;
+}
+
+.min-height {
+  min-height: 15rem;
+}
+
+.nilai i {
+  font-size: 6rem !important;
+}
+
+.nilai .title {
+  font-size: 1rem;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.nilai .text .desc {
+  font-weight: bold;
+  font-size: 1.9rem;
+}
+
+.small {
+  margin-left: 0.7rem;
+  font-weight: 600;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.t-link {
+  text-decoration: none;
+  color: var(--first-color);
+  font-weight: bold;
+  padding: 0.5rem 1.4rem;
+  color: #303d609d;
+}
+
+.t-link:hover {
+  color: var(--first-color);
+}
+
+.t-active {
+  background: var(--second-color);
+  color: var(--light-color);
+  border-radius: 0.2rem;
+}
+
+.t-active:hover {
+  color: #ffffff;
+}
+
+.middle {
+  left: 39%;
+  top: 11rem;
+  font-size: 1rem;
+  font-weight: bold;
+}

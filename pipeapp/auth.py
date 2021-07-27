@@ -20,6 +20,7 @@ def login(request):
       if 'token' in token and statuslogin.isAvailable:
         if profile:
           request.session['user_login'] = request.POST['username']
+          request.session['role'] = profile[0].role
           return redirect('home')
         else:
           bearertoken = {
@@ -78,6 +79,7 @@ def login(request):
 def logout(request):
   try:
     del request.session['user_login']
+    del request.session['role']
   except KeyError:
     pass
   return redirect('index')

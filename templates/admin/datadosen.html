@@ -46,14 +46,14 @@
                       {% csrf_token %}
                       <input type="hidden" name="id" value="{{dosen.id}}" />
                       <button
-                        class="btn btn-sm btn-primary mx-2"
+                        class="btn btn-sm btn-danger mx-2"
                         name="data"
                         value="DOSEN"
                       >
                         Delete
                       </button>
                     </form>
-                    <a class="btn btn-sm btn-danger" href="/data-dosen/edit/{{dosen.id}}"
+                    <a class="btn btn-sm btn-primary" href="/data-dosen/edit/{{dosen.id}}"
                       >Edit</a
                     >
                   </td>

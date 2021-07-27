@@ -1,9 +1,7 @@
-{% load static %}
-
-{% block main %} {% if nilai %}
+{% load static %} {% block main %} {% if nilai %}
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
-    <h1>Nilai Mahasiswa</h1>
+    <h1>Update Nilai Mahasiswa</h1>
   </div>
 </div>
 <div class="row mt-3">
@@ -22,6 +20,7 @@
                 class="form-control"
                 placeholder="NIM Mahasiswa"
                 value="{{nilai.nim}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -32,6 +31,7 @@
                 class="form-control"
                 placeholder="Nama Mahasiswa"
                 value="{{nilai.name}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -42,6 +42,7 @@
                 class="form-control"
                 placeholder="Nilai RPB"
                 value="{{nilai.rpb}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -52,6 +53,7 @@
                 class="form-control"
                 placeholder="Nilai PROBSTAT"
                 value="{{nilai.probstat}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -62,6 +64,7 @@
                 class="form-control"
                 placeholder="Nilai BASDAT"
                 value="{{nilai.basdat}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -72,6 +75,7 @@
                 class="form-control"
                 placeholder="Nilai DWBI"
                 value="{{nilai.dwbi}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -82,6 +86,7 @@
                 class="form-control"
                 placeholder="Nilai OOP"
                 value="{{nilai.oop}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -92,6 +97,7 @@
                 class="form-control"
                 placeholder="Nilai APSI"
                 value="{{nilai.apsi}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -102,6 +108,7 @@
                 class="form-control"
                 placeholder="Nilai ALPRO"
                 value="{{nilai.alpro}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -112,6 +119,7 @@
                 class="form-control"
                 placeholder="Nilai WEB"
                 value="{{nilai.web}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -122,6 +130,7 @@
                 class="form-control"
                 placeholder="Nilai EA"
                 value="{{nilai.ea}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -132,6 +141,7 @@
                 class="form-control"
                 placeholder="Nilai MANLAY"
                 value="{{nilai.manlay}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -142,6 +152,7 @@
                 class="form-control"
                 placeholder="Nilai SE"
                 value="{{nilai.se}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -152,6 +163,7 @@
                 class="form-control"
                 placeholder="Nilai SCM"
                 value="{{nilai.scm}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -162,6 +174,7 @@
                 class="form-control"
                 placeholder="Nilai AKUNTANSI"
                 value="{{nilai.akuntansi}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -172,6 +185,7 @@
                 class="form-control"
                 placeholder="Nilai MANPROSI"
                 value="{{nilai.manprosi}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -182,6 +196,7 @@
                 class="form-control"
                 placeholder="Nilai DESJAR"
                 value="{{nilai.desjar}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -192,6 +207,7 @@
                 class="form-control"
                 placeholder="Nilai MANJARKOM"
                 value="{{nilai.manjarkom}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -202,6 +218,7 @@
                 class="form-control"
                 placeholder="Nilai SISOP"
                 value="{{nilai.sisop}}"
+                required
               />
             </div>
             <div class="form-group">
@@ -212,6 +229,7 @@
                 class="form-control"
                 placeholder="Nilai KSI"
                 value="{{nilai.ksi}}"
+                required
               />
             </div>
 
@@ -220,6 +238,7 @@
               class="submit-button mt-5"
               name="data"
               value="NILAI"
+              required
             >
               <span>Update</span>
               <i class="bx bxs-chevrons-right"></i>
@@ -235,7 +254,7 @@
 
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
-    <h1>Nilai Mahasiswa</h1>
+    <h1>Import Nilai Mahasiswa</h1>
   </div>
 </div>
 <div class="row mt-3">
@@ -250,11 +269,13 @@
           >
             {% csrf_token %}
             <div class="form-group">
-              <input type="file" name="file" class="form-control" />
+              <input type="file" name="file" class="form-control" required />
             </div>
 
             <div class="form-group">
-              <a href="{% static 'assets/template/nilaimahasiswa.xlsx' %}">Download Template</a>
+              <a href="{% static 'assets/template/nilaimahasiswa.xlsx' %}"
+                >Download Template</a
+              >
             </div>
 
             <button
@@ -267,8 +288,22 @@
               <i class="bx bxs-chevrons-right"></i>
             </button>
           </form>
-          <p class="br my-5"><span>or</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="row mt-5">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <h1>Tambah Nilai Mahasiswa</h1>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
+    <div class="card p-5">
+      <div class="row">
+        <div class="col">
           <form action="/api/insert-data" method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -278,6 +313,7 @@
                 name="nim"
                 class="form-control"
                 placeholder="NIM Mahasiswa"
+                required
               />
             </div>
             <div class="form-group">
@@ -287,6 +323,7 @@
                 name="name"
                 class="form-control"
                 placeholder="Nama Mahasiswa"
+                required
               />
             </div>
             <div class="form-group">
@@ -296,6 +333,7 @@
                 name="rpb"
                 class="form-control"
                 placeholder="Nilai RPB"
+                required
               />
             </div>
             <div class="form-group">
@@ -305,6 +343,7 @@
                 name="probstat"
                 class="form-control"
                 placeholder="Nilai PROBSTAT"
+                required
               />
             </div>
             <div class="form-group">
@@ -314,6 +353,7 @@
                 name="basdat"
                 class="form-control"
                 placeholder="Nilai BASDAT"
+                required
               />
             </div>
             <div class="form-group">
@@ -323,6 +363,7 @@
                 name="dwbi"
                 class="form-control"
                 placeholder="Nilai DWBI"
+                required
               />
             </div>
             <div class="form-group">
@@ -332,6 +373,7 @@
                 name="oop"
                 class="form-control"
                 placeholder="Nilai OOP"
+                required
               />
             </div>
             <div class="form-group">
@@ -341,6 +383,7 @@
                 name="apsi"
                 class="form-control"
                 placeholder="Nilai APSI"
+                required
               />
             </div>
             <div class="form-group">
@@ -350,6 +393,7 @@
                 name="alpro"
                 class="form-control"
                 placeholder="Nilai ALPRO"
+                required
               />
             </div>
             <div class="form-group">
@@ -359,6 +403,7 @@
                 name="web"
                 class="form-control"
                 placeholder="Nilai WEB"
+                required
               />
             </div>
             <div class="form-group">
@@ -368,6 +413,7 @@
                 name="ea"
                 class="form-control"
                 placeholder="Nilai EA"
+                required
               />
             </div>
             <div class="form-group">
@@ -377,6 +423,7 @@
                 name="manlay"
                 class="form-control"
                 placeholder="Nilai MANLAY"
+                required
               />
             </div>
             <div class="form-group">
@@ -386,6 +433,7 @@
                 name="se"
                 class="form-control"
                 placeholder="Nilai SE"
+                required
               />
             </div>
             <div class="form-group">
@@ -395,6 +443,7 @@
                 name="scm"
                 class="form-control"
                 placeholder="Nilai SCM"
+                required
               />
             </div>
             <div class="form-group">
@@ -404,6 +453,7 @@
                 name="akuntansi"
                 class="form-control"
                 placeholder="Nilai AKUNTANSI"
+                required
               />
             </div>
             <div class="form-group">
@@ -413,6 +463,7 @@
                 name="manprosi"
                 class="form-control"
                 placeholder="Nilai MANPROSI"
+                required
               />
             </div>
             <div class="form-group">
@@ -422,6 +473,7 @@
                 name="desjar"
                 class="form-control"
                 placeholder="Nilai DESJAR"
+                required
               />
             </div>
             <div class="form-group">
@@ -431,6 +483,7 @@
                 name="manjarkom"
                 class="form-control"
                 placeholder="Nilai MANJARKOM"
+                required
               />
             </div>
             <div class="form-group">
@@ -440,6 +493,7 @@
                 name="sisop"
                 class="form-control"
                 placeholder="Nilai SISOP"
+                required
               />
             </div>
             <div class="form-group">
@@ -449,6 +503,7 @@
                 name="ksi"
                 class="form-control"
                 placeholder="Nilai KSI"
+                required
               />
             </div>
 
@@ -467,5 +522,4 @@
     </div>
   </div>
 </div>
-
 {% endif %} {% endblock %}

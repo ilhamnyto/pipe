@@ -40,8 +40,6 @@
                   </td>
                 </tr>
                 {% endfor %}
-            
-                
               </tbody>
             </table>
           </div>
@@ -62,50 +60,7 @@
     <div class="card p-4">
       <div class="row">
         <div class="col">
-          <div class="table-responsive p-2">
-            <table class="table borderless" id="tablepeminatan" width="100%">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Nama Peminatan</th>
-                  <th>Jumlah Pendaftar</th>
-                  <th>Jumlah Pilihan 1</th>
-                  <th>Jumlah Pilihan 2</th>
-                  <th>Pilihan 1</th>
-                  <th>Pilihan 2</th>
-                  <th>Nilai Tertinggi</th>
-                  <th>Nilai Terendah</th>
-                  <th>Nilai Rata-rata</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Enterprise Data Engineering</td>
-                  <td>3</td>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>100%</td>
-                  <td>0%</td>
-                  <td>0</td>
-                  <td>TBD</td>
-                  <td>TBD</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Enterprise Intelligent System Development</td>
-                  <td>9</td>
-                  <td>1</td>
-                  <td>8</td>
-                  <td>100%</td>
-                  <td>12.5%</td>
-                  <td>0</td>
-                  <td>TBD</td>
-                  <td>TBD</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div class="table-responsive p-2">{{peminatan | safe}}</div>
         </div>
       </div>
     </div>
@@ -123,35 +78,7 @@
     <div class="card p-4">
       <div class="row">
         <div class="col">
-          <div class="table-responsive p-2">
-            <table class="table borderless" id="tablekk" width="100%">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Nama Kelompok</th>
-                  <th>Jumlah Peminat</th>
-                  <th>Jumlah Diterima</th>
-                  <th>Rasio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>ESD</td>
-                  <td>2</td>
-                  <td>3</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>ESA</td>
-                  <td>10</td>
-                  <td>9</td>
-                  <td>90%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div class="table-responsive p-2">{{keahlian | safe}}</div>
         </div>
       </div>
     </div>

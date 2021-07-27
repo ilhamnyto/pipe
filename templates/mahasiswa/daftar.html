@@ -25,7 +25,7 @@
                 <select name="pilihan1" id="" class="form-select" disabled>
                 <option value="">{{ seleksistatus.0.pilihan1.peminatancode }} - {{ seleksistatus.0.pilihan1.peminatanname }}</option>
                 {% else %}
-                <select name="pilihan1" id="" class="form-select">
+                <select name="pilihan1" id="" class="form-select" required>
               {% endif %}
                 <option value="">Pilihan 1</option>
                 {% for p in peminatan %}
@@ -40,7 +40,7 @@
                 <select name="pilihan2" id="" class="form-select" disabled>
                 <option value="">{{ seleksistatus.0.pilihan2.peminatancode }} - {{ seleksistatus.0.pilihan2.peminatanname }}</option>
                 {% else %}
-                <select name="pilihan2" id="" class="form-select">
+                <select name="pilihan2" id="" class="form-select" required>
               {% endif %}
                 <option value="">Pilihan 2</option>
                 {% for p in peminatan %}
