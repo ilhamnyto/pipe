@@ -334,12 +334,6 @@ def bidashboard(request):
 
 @login_required()
 @role_required(allowed_roles=['DOSEN', 'DOSEN PEMBINA', 'ADMIN'])
-def bipeminatan(request):
-  user = Profile.objects.get(username=request.session['user_login'])
-  return render(request, 'bipeminatan.html', {'user': user})
-
-@login_required()
-@role_required(allowed_roles=['DOSEN', 'DOSEN PEMBINA', 'ADMIN'])
 def bidata(request):
   user = Profile.objects.get(username=request.session['user_login'])
 

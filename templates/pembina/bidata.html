@@ -1,4 +1,4 @@
-{% block main %}
+{% load static %} {% block main %}
 
 <div class="row">
   <div class="col">
@@ -15,7 +15,7 @@
 </div>
 <div class="row mt-5">
   <div class="col-xl-5 mx-auto col-md-12 col-sm-12">
-    <div class="card p-5">
+    <div class="card p-5" id="card-id">
       <div class="row">
         <div class="col">
           <form
@@ -23,19 +23,11 @@
             method="POST"
             enctype="multipart/form-data"
           >
-            {% csrf_token %} 
-            {% if message %}
+            {% csrf_token %} {% if message %}
             <span class="text-success d-block mb-4">{{message}}</span>
-            {% endif %}
-            {% if error %}
+            {% endif %} {% if error %}
             <span class="text-danger d-block mb-4">{{error}}</span>
             {% endif %}
-            <div class="form-group">
-              <label for="angkatan">Angkatan</label>
-              <select name="angkatan" id="" class="form-select">
-                <option value="2017">2017</option>
-              </select>
-            </div>
 
             <div class="form-group">
               <label for="datamahasiswa">Data Hasil Seleksi Peminatan</label>
@@ -48,7 +40,12 @@
                     Choose File
                   </div>
 
-                  <input type="file" name="datamahasiswa" id="filemahasiswa" />
+                  <input
+                    type="file"
+                    name="datamahasiswa"
+                    id="filemahasiswa"
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -64,7 +61,7 @@
                     Choose File
                   </div>
 
-                  <input type="file" name="datadosen" id="filedosen" />
+                  <input type="file" name="datadosen" id="filedosen" required />
                 </div>
               </div>
             </div>
