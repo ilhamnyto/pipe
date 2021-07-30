@@ -158,7 +158,7 @@ fetch("/api/bi/overall")
                     class="text-center font-weight-bold mt-4"
                     style="font-size: 1rem; margin-bottom: -0.2rem"
                   >
-                    AVG Mahasiswa Bimbingan
+                    Rata-rata Mahasiswa Bimbingan
                   </p>
                 </div>
               </div>
