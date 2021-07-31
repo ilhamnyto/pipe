@@ -54,7 +54,8 @@ def datadosen(request):
 @role_required(allowed_roles=['ADMIN'])
 def datakeprof(request):
   user = Profile.objects.get(username=request.session['user_login'])
-  return render(request, 'datakeprof.html', {'user': user})
+  keproflist = Keprof.objects.all()
+  return render(request, 'datakeprof.html', {'user': user, "keproflist": keproflist})
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
@@ -67,7 +68,8 @@ def datamahasiswa(request):
 @role_required(allowed_roles=['ADMIN'])
 def datapeminatan(request):
   user = Profile.objects.get(username=request.session['user_login'])
-  return render(request, 'datapeminatan.html', {'user': user})
+  peminatanlist = Peminatan.objects.all()
+  return render(request, 'datapeminatan.html', {'user': user, "peminatanlist": peminatanlist})
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
@@ -107,7 +109,11 @@ def editdosen(request, id):
 @role_required(allowed_roles=['ADMIN'])
 def editkeprof(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
-  return render(request, 'tambahkeprof.html', {'user': user})
+  keprof = Keprof.objects.filter(id=id)
+  if keprof:
+    return render(request, 'tambahkeprof.html', {'user': user, "keprof": keprof[0]})
+  else:  
+    return render(request, 'tambahkeprof.html', {'user': user})
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
@@ -121,9 +127,14 @@ def editmahasiswa(request, id):
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
-def editpeminatan(request, id):
+def editpeminatan(request, peminatancode):
   user = Profile.objects.get(username=request.session['user_login'])
-  return render(request, 'tambahpeminatan.html', {'user': user})
+  peminatan = Peminatan.objects.filter(peminatancode=id)
+  if peminatan:
+    return render(request, 'tambahpeminatan.html', {'user': user, "peminatan": peminatan[0]})
+  else:  
+   return render(request, 'tambahpeminatan.html', {'user': user})
+  
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])

@@ -1,4 +1,4 @@
-{% load static %} {% block main %} {% if dosen %}
+{% load static %} {% block main %} {% if peminatan %}
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
     <h1>Update Peminatan</h1>
@@ -11,6 +11,7 @@
         <div class="col">
           <form action="/api/update-data" method="POST">
             {% csrf_token %}
+             <input type="hidden" name="id" value="{{peminatan.id}}" />
             <div class="form-group">
               <label for="name">Kode Peminatan</label>
               <input
@@ -18,6 +19,7 @@
                 name="kodepeminatan"
                 class="form-control"
                 placeholder="Kode Peminatan"
+                value="{{peminatan.peminatancode}}"
                 required
               />
             </div>
@@ -28,16 +30,18 @@
                 name="namapeminatan"
                 class="form-control"
                 placeholder="Nama Peminatan"
+                value="{{peminatan.peminatanname}}"
                 required
               />
             </div>
             <div class="form-group">
-              <label for="keprofesian">Keprofesian</label>
+              <label for="keprofesian">Kelompok Keahlian</label>
               <input
                 type="text"
                 name="keprofesian"
                 class="form-control"
                 placeholder="Keprofesian"
+                value="{{peminatan.kelompokkeahlian}}"
                 required
               />
             </div>
@@ -48,7 +52,7 @@
               name="data"
               value="PEMINATAN"
             >
-              <span>Tambah</span>
+              <span>Update</span>
               <i class="bx bxs-chevrons-right"></i>
             </button>
           </form>
@@ -112,7 +116,7 @@
     <div class="card p-5">
       <div class="row">
         <div class="col">
-          <form action="/api/update-data" method="POST">
+          <form action="/api/insert-data" method="POST">
             {% csrf_token %}
             <div class="form-group">
               <label for="name">Kode Peminatan</label>
@@ -135,12 +139,12 @@
               />
             </div>
             <div class="form-group">
-              <label for="keprofesian">Keprofesian</label>
+              <label for="kelompokkeahlian">Kelompok Keahlian</label>
               <input
                 type="text"
-                name="keprofesian"
+                name="kelompokkeahlian"
                 class="form-control"
-                placeholder="Keprofesian"
+                placeholder="Kelompok Keahlian"
                 required
               />
             </div>

@@ -1,4 +1,4 @@
-{% load static %} {% block main %} {% if dosen %}
+{% load static %} {% block main %} {% if keprof %}
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
     <h1>Update Keprofesian</h1>
@@ -11,6 +11,7 @@
         <div class="col">
           <form action="/api/update-data" method="POST">
             {% csrf_token %}
+            <input type="hidden" name="id" value="{{keprof.id}}" />
             <div class="form-group">
               <label for="name">NIM</label>
               <input
@@ -18,6 +19,7 @@
                 name="nim"
                 class="form-control"
                 placeholder="NIM"
+                value="{{keprof.nim}}"
                 required
               />
             </div>
@@ -28,6 +30,7 @@
                 name="name"
                 class="form-control"
                 placeholder="Nama Mahasiswa"
+                value="{{keprof.name}}"
                 required
               />
             </div>
@@ -38,6 +41,7 @@
                 name="keprofesian"
                 class="form-control"
                 placeholder="Keprofesian"
+                value="{{keprof.keprof}}"
                 required
               />
             </div>
@@ -48,7 +52,7 @@
               name="data"
               value="KEPROF"
             >
-              <span>Tambah</span>
+              <span>Update</span>
               <i class="bx bxs-chevrons-right"></i>
             </button>
           </form>

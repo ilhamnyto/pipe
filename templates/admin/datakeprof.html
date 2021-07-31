@@ -8,7 +8,7 @@
   <div class="col-xl-4 ml-auto mb-4 d-flex justify-content-end">
     <form action="/api/truncate-data" method="POST">
       {% csrf_token %}
-      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="KEPROF">
+      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="KEPROF" onclick="return confirm('WARNING : Anda yakin mau menghapus semua data ini? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')">
         <i class="bx bxs-trash mr-2"></i>Truncate Data
       </button>
     </form>
@@ -28,33 +28,38 @@
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>NIM<</th>
+                  <th>NIM</th>
                   <th>Nama</th>
                   <th>Keprofesian</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
+                 {% for keprof in keproflist %}
                 <tr>
-                  <td>1</td>
-                  <td>1202174326</td>
-                  <td>Ilham Nuryanto</td>
-                  <td>Enterprise Intelligent System Development</td>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{keprof.nim}}</td>
+                  <td>{{keprof.name}}</td>
+                  <td>{{keprof.keprof}}</td>
                   <td class="d-flex align-items-center">
-                    <button class="btn btn-sm btn-danger mx-2">Delete</button>
-                    <button class="btn btn-sm btn-primary">Edit</button>
+                   <form action="/api/delete-data" method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="id" value="{{keprof.id}}" />
+                      <button
+                        class="btn btn-sm btn-danger mx-2"
+                        name="data"
+                        value="KEPROF" onclick="return confirm('WARNING : Anda yakin mau menghapus data yang dipilih? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                    <a class="btn btn-sm btn-primary" href="/data-keprof/edit/{{keprof.id}}"
+                      >Edit</a
+                    >
                   </td>
                 </tr>
-                <tr>
-                  <td>2</td>
-                  <td>1202174327</td>
-                  <td>Reva Fidela</td>
-                  <td>System Architecture and Governance</td>
-                  <td class="d-flex align-items-center">
-                    <button class="btn btn-sm btn-primary mx-2">Delete</button>
-                    <button class="btn btn-sm btn-danger">Edit</button>
-                  </td>
-                </tr>
+                {% endfor %}
+               
               </tbody>
             </table>
           </div>

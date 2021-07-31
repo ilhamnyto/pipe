@@ -70,7 +70,7 @@ class Peminatan(models.Model):
   prasyarat2 = models.CharField(max_length=255, choices=MATKUL_CHOICES, blank=True, null=True)
   prasyarat3 = models.CharField(max_length=255, choices=MATKUL_CHOICES, blank=True, null=True)
   prasyarat4 = models.CharField(max_length=255, choices=MATKUL_CHOICES, blank=True, null=True)
-  kuota = models.IntegerField()
+  kuota = models.IntegerField(blank=True, null=True, default=0)
 
 class Profile(models.Model):
   numberid = models.CharField(max_length=255, null=True)

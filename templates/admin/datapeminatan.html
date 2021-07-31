@@ -8,8 +8,8 @@
   <div class="col-xl-4 ml-auto mb-4 d-flex justify-content-end">
     <form action="/api/truncate-data" method="POST">
       {% csrf_token %}
-      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="PEMINATAN">
-        <i class="bx bxs-trash mr-2"></i>Truncate Data
+      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="PEMINATAN" onclick="return confirm('WARNING : Anda yakin mau menghapus semua data ini? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')">
+        <i class="bx bxs-trash mr-2" ></i>Truncate Data
       </button>
     </form>
   
@@ -31,39 +31,39 @@
                   <th>Nama</th>
                   <th>Singkatan</th>
                   <th>Kelompok</th>
-                  <th>Keprofesian</th>
                   <th>Kuota</th>
                   <th>Sisa Kuota</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
+                 {% for peminatan in peminatanlist %}
                 <tr>
-                  <td>1</td>
-                  <td>Enterprise Data Engineering</td>
-                  <td>EDE</td>
-                  <td>ESD</td>
-                  <td>EDE</td>
-                  <td>3</td>
-                  <td>2</td>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{peminatan.peminatancode}}</td>
+                  <td>{{peminatan.peminatanname}}</td>
+                  <td>{{peminatan.kelompokkeahlian}}</td>
+                  <td>{{peminatan.kuota}}</td>
+                  <td>{{peminatan.kuota}}</td>
                   <td class="d-flex align-items-center">
-                    <button class="btn btn-sm btn-danger mx-2">Delete</button>
-                    <button class="btn btn-sm btn-primary">Edit</button>
+                   <form action="/api/delete-data" method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="id" value="{{peminatan.peminatancode}}" />
+                      <button
+                        class="btn btn-sm btn-danger mx-2"
+                        name="data"
+                        value="PEMINATAN" onclick="return confirm('WARNING : Anda yakin mau menghapus data yang dipilih? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                    <a class="btn btn-sm btn-primary" href="/data-peminatan/edit/{{peminatan.peminatancode}}"
+                      >Edit</a
+                    >
                   </td>
                 </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Enterprise Intelligent System Development</td>
-                  <td>EISD</td>
-                  <td>ESD</td>
-                  <td>EAD</td>
-                  <td>4</td>
-                  <td>2</td>
-                  <td class="d-flex align-items-center">
-                    <button class="btn btn-sm btn-primary mx-2">Delete</button>
-                    <button class="btn btn-sm btn-danger">Edit</button>
-                  </td>
-                </tr>
+                {% endfor %}
+               
               </tbody>
             </table>
           </div>

@@ -12,10 +12,10 @@ def deleteData(request):
       Nilai.objects.get(id=request.POST['id']).delete()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-      Nilai.objects.get(id=request.POST['id']).delete()
+      Peminatan.objects.get(peminatancode=request.POST['id']).delete()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
-      Nilai.objects.get(id=request.POST['id']).delete()
+      Keprof.objects.get(id=request.POST['id']).delete()
       return redirect('datakeprof')
 
 
@@ -51,12 +51,12 @@ def insertData(request):
       nilai.save()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-
-
+      peminatan = Peminatan(peminatancode=request.POST['kodepeminatan'], peminatanname=request.POST['namapeminatan'], kelompokkeahlian=request.POST['kelompokkeahlian'])
+      peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
-
-
+      keprof = Keprof(nim=request.POST['nim'], name=request.POST['name'], keprof=request.POST['keprofesian'])
+      keprof.save()
       return redirect('datakeprof')
 
 def updateData(request):
@@ -93,12 +93,18 @@ def updateData(request):
       nilai.save()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-
-
+      peminatan = Peminatan.objects.get(id=request.POST['id'])
+      peminatan.peminatancode = request.POST['kodepeminatan']
+      peminatan.peminatanname = request.POST['namapeminatan']
+      peminatan.kelompokkeahlian = request.POST['kelompokkeahlian']
+      peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
-
-
+      keprof = Keprof.objects.get(id=request.POST['id'])
+      keprof.nim = request.POST['nim']
+      keprof.name = request.POST['name']
+      keprof.keprof = request.POST['keprofesian']
+      keprof.save()
       return redirect('datakeprof')
 
 def importData(request):
@@ -124,13 +130,13 @@ def importData(request):
         return render(request, 'tambahnilai.html', {'user': user, "error" : "File tidak sesuai"})
 
     elif request.POST['data'] == 'PEMINATAN':
+       
+        return render(request, 'tambahpeminatan.html', {'user': user, "error" : "File tidak sesuai."})
 
-
-      return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
+        
+        return render(request, 'tambahkeprof.html', {'user': user, "error" : "File tidak sesuai."})
 
-
-      return redirect('datakeprof')
 
 def truncateData(request):
   if request.method == 'POST':
