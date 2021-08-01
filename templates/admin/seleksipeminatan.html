@@ -15,13 +15,9 @@
             <div class="form-group">
               <label for="batchnum">Batch</label>
               <input
-                type="number"
+                type="text"
                 name="batchnum"
-                min="{{ minbatch }}"
                 class="form-control"
-                value="{{ minbatch }}"
-                placeholder="{{ minbatch }}"
-                disabled
               />
             </div>
             
@@ -53,7 +49,7 @@
           <div class="col d-flex flex-column align-items-center">
             <i class="bx bxs-calendar-week"></i>
             <div class="batch__text my-4 d-flex flex-column align-items-center">
-              <span class="batch__num">Batch {{ latestbatch }}</span>
+              <span class="batch__num">{{ latestbatch }}</span>
               <span class="batch__desc">Open</span>
             </div>
             <form action="/api/batch-status" method="POST">

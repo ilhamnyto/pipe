@@ -77,7 +77,12 @@
               <i class="bx bxs-chevrons-right"></i>
             </button>
             {% elif tukar %}
-            <button type="submit" class="submit-button danger" name="reset" value="true">
+            <button
+              type="submit"
+              class="submit-button danger"
+              name="reset"
+              value="true"
+            >
               <span>Reset</span>
               <i class="bx bxs-chevrons-right"></i>
             </button>
@@ -101,21 +106,36 @@
           <ul class="process__status">
             {% if tukar.0.status == 'Pengajuan I' %}
             <li>
-              <div class="circle done">1</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Asal</span>
                 <span class="text">Sedang diajukan.</span>
               </div>
             </li>
             <li>
-              <div class="circle on-process">2</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Tujuan</span>
                 <span class="text">-</span>
               </div>
             </li>
             <li>
-              <div class="circle on-process">3</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">-</span>
@@ -123,21 +143,36 @@
             </li>
             {% elif tukar.0.status == 'Pengajuan II' %}
             <li>
-              <div class="circle done">1</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-check-circle"
+                  style="font-size: 2.5rem; color: #75a1de"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Asal</span>
                 <span class="text">Disetujui</span>
               </div>
             </li>
             <li>
-              <div class="circle done">2</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Tujuan</span>
                 <span class="text">Sedang diajukan.</span>
               </div>
             </li>
             <li>
-              <div class="circle on-process">3</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">-</span>
@@ -145,21 +180,36 @@
             </li>
             {% elif tukar.0.status == 'Disetujui'%}
             <li>
-              <div class="circle done">1</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-check-circle"
+                  style="font-size: 2.5rem; color: #75a1de"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Asal</span>
                 <span class="text">Disetujui.</span>
               </div>
             </li>
             <li>
-              <div class="circle done">2</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-check-circle"
+                  style="font-size: 2.5rem; color: #75a1de"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Tujuan</span>
                 <span class="text">Disetujui.</span>
               </div>
             </li>
             <li>
-              <div class="circle done">3</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-check-circle"
+                  style="font-size: 2.5rem; color: #75a1de"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">Tukar peminatan berhasil.</span>
@@ -167,21 +217,36 @@
             </li>
             {% elif tukar.0.status == 'Ditolak I'%}
             <li>
-              <div class="circle done">1</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-x-circle"
+                  style="font-size: 2.5rem; color: #d62828"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Asal</span>
                 <span class="text">Ditolak.</span>
               </div>
             </li>
             <li>
-              <div class="circle done">2</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-x-circle"
+                  style="font-size: 2.5rem; color: #d62828"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Tujuan</span>
                 <span class="text">Tidak diproses.</span>
               </div>
             </li>
             <li>
-              <div class="circle done">3</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-x-circle"
+                  style="font-size: 2.5rem; color: #d62828"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">Tukar peminatan gagal.</span>
@@ -189,21 +254,36 @@
             </li>
             {% elif tukar.0.status == 'Ditolak II'%}
             <li>
-              <div class="circle done">1</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-check-circle"
+                  style="font-size: 2.5rem; color: #75a1de"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Asal</span>
                 <span class="text">Disetujui.</span>
               </div>
             </li>
             <li>
-              <div class="circle done">2</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-x-circle"
+                  style="font-size: 2.5rem; color: #d62828"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Tujuan</span>
                 <span class="text">Tidak disetujui.</span>
               </div>
             </li>
             <li>
-              <div class="circle done">3</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-x-circle"
+                  style="font-size: 2.5rem; color: #d62828"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">Tukar peminatan gagal.</span>
@@ -211,21 +291,36 @@
             </li>
             {% else %}
             <li>
-              <div class="circle on-process">1</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Asal</span>
                 <span class="text">-</span>
               </div>
             </li>
             <li>
-              <div class="circle on-process">2</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Persetujuan Pembina Lab Tujuan</span>
                 <span class="text">-</span>
               </div>
             </li>
             <li>
-              <div class="circle on-process">3</div>
+              <div class="icon mx-3">
+                <i
+                  class="bx bx-circle"
+                  style="font-size: 2.5rem; color: #8d99ae"
+                ></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">-</span>

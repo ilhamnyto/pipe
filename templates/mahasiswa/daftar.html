@@ -9,7 +9,7 @@
     <div class="card pengajuan-card p-4">
       <div class="row">
         <div class="col d-flex flex-column">
-          <h2>Daftar Peminatan - Batch {{batch.batchnum}}</h2>
+          <h2>Daftar Peminatan | {{batch.batchnum}}</h2>
           <form action="/api/daftar-peminatan" method="POST">
             {% csrf_token %}
             {% if error %}
@@ -73,7 +73,9 @@
           <h2>Status Pengajuan</h2>
           <ul class="process__status">
             <li>
-              <div class="circle done">1</div>
+              <div class="icon mx-3">
+                <i class='bx bx-circle'  style="font-size: 2.5rem; color: #8d99ae;"></i>
+              </div>
               <div class="desc">
                 <span class="title">Proses</span>
                 {% if seleksistatus %}
@@ -86,15 +88,20 @@
 
             <li>
               {% if seleksistatus.0.result %}
-              <div class="circle done">2</div>
+              <div class="icon mx-3">
+                <i class='bx bx-check-circle' style="font-size: 2.5rem; color: #75a1de;"></i>
+              </div>
               <div class="desc">
                 <span class="title">Selesai</span>
                 <span class="text">Kamu lolos di peminatan {{seleksistatus.0.result.peminatancode}} - {{seleksistatus.0.result.peminatanname}}</span>
               </div>
               {% else %}
-              <div class="circle on-process">2</div>
+              <div class="icon mx-3">
+                <i class='bx bx-circle'  style="font-size: 2.5rem; color: #8d99ae;"></i>
+              </div>
               <div class="desc">
                 <span class="text">Selesai</span>
+                <span class="text">-</span>
               </div>
               {% endif %}
             </li>

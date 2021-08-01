@@ -48,6 +48,7 @@ def login(request):
             )
 
             request.session['user_login'] = request.POST['username']
+            request.session['role'] = 'MAHASISWA'
             users.save()
           else:
             users = Profile(
@@ -58,6 +59,7 @@ def login(request):
             )
 
             request.session['user_login'] = request.POST['username']
+            request.session['role'] = 'DOSEN'
             users.save()
 
           return redirect('home')

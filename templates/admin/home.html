@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="col-xl-3 col-md-12 col-sm-12">
+  <div class="col-xl-3 col-md-12 col-sm-12 mt-4 mt-md-0 mt-xl-0">
     <div class="card score-card p-3">
       <div class="row">
         <div class="col d-flex flex-column align-items-center">
@@ -41,8 +41,7 @@
     </div>
   </div>
 
-
-  <div class="col-xl-3 col-md-12 col-sm-12 mt-4 mt-md-0 mt-xl-0">
+  <div class="col-xl-3 col-md-12 col-sm-12">
     {% if login.isAvailable %}
     <div class="card status-card status-enable p-3">
       <div class="row">
@@ -51,7 +50,13 @@
           <span class="st-title my-3">User Login : Enabled</span>
           <form action="/api/login-status" method="POST">
             {% csrf_token %}
-            <button class="st-btn btn btn-sm btn-light px-4 py-2" value="disable" name="status">Disable</button>
+            <button
+              class="st-btn btn btn-sm btn-light px-4 py-2"
+              value="disable"
+              name="status"
+            >
+              Disable
+            </button>
           </form>
         </div>
       </div>
@@ -64,7 +69,14 @@
           <span class="st-title my-3">User Login : Disabled</span>
           <form action="/api/login-status" method="POST">
             {% csrf_token %}
-            <button type="submit" class="st-btn btn btn-sm btn-light px-4 py-2" value="enable" name="status">Enable</button>
+            <button
+              type="submit"
+              class="st-btn btn btn-sm btn-light px-4 py-2"
+              value="enable"
+              name="status"
+            >
+              Enable
+            </button>
           </form>
         </div>
       </div>

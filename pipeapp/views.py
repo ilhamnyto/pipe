@@ -1,10 +1,9 @@
-from django.db.models.expressions import  F
+from pipeapp.seleksi import hitung
 from pipeapp.models import Batch, Dosen, Keprof, Nilai, Peminatan, Profile, Seleksi, StatusServer, TukarPeminatan
-from django.shortcuts import render
-from .decorator import login_required, is_authenticated, role_required, daftarlist, diterimalist, rasiolist
+from django.shortcuts import redirect, render
+from .decorator import login_required, is_authenticated, role_required
 from django.db.models import Q, Count
-import pandas as pd
-from .dburl import engine
+
 
 # Create your views here.
 
@@ -129,7 +128,7 @@ def editmahasiswa(request, id):
 @role_required(allowed_roles=['ADMIN'])
 def editpeminatan(request, peminatancode):
   user = Profile.objects.get(username=request.session['user_login'])
-  peminatan = Peminatan.objects.filter(peminatancode=id)
+  peminatan = Peminatan.objects.filter(peminatancode=peminatancode)
   if peminatan:
     return render(request, 'tambahpeminatan.html', {'user': user, "peminatan": peminatan[0]})
   else:  
@@ -143,175 +142,52 @@ def seleksipeminatan(request):
   batchstatus = StatusServer.objects.get(name='Batch Pendaftaran')
   latestbatch = Batch.objects.last()
   batchdata = Seleksi.objects.values('batch__batchnum').annotate(mahasiswa=Count('studentid')).order_by()
-  print(batchdata)
+
   return render(
     request, 'seleksipeminatan.html', {'user': user, "batchstatus": batchstatus, 
-    "latestbatch": latestbatch.batchnum, "minbatch": (latestbatch.batchnum + 1),
+    "latestbatch": latestbatch.batchnum,
     "batchdata": batchdata
     })
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
 def hasilseleksi(request):
+  latestbatch = Batch.objects.last()
+  return redirect(f'/hasil-seleksi/{latestbatch.id}')
+
+
+@login_required()
+@role_required(allowed_roles=['ADMIN'])
+def seleksiresult(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
-  seleksiresult = pd.read_sql('SELECT * FROM "pipeapp_seleksi"', con=engine)
-  pilihan1 = seleksiresult.groupby(['pilihan1_id']).size().reset_index(name='counts')
-  pilihan1.columns = ['pilihan', 'counts']
-  pilihan2 = seleksiresult.groupby(['pilihan2_id']).size().reset_index(name='counts')
-  pilihan2.columns = ['pilihan', 'counts']
-  pendaftar = pd.concat([pilihan1, pilihan2]).groupby(['pilihan']).sum().reset_index()
-  persen1 = seleksiresult.groupby(['pilihan1_id']).size().reset_index(name='counts')['counts'] / len(seleksiresult) * 100
-  persen2 = seleksiresult.groupby(['pilihan2_id']).size().reset_index(name='counts')['counts'] / len(seleksiresult) * 100
-  diterima = seleksiresult.groupby(['result_id']).size().reset_index(name='counts')
+  latestbatch = Batch.objects.filter(id=id)
+  if latestbatch:
 
-  peminatan = pd.DataFrame({
-    "Peminatan": diterima['result_id'],
-    "Jumlah Pendaftar": pendaftar['counts'],
-    "Jumlah Pilihan 1": pilihan1['counts'],
-    "Jumlah Pilihan 2": pilihan2['counts'],
-    "Pilihan 1": persen1.map('{}%'.format),
-    "Pilihan 2": persen2.map('{}%'.format),
-  })
-  peminatan.index += 1 
-  peminatan['No.'] = list(peminatan.index)
-  peminatan = peminatan[['No.', 'Peminatan', 'Jumlah Pendaftar', 'Jumlah Pilihan 1', 'Jumlah Pilihan 2', 'Pilihan 1', 'Pilihan 2']]
-
-  
-  keahlian = pd.DataFrame({
-    "Kelompok Keahlian": ['Cybernatics', 'EIS'],
-    "Jumlah Peminat": daftarlist(pendaftar),
-    "Jumlah Diterima": diterimalist(diterima),
-    "Rasio": rasiolist(pendaftar, diterima)
-  })
-  result = Seleksi.objects.all()
-
-  return render(request, 'hasilseleksi.html', {'user': user, "result": result, 
-  "peminatan": peminatan.to_html(index=False, justify='left', classes='table borderless', table_id='tablepeminatan', border=0),
-  "keahlian": keahlian.to_html(index=False, justify='left', classes='table borderless', table_id='tablekk', border=0)
-  })
+    result = Seleksi.objects.filter(batch=latestbatch[0])
+    batch = Batch.objects.all().exclude(id=latestbatch[0].id)
+    peminatan = Seleksi.objects.filter(batch=latestbatch[0]).select_related('result').values('result').annotate(count=Count('studentid')).values('result', 'count', 'result__kuota').order_by()
+    print(peminatan)
+    return render(request, 'hasilseleksi.html', {'user': user, "result": result, 'allbatch': batch, 'latest': latestbatch[0], "peminatan":peminatan})
+  else:
+    return render(request, 'hasilseleksi.html', {'user': user})
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
 def penghitungannilai(request):
   latestbatch = Batch.objects.last()
+  return redirect(f'/penghitungan-nilai/{latestbatch.id}')
+
+@login_required()
+@role_required(allowed_roles=['ADMIN'])
+def hitungnilai(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
-  seleksi = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__pilihan1__kuota', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__pilihan2__kuota')
-  ede = Peminatan.objects.get(peminatancode='EDE')
-  eisd = Peminatan.objects.get(peminatancode='EISD')
-  sag = Peminatan.objects.get(peminatancode='SAG')
-  eim = Peminatan.objects.get(peminatancode='EIM')
-  erp = Peminatan.objects.get(peminatancode='ERP')
-
-
-  for s in seleksi:
-    data = Seleksi.objects.get(studentid__numberid=s['numberid'])
-    keprof = Keprof.objects.filter(nim=s['numberid'])
-    if s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Data Engineering':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(ede.prasyarat1.lower()) + F(ede.prasyarat2.lower()) + F(ede.prasyarat3.lower()) + F(ede.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
-      else:
-        data.score1 = 0
-      
-      if keprof and keprof[0].keprof == 'DASPRO':
-        data.score1 += 2
-
-    elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Resource Planning':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(erp.prasyarat1.lower()) + F(erp.prasyarat2.lower()) + F(erp.prasyarat3.lower()) + F(erp.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
-      else:
-        data.score1 = 0
-
-      if keprof and keprof[0].keprof == 'ERP':
-        data.score1 += 2
-
-    elif s['seleksi_student__pilihan1__peminatanname'] == 'System Architecture and Governance':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(sag.prasyarat1.lower()) + F(sag.prasyarat2.lower()) + F(sag.prasyarat3.lower()) + F(sag.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
-      else:
-        data.score1 = 0
-
-      if keprof and keprof[0].keprof == 'SAG':
-        data.score1 += 2
-
-    elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Intelligent System Development':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eisd.prasyarat1.lower()) + F(eisd.prasyarat2.lower()) + F(eisd.prasyarat3.lower()) + F(eisd.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
-      else:
-        data.score1 = 0
-
-      if keprof and keprof[0].keprof == 'EISD':
-        data.score1 += 2
-
-    elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Infrastructure Management':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eim.prasyarat1.lower()) + F(eim.prasyarat2.lower()) + F(eim.prasyarat3.lower()) + F(eim.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
-      else:
-        data.score1 = 0
-
-      if keprof and keprof[0].keprof == 'SISJAR':
-        data.score1 += 2
-
-    if s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Data Engineering':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(ede.prasyarat1.lower()) + F(ede.prasyarat2.lower()) + F(ede.prasyarat3.lower()) + F(ede.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score2 = nilai[0]['nilai']
-      else:
-        data.score2 = 0
-
-      if keprof and keprof[0].keprof == 'DASPRO':
-        data.score2 += 2
-
-    elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Resource Planning':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(erp.prasyarat1.lower()) + F(erp.prasyarat2.lower()) + F(erp.prasyarat3.lower()) + F(erp.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score2 = nilai[0]['nilai']
-      else:
-        data.score2 = 0
-
-      if keprof and keprof[0].keprof == 'ERP':
-        data.score2 += 2
-
-    elif s['seleksi_student__pilihan2__peminatanname'] == 'System Architecture and Governance':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(sag.prasyarat1.lower()) + F(sag.prasyarat2.lower()) + F(sag.prasyarat3.lower()) + F(sag.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score2 = nilai[0]['nilai']
-      else:
-        data.score2 = 0
-
-      if keprof and keprof[0].keprof == 'SAG':
-        data.score2 += 2
-
-    elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Intelligent System Development':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eisd.prasyarat1.lower()) + F(eisd.prasyarat2.lower()) + F(eisd.prasyarat3.lower()) + F(eisd.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score2 = nilai[0]['nilai']
-      else:
-        data.score2 = 0
-
-      if keprof and keprof[0].keprof == 'EISD':
-        data.score2 += 2
-
-    elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Infrastructure Management':
-      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eim.prasyarat1.lower()) + F(eim.prasyarat2.lower()) + F(eim.prasyarat3.lower()) + F(eim.prasyarat4.lower())).values('nilai')
-      if nilai and nilai[0]:
-        data.score2 = nilai[0]['nilai']
-      else:
-        data.score2 = 0
-
-      if keprof and keprof[0].keprof == 'EIM':
-        data.score2 += 2
-
-    data.save()
-
-  fulldata = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__score1', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__score2', 'seleksi_student__result').order_by('-seleksi_student__score1')
-  
-  return render(request, 'penghitungannilai.html', {'user': user, "latestbatch": latestbatch, "seleksi": fulldata})
-
+  latestbatch = Batch.objects.filter(id=id)
+  if latestbatch:
+    batch = Batch.objects.all().exclude(id=latestbatch[0].id)
+    fulldata = hitung(request, latestbatch[0])
+    return render(request, 'penghitungannilai.html', {'user': user, "seleksi": fulldata, 'allbatch': batch, 'latest': latestbatch[0]})
+  else:
+    return render(request, 'penghitungannilai.html', {'user': user})
 
 # mahasiswa dan dosen
 

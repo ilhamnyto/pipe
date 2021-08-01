@@ -8,7 +8,7 @@
   <div class="col-xl-4 ml-auto mb-4 d-flex justify-content-end">
     <form action="/api/truncate-data" method="POST">
       {% csrf_token %}
-      <button class="btn btn-sm btn-danger px-3 py-2 mr-3" name="data" value="KEPROF" onclick="return confirm('WARNING : Anda yakin mau menghapus semua data ini? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')">
+      <button class="btn btn-sm btn-danger px-3 py-2 mr-3 d-flex" name="data" value="KEPROF" onclick="return confirm('WARNING : Anda yakin mau menghapus semua data ini? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')">
         <i class="bx bxs-trash mr-2"></i>Truncate Data
       </button>
     </form>

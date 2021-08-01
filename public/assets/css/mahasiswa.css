@@ -68,19 +68,6 @@
   overflow: hidden;
 }
 
-.process__status .circle {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--light-color);
-  margin-right: 2rem;
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20rem;
-}
-
 .process__status .title {
   font-size: 11px;
   font-weight: 700;

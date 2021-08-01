@@ -12,7 +12,10 @@ def deleteData(request):
       Nilai.objects.get(id=request.POST['id']).delete()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-      Peminatan.objects.get(peminatancode=request.POST['id']).delete()
+      peminatan = Peminatan.objects.get(peminatancode=request.POST['id'])
+      print(peminatan)
+      print(peminatan.peminatancode)
+      peminatan.delete()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
       Keprof.objects.get(id=request.POST['id']).delete()
@@ -51,7 +54,7 @@ def insertData(request):
       nilai.save()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-      peminatan = Peminatan(peminatancode=request.POST['kodepeminatan'], peminatanname=request.POST['namapeminatan'], kelompokkeahlian=request.POST['kelompokkeahlian'])
+      peminatan = Peminatan(peminatancode=request.POST['kodepeminatan'], peminatanname=request.POST['namapeminatan'], kelompokkeahlian=request.POST['kelompokkeahlian'], kuota=request.POST['kuota'])
       peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
@@ -93,10 +96,10 @@ def updateData(request):
       nilai.save()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-      peminatan = Peminatan.objects.get(id=request.POST['id'])
-      peminatan.peminatancode = request.POST['kodepeminatan']
+      peminatan = Peminatan.objects.get(peminatancode=request.POST['id'])
       peminatan.peminatanname = request.POST['namapeminatan']
-      peminatan.kelompokkeahlian = request.POST['kelompokkeahlian']
+      peminatan.kelompokkeahlian=request.POST['kelompokkeahlian']
+      peminatan.kuota=request.POST['kuota']
       peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':

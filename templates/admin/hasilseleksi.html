@@ -4,6 +4,35 @@
     <h1>Hasil Seleksi Peminatan</h1>
   </div>
 </div>
+
+<div class="row mb-4">
+  <div class="col-xl-3 ml-auto d-flex justify-content-end">
+    <select name="batch" class="mr-3 form-select" id="batch-select">
+      <option value="{{latest.id}}">{{latest.batchnum}}</option>
+      {% for batch in allbatch %}
+      <option value="{{batch.id}}">{{batch.batchnum}}</option>
+      {% endfor %}
+    </select>
+    {% if result %}
+    <form action="/api/plotting" method="POST">
+      {% csrf_token %}
+      <button
+        type="submit"
+        class="btn btn-sm btn-primary px-3 py-2 d-flex align-items-center"
+      >
+        <i class="bx bxs-caret-right-square mr-2"></i>Export
+      </button>
+    </form>
+    {% else %}
+    <button
+      class="btn btn-sm btn-secondary px-3 py-2 d-flex align-items-center"
+      disabled
+    >
+      <i class="bx bxs-caret-right-square mr-2"></i>Export
+    </button>
+    {% endif %}
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <div class="card p-4">
@@ -60,25 +89,28 @@
     <div class="card p-4">
       <div class="row">
         <div class="col">
-          <div class="table-responsive p-2">{{peminatan | safe}}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row mt-5 mb-3">
-  <div class="col">
-    <h1>Kelompok Keahlian</h1>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col">
-    <div class="card p-4">
-      <div class="row">
-        <div class="col">
-          <div class="table-responsive p-2">{{keahlian | safe}}</div>
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="tablepeminatan" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Peminatan</th>
+                  <th>Kuota</th>
+                  <th>Jumlah Mahasiswa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in peminatan %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{p.result}}</td>
+                  <td>{{p.result__kuota}}</td>
+                  <td>{{p.count}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -92,7 +124,11 @@
   $(document).ready(function () {
     $("#tablehasil").DataTable();
     $("#tablepeminatan").DataTable();
-    $("#tablekk").DataTable();
+  });
+
+  document.getElementById("batch-select").addEventListener("change", (e) => {
+    window.location.href = `/hasil-seleksi/${e.target.value}`;
   });
 </script>
+
 {% endblock %}

@@ -182,13 +182,13 @@ ul {
   font-size: 1.25rem;
 }
 
-.show {
+.show-nav {
   left: 0;
   width: 70%;
 }
 
 .body-pd {
-  padding-left: calc(100% - var(--nav-width));
+  padding-left: calc(100% - var(--nav-width) - 35px);
 }
 
 .active {
@@ -251,7 +251,7 @@ ul {
     width: calc(var(--nav-width) + 180px);
   }
 
-  .show {
+  .show-nav {
     width: calc(var(--nav-width) + 156px);
   }
 

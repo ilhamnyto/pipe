@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.db.models.fields import IntegerField
+from decimal import Decimal
+
 
 
 PEMINATAN_CHOICES = [
@@ -83,7 +85,7 @@ class Profile(models.Model):
   lecturerguardian = models.CharField(max_length=255, null=True, blank=True)
   studyprogram = models.CharField(max_length=255, null=True, blank=True)
   faculty = models.CharField(max_length=255, null=True, blank=True)
-  peminatan = models.ForeignKey('Peminatan', null=True, on_delete=CASCADE, blank=True, related_name='user_peminatan')
+  peminatan = models.ForeignKey('Peminatan', null=True, on_delete=models.SET_NULL, blank=True, related_name='user_peminatan')
 
 class Dosen(models.Model):
   name = models.CharField(max_length=255, null=True)
@@ -118,17 +120,17 @@ class Nilai(models.Model):
   ksi = models.DecimalField(null=True, max_digits=2, decimal_places=1, blank=True, default=0)
 
 class Batch(models.Model):
-  batchnum = models.IntegerField()
+  batchnum = models.CharField(max_length=255, unique=True)
   created_at = models.DateTimeField(auto_now_add=True)
 
 class Seleksi(models.Model):
   studentid = models.ForeignKey('Profile', on_delete=CASCADE, related_name='seleksi_student')
-  pilihan1 = models.ForeignKey('Peminatan', on_delete=CASCADE, related_name='pilihansatu')
-  pilihan2 = models.ForeignKey('Peminatan', on_delete=CASCADE, related_name='pilihandua')
-  score1 = models.DecimalField(null=True, max_digits=3, decimal_places=1, blank=True)
-  score2 = models.DecimalField(null=True, max_digits=3, decimal_places=1, blank=True)
-  batch = models.ForeignKey('Batch', on_delete=CASCADE, null=True, related_name='batchnumber')
-  result = models.ForeignKey('Peminatan', on_delete=CASCADE, null=True, blank=True)
+  pilihan1 = models.ForeignKey('Peminatan', on_delete=models.SET_NULL, null=True, blank=True, related_name='pilihansatu')
+  pilihan2 = models.ForeignKey('Peminatan', on_delete=models.SET_NULL, null=True, blank=True, related_name='pilihandua')
+  score1 = models.DecimalField(max_digits=3, decimal_places=1, default=Decimal(0.0), null=True)
+  score2 = models.DecimalField(max_digits=3, decimal_places=1, default=Decimal(0.0), null=True)
+  batch = models.ForeignKey('Batch', on_delete=models.SET_NULL, null=True, blank=True, related_name='batchnumber')
+  result = models.ForeignKey('Peminatan', on_delete=models.SET_NULL, null=True, blank=True, related_name='result_peminatan')
 
 class StatusServer(models.Model):
   name = models.CharField(max_length=100)

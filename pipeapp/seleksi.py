@@ -1,4 +1,5 @@
-from .models import Batch, Seleksi, Peminatan, Profile, TukarPeminatan, StatusServer
+from django.db.models.expressions import F
+from .models import Batch, Keprof, Nilai, Seleksi, Peminatan, Profile, TukarPeminatan, StatusServer
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count
@@ -95,15 +96,140 @@ def plotting(request):
   if request.method == 'POST':
     seleksi = Seleksi.objects.all().order_by('-score1')
     for s in seleksi:
+      print(s.studentid)
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
       elif list(seleksi).index(s) + 1 > s.pilihan1.kuota:
         data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
         data.result = s.pilihan2
+        mahasiswa.peminatan = s.pilihan2
         data.save()
+        mahasiswa.save()
       else:
         data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
         data.result = s.pilihan1
+        mahasiswa.peminatan = s.pilihan1
         data.save()
+        mahasiswa.save()
 
     return redirect('penghitungannilai')
+
+def hitung(request, latestbatch):
+  seleksi = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__pilihan1__kuota', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__pilihan2__kuota')
+  ede = Peminatan.objects.get(peminatancode='EDE')
+  eisd = Peminatan.objects.get(peminatancode='EISD')
+  sag = Peminatan.objects.get(peminatancode='SAG')
+  eim = Peminatan.objects.get(peminatancode='EIM')
+  erp = Peminatan.objects.get(peminatancode='ERP')
+
+
+  for s in seleksi:
+    data = Seleksi.objects.get(studentid__numberid=s['numberid'])
+    keprof = Keprof.objects.filter(nim=s['numberid'])
+    if s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Data Engineering':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(ede.prasyarat1.lower()) + F(ede.prasyarat2.lower()) + F(ede.prasyarat3.lower()) + F(ede.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score1 = nilai[0]['nilai'] + 1
+      else:
+        data.score1 = 0
+      
+      if keprof and keprof[0].keprof == 'DASPRO':
+        data.score1 += 2
+
+    elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Resource Planning':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(erp.prasyarat1.lower()) + F(erp.prasyarat2.lower()) + F(erp.prasyarat3.lower()) + F(erp.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score1 = nilai[0]['nilai'] + 1
+      else:
+        data.score1 = 0
+
+      if keprof and keprof[0].keprof == 'ERP':
+        data.score1 += 2
+
+    elif s['seleksi_student__pilihan1__peminatanname'] == 'System Architecture and Governance':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(sag.prasyarat1.lower()) + F(sag.prasyarat2.lower()) + F(sag.prasyarat3.lower()) + F(sag.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score1 = nilai[0]['nilai'] + 1
+      else:
+        data.score1 = 0
+
+      if keprof and keprof[0].keprof == 'SAG':
+        data.score1 += 2
+
+    elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Intelligent System Development':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eisd.prasyarat1.lower()) + F(eisd.prasyarat2.lower()) + F(eisd.prasyarat3.lower()) + F(eisd.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score1 = nilai[0]['nilai'] + 1
+      else:
+        data.score1 = 0
+
+      if keprof and keprof[0].keprof == 'EISD':
+        data.score1 += 2
+
+    elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Infrastructure Management':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eim.prasyarat1.lower()) + F(eim.prasyarat2.lower()) + F(eim.prasyarat3.lower()) + F(eim.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score1 = nilai[0]['nilai'] + 1
+      else:
+        data.score1 = 0
+
+      if keprof and keprof[0].keprof == 'SISJAR':
+        data.score1 += 2
+
+    if s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Data Engineering':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(ede.prasyarat1.lower()) + F(ede.prasyarat2.lower()) + F(ede.prasyarat3.lower()) + F(ede.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score2 = nilai[0]['nilai']
+      else:
+        data.score2 = 0
+
+      if keprof and keprof[0].keprof == 'DASPRO':
+        data.score2 += 2
+
+    elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Resource Planning':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(erp.prasyarat1.lower()) + F(erp.prasyarat2.lower()) + F(erp.prasyarat3.lower()) + F(erp.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score2 = nilai[0]['nilai']
+      else:
+        data.score2 = 0
+
+      if keprof and keprof[0].keprof == 'ERP':
+        data.score2 += 2
+
+    elif s['seleksi_student__pilihan2__peminatanname'] == 'System Architecture and Governance':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(sag.prasyarat1.lower()) + F(sag.prasyarat2.lower()) + F(sag.prasyarat3.lower()) + F(sag.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score2 = nilai[0]['nilai']
+      else:
+        data.score2 = 0
+
+      if keprof and keprof[0].keprof == 'SAG':
+        data.score2 += 2
+
+    elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Intelligent System Development':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eisd.prasyarat1.lower()) + F(eisd.prasyarat2.lower()) + F(eisd.prasyarat3.lower()) + F(eisd.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score2 = nilai[0]['nilai']
+      else:
+        data.score2 = 0
+
+      if keprof and keprof[0].keprof == 'EISD':
+        data.score2 += 2
+
+    elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Infrastructure Management':
+      nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eim.prasyarat1.lower()) + F(eim.prasyarat2.lower()) + F(eim.prasyarat3.lower()) + F(eim.prasyarat4.lower())).values('nilai')
+      if nilai and nilai[0]:
+        data.score2 = nilai[0]['nilai']
+      else:
+        data.score2 = 0
+
+      if keprof and keprof[0].keprof == 'EIM':
+        data.score2 += 2
+
+    data.save()
+
+  fulldata = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__score1', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__score2', 'seleksi_student__result').order_by('-seleksi_student__score1')
+
+  return fulldata

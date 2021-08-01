@@ -1,0 +1,29 @@
+{% block main %}
+
+<div class="row mt-5 mb-3">
+  <div class="col">
+    <h1>Prediksi Peminatan</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">{{df | safe}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#tablepeminatan").DataTable();
+  });
+</script>
+{% endblock %}

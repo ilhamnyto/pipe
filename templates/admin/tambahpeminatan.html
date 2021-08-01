@@ -11,7 +11,11 @@
         <div class="col">
           <form action="/api/update-data" method="POST">
             {% csrf_token %}
-             <input type="hidden" name="id" value="{{peminatan.id}}" />
+            <input
+              type="hidden"
+              name="id"
+              value="{{peminatan.peminatancode}}"
+            />
             <div class="form-group">
               <label for="name">Kode Peminatan</label>
               <input
@@ -21,6 +25,7 @@
                 placeholder="Kode Peminatan"
                 value="{{peminatan.peminatancode}}"
                 required
+                disabled
               />
             </div>
             <div class="form-group">
@@ -35,13 +40,24 @@
               />
             </div>
             <div class="form-group">
-              <label for="keprofesian">Kelompok Keahlian</label>
+              <label for="kelompokkeahlian">Kelompok Keahlian</label>
               <input
                 type="text"
-                name="keprofesian"
+                name="kelompokkeahlian"
                 class="form-control"
-                placeholder="Keprofesian"
+                placeholder="Kelompok Keahlian"
                 value="{{peminatan.kelompokkeahlian}}"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="kelompokkeahlian">Kuota</label>
+              <input
+                type="text"
+                name="kuota"
+                class="form-control"
+                placeholder="Kuota Peminatan"
+                value="{{peminatan.kuota}}"
                 required
               />
             </div>
@@ -85,7 +101,7 @@
               <input type="file" name="file" class="form-control" required />
             </div>
             <div class="form-group">
-              <a href="{% static 'assets/template/keprof.xlsx' %}"
+              <a href="{% static 'assets/template/peminatan.xlsx' %}"
                 >Download Template</a
               >
             </div>
@@ -94,7 +110,7 @@
               type="submit"
               class="submit-button mt-5"
               name="data"
-              value="KEPROF"
+              value="PEMINATAN"
             >
               <span>Import Data</span>
               <i class="bx bxs-chevrons-right"></i>
@@ -145,6 +161,16 @@
                 name="kelompokkeahlian"
                 class="form-control"
                 placeholder="Kelompok Keahlian"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="kelompokkeahlian">Kuota</label>
+              <input
+                type="text"
+                name="kuota"
+                class="form-control"
+                placeholder="Kuota Peminatan"
                 required
               />
             </div>

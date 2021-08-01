@@ -5,6 +5,7 @@ from . import auth
 from . import seleksi
 from . import bidash
 from . import masterdata
+from . import prediksi
 
 urlpatterns = [
   # Views
@@ -23,13 +24,15 @@ urlpatterns = [
   path('data-keprof/add', views.tambahkeprof, name='tambahkeprof'),
   path('data-mahasiswa/add', views.tambahmahasiswa, name='tambahmahasiswa'),
   path('data-dosen/add', views.tambahdosen, name='tambahdosen'),
-  path('data-peminatan/edit/<int:id>', views.editpeminatan, name='editpeminatan'),
+  path('data-peminatan/edit/<str:peminatancode>', views.editpeminatan, name='editpeminatan'),
   path('data-keprof/edit/<int:id>', views.editkeprof, name='editkeprof'),
   path('data-mahasiswa/edit/<int:id>', views.editmahasiswa, name='editmahasiswa'),
   path('data-dosen/edit/<int:id>', views.editdosen, name='editdosen'),
   path('seleksi-peminatan', views.seleksipeminatan, name='seleksipeminatan'),
   path('hasil-seleksi', views.hasilseleksi, name='hasilseleksi'),
+  path('hasil-seleksi/<int:id>', views.seleksiresult, name='seleksiresult'),
   path('penghitungan-nilai', views.penghitungannilai, name='penghitungannilai'),
+  path('penghitungan-nilai/<int:id>', views.hitungnilai, name='hitungnilai'),
       # admin dan dosen
   path('bi-dashboard', views.bidashboard, name='bidashboard'),
   path('bi-dashboard/data', views.bidata, name='bidata'),
@@ -53,4 +56,8 @@ urlpatterns = [
   path('api/import-data', masterdata.importData, name='api-importdata'),
   path('api/bi/overall', bidash.getdataoverall, name='api-bi-overall'),
   path('api/bi/datanilai', bidash.getdatanilai, name='api-bi-nilai'),
+
+    #   TA
+    path('prediksi/kelulusan', prediksi.prediksikelulusan, name="prediksikelulusan"),
+    path('prediksi/peminatan', prediksi.prediksipeminatan, name="prediksipeminatan"),
 ]
