@@ -133,11 +133,21 @@ def importData(request):
         return render(request, 'tambahnilai.html', {'user': user, "error" : "File tidak sesuai"})
 
     elif request.POST['data'] == 'PEMINATAN':
-       
+      try:
+        peminatan = pd.read_excel(request.FILES['file'])
+        peminatan.columns = map(str.lower, peminatan.columns)
+        peminatan.to_sql('pipeapp_peminatan', con=engine, index=False, if_exists="append", method='multi')
+        return redirect('datapeminatan')
+      except Exception:
         return render(request, 'tambahpeminatan.html', {'user': user, "error" : "File tidak sesuai."})
 
     elif request.POST['data'] == 'KEPROF':
-        
+      try:
+        keprof = pd.read_excel(request.FILES['file'])
+        keprof.columns = map(str.lower, keprof.columns)
+        keprof.to_sql('pipeapp_keprof', con=engine, index=False, if_exists="append", method='multi')
+        return redirect('datakeprof')
+      except Exception:
         return render(request, 'tambahkeprof.html', {'user': user, "error" : "File tidak sesuai."})
 
 

@@ -97,7 +97,7 @@
           >
 
           <div class="form-group">
-           <p><b>Keterangan</b> :</p><p style="color: red">Pastikan data Peminatan yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Peminatan agar tidak terjadi Duplikasi Data</p>
+           <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Peminatan yang akan diimport <b>BELUM ADA</b> di Tabel Data Peminatan agar tidak terjadi Duplikasi Data</span>
           </div>
 
             {% csrf_token %}
@@ -140,7 +140,7 @@
           <form action="/api/insert-data" method="POST">
 
           <div class="form-group">
-           <p><b>Keterangan</b> :</p><p style="color: red">Pastikan data Peminatan yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Peminatan agar tidak terjadi Duplikasi Data</p>
+           <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Peminatan yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Peminatan agar tidak terjadi Duplikasi Data</span>
           </div>
 
             {% csrf_token %}
