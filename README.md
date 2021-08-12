@@ -27,7 +27,7 @@ source ENV/Scripts/activate
 5. install packages from requirements
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 5. run app
