@@ -73,14 +73,19 @@
           <h2>Status Pengajuan</h2>
           <ul class="process__status">
             <li>
+              {% if seleksistatus %}
               <div class="icon mx-3">
-                <i class='bx bx-circle'  style="font-size: 2.5rem; color: #8d99ae;"></i>
+                <i class='bx bx-check-circle' style="font-size: 2.5rem; color: #75a1de;"></i>
               </div>
               <div class="desc">
                 <span class="title">Proses</span>
-                {% if seleksistatus %}
                 <span class="text">Proses seleksi mahasiswa.</span>
                 {% else %}
+                <div class="icon mx-3">
+                  <i class='bx bx-circle'  style="font-size: 2.5rem; color: #8d99ae;"></i>
+                </div>
+                <div class="desc">
+                  <span class="title">Proses</span>
                 <span class="text">Pendaftaran seleksi.</span>
                 {% endif %}
               </div>

@@ -162,11 +162,9 @@ def seleksiresult(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
   latestbatch = Batch.objects.filter(id=id)
   if latestbatch:
-
     result = Seleksi.objects.filter(batch=latestbatch[0])
     batch = Batch.objects.all().exclude(id=latestbatch[0].id)
     peminatan = Seleksi.objects.filter(batch=latestbatch[0]).select_related('result').values('result').annotate(count=Count('studentid')).values('result', 'count', 'result__kuota').order_by()
-    print(peminatan)
     return render(request, 'hasilseleksi.html', {'user': user, "result": result, 'allbatch': batch, 'latest': latestbatch[0], "peminatan":peminatan})
   else:
     return render(request, 'hasilseleksi.html', {'user': user})

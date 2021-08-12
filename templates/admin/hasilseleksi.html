@@ -14,15 +14,13 @@
       {% endfor %}
     </select>
     {% if result %}
-    <form action="/api/plotting" method="POST">
-      {% csrf_token %}
-      <button
-        type="submit"
-        class="btn btn-sm btn-primary px-3 py-2 d-flex align-items-center"
-      >
-        <i class="bx bxs-caret-right-square mr-2"></i>Export
-      </button>
-    </form>
+
+    <a
+      href="/api/export-data/{{latest.id}}"
+      class="btn btn-sm btn-primary px-3 py-2 d-flex align-items-center"
+    >
+      <i class="bx bxs-caret-right-square mr-2"></i>Export
+    </a>
     {% else %}
     <button
       class="btn btn-sm btn-secondary px-3 py-2 d-flex align-items-center"

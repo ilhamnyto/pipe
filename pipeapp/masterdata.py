@@ -1,5 +1,7 @@
+from django.db.models.aggregates import Count
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
-from .models import Dosen, Nilai, Peminatan, Keprof, Profile
+from .models import Batch, Dosen, Nilai, Peminatan, Keprof, Profile, Seleksi
 import pandas as pd
 from.dburl import engine
 
@@ -155,3 +157,16 @@ def truncateData(request):
     elif request.POST['data'] == 'KEPROF':
       Keprof.objects.all().delete()
       return redirect('datakeprof')
+
+def exportData(request, id):
+  user = Profile.objects.get(username=request.session['user_login'])
+  latestbatch = Batch.objects.filter(id=id)
+  if latestbatch:
+    results = pd.DataFrame.from_records(Seleksi.objects.filter(batch=latestbatch[0]).values('studentid__numberid', 'studentid__fullname', 'pilihan1_id', 'pilihan2_id', 'score1', 'score2', 'result_id'))
+    results.columns = ['NIM', 'Nama', 'Pilihan 1', 'Pilihan 2', 'Skor Pilihan 1', 'Skor Pilihan 2', 'Peminatan']
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=seleksi.csv'
+    results.to_csv(path_or_buf=response,sep=',',float_format='%.2f', index=False, decimal=".")
+    return response
+  else:
+    return redirect('hasilseleksi')

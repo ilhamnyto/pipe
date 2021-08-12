@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 from . import api
 from . import auth
@@ -54,10 +55,12 @@ urlpatterns = [
   path('api/truncate-data', masterdata.truncateData, name='api-truncatedata'),
   path('api/update-data', masterdata.updateData, name='api-updatedata'),
   path('api/import-data', masterdata.importData, name='api-importdata'),
-  path('api/bi/overall', bidash.getdataoverall, name='api-bi-overall'),
-  path('api/bi/datanilai', bidash.getdatanilai, name='api-bi-nilai'),
+  path('api/export-data/<int:id>', masterdata.exportData, name='api-exportdata'),
 
     #   TA
-    path('prediksi/kelulusan', prediksi.prediksikelulusan, name="prediksikelulusan"),
-    path('prediksi/peminatan', prediksi.prediksipeminatan, name="prediksipeminatan"),
+  path('api/bi/overall', bidash.getdataoverall, name='api-bi-overall'),
+  path('api/bi/datanilai', bidash.getdatanilai, name='api-bi-nilai'),
+  path('prediksi/kelulusan', prediksi.prediksikelulusan, name="prediksikelulusan"),
+  path('prediksi/peminatan', prediksi.prediksipeminatan, name="prediksipeminatan"),
+  
 ]
