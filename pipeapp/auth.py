@@ -30,6 +30,9 @@ def login(request):
           getprofile = req.get('https://gateway.telkomuniversity.ac.id/issueprofile', headers=bearertoken)
           getposisi = req.get('https://gateway.telkomuniversity.ac.id/issuerole', headers=bearertoken)
 
+          if getprofile.status_code == 500:
+            return render(request, 'index.html', {"error": "Anda bukan Mahasiswa ya"})
+
           profile = getprofile.json()
           posisi = getposisi.json()
           
