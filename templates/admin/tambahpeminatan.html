@@ -41,14 +41,14 @@
             </div>
             <div class="form-group">
               <label for="kelompokkeahlian">Kelompok Keahlian</label>
-              <input
-                type="text"
-                name="kelompokkeahlian"
-                class="form-control"
-                placeholder="Kelompok Keahlian"
-                value="{{peminatan.kelompokkeahlian}}"
-                required
-              />
+              <select
+               name="kelompokkeahlian"
+               class="form-control"
+               required>
+              <option value="{{peminatan.kelompokkeahlian}}">SAAT INI : {{peminatan.kelompokkeahlian}}</option>
+              <option value="CYBERNETICS">CYBERNETICS</option>
+              <option value="EINS">EINS</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="kelompokkeahlian">Kuota</label>
@@ -95,6 +95,11 @@
             enctype="multipart/form-data"
             method="POST"
           >
+
+          <div class="form-group">
+           <p><b>Keterangan</b> :</p><p style="color: red">Pastikan data Peminatan yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Peminatan agar tidak terjadi Duplikasi Data</p>
+          </div>
+
             {% csrf_token %}
             <div class="form-group">
               <label for="file">Data Peminatan</label>
@@ -133,6 +138,11 @@
       <div class="row">
         <div class="col">
           <form action="/api/insert-data" method="POST">
+
+          <div class="form-group">
+           <p><b>Keterangan</b> :</p><p style="color: red">Pastikan data Peminatan yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Peminatan agar tidak terjadi Duplikasi Data</p>
+          </div>
+
             {% csrf_token %}
             <div class="form-group">
               <label for="name">Kode Peminatan</label>
@@ -156,13 +166,14 @@
             </div>
             <div class="form-group">
               <label for="kelompokkeahlian">Kelompok Keahlian</label>
-              <input
-                type="text"
-                name="kelompokkeahlian"
-                class="form-control"
-                placeholder="Kelompok Keahlian"
-                required
-              />
+              <select
+               name="kelompokkeahlian"
+               class="form-control"
+               required>
+              <option value="">Pilih Kelompok Keahlian</option>
+              <option value="CYBERNETICS">CYBERNETICS</option>
+              <option value="EINS">EINS</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="kelompokkeahlian">Kuota</label>

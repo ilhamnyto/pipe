@@ -267,6 +267,16 @@
             enctype="multipart/form-data"
             method="POST"
           >
+          
+          <div class="form-group">
+           <p><b>Keterangan</b> :</p>
+           <ol type="1">
+           <li><p style="color: red">Pastikan data Nilai Mahasiswa yang akan diimport <b>BELUM ADA</b> di Tabel Data Mahasiswa agar tidak terjadi Duplikasi Data</p></li>  
+           <li><p>Format pengisian Nilai yaitu dengan rentang angka 0 hingga 4 apabila terdapat koma (,) maka pengisian menggunakan titik (.) </p>
+           <p><b>Contoh : 3.5</b></p></li>
+           </li>
+           </div>
+
             {% csrf_token %}
             <div class="form-group">
               <input type="file" name="file" class="form-control" required />
@@ -305,6 +315,18 @@
       <div class="row">
         <div class="col">
           <form action="/api/insert-data" method="POST">
+
+          <div class="form-group">
+           <p><b>Keterangan</b> :</p>
+           <ol type="1">
+           <li><p style="color: red">Pastikan data Nilai Mahasiswa yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Mahasiswa agar tidak terjadi Duplikasi Data</p></li>  
+           <li><p>Format pengisian Nilai yaitu dengan rentang angka 0 hingga 4 apabila terdapat koma (,) maka pengisian menggunakan titik (.) </p>
+           <p><b>Contoh : 3.5</b></p></li>
+           </li>
+          </ol>
+          </div>
+         
+
             {% csrf_token %}
             <div class="form-group">
               <label for="name">NIM</label>

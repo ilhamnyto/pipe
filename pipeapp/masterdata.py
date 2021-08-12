@@ -119,7 +119,6 @@ def importData(request):
       try:
         dosen = pd.read_excel(request.FILES['file'])
         dosen.columns = map(str.lower, dosen.columns)
-        Dosen.objects.all().delete()
         dosen.to_sql('pipeapp_dosen', con=engine, index=False, if_exists="append", method='multi')
         return redirect('datadosen')
       except Exception:
@@ -128,7 +127,6 @@ def importData(request):
       try:
         nilai = pd.read_excel(request.FILES['file'])
         nilai.columns = map(str.lower, nilai.columns)
-        Nilai.objects.all().delete()
         nilai.to_sql('pipeapp_nilai', con=engine, index=False, if_exists="append", method='multi')
         return redirect('datamahasiswa')
       except Exception:

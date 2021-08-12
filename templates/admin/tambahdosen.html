@@ -1,7 +1,7 @@
 {% load static %} {% block main %} {% if dosen %}
 <div class="row">
   <div class="col-xl-9 mx-auto col-md-12 col-sm-12">
-    <h1>Tambah Dosen</h1>
+    <h1>Update Data Dosen</h1>
   </div>
 </div>
 <div class="row mt-3">
@@ -25,25 +25,28 @@
             </div>
             <div class="form-group">
               <label for="name">Kelompok Keahlian</label>
-              <input
-                type="text"
-                name="kelompok"
-                class="form-control"
-                placeholder="Kelompok Keahlian"
-                value="{{dosen.kelompok}}"
-                required
-              />
+              <select
+               name="kelompok"
+               class="form-control"
+               required>
+              <option value="{{dosen.kelompok}}">SAAT INI : {{dosen.kelompok}}</option>
+              <option value="CYBERNETICS">CYBERNETICS</option>
+              <option value="EINS">EINS</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="name">Peminatan</label>
-              <input
-                type="text"
-                name="peminatan"
-                class="form-control"
-                placeholder="Peminatan"
-                value="{{dosen.peminatan}}"
-                required
-              />
+              <select
+               name="peminatan"
+               class="form-control"
+               required>
+              <option value="{{dosen.peminatan}}">SAAT INI : {{dosen.peminatan}}</option>
+              <option value="EISD">EISD</option>
+              <option value="EDE">EDE</option>
+              <option value="SAG">SAG</option>
+              <option value="ERP">ERP</option>
+              <option value="EIM">EIM</option> 
+              </select>
             </div>
 
             <button
@@ -79,6 +82,11 @@
             enctype="multipart/form-data"
             method="POST"
           >
+
+           <div class="form-group">
+           <p><b>Keterangan</b> :</p><p style="color: red">Pastikan data Dosen yang akan diimport <b>BELUM ADA</b> di Tabel Data Dosen agar tidak terjadi Duplikasi Data</p>
+           </div>
+
             {% csrf_token %}
             <div class="form-group">
               <label for="file">Data Dosen</label>
@@ -117,6 +125,11 @@
       <div class="row">
         <div class="col">
           <form action="/api/insert-data" method="POST">
+
+          <div class="form-group">
+           <p><b>Keterangan</b> :</p><p style="color: red">Pastikan data Dosen yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Dosen agar tidak terjadi Duplikasi Data</p>
+          </div>
+
             {% csrf_token %}
             <div class="form-group">
               <label for="name">Name</label>
@@ -130,24 +143,30 @@
             </div>
             <div class="form-group">
               <label for="name">Kelompok Keahlian</label>
-              <input
-                type="text"
-                name="kelompok"
-                class="form-control"
-                placeholder="Kelompok Keahlian"
-                required
-              />
+              <select
+               name="kelompok"
+               class="form-control"
+               required>
+              <option value="">Pilih Kelompok Keahlian</option>
+              <option value="CYBERNETICS">CYBERNETICS</option>
+              <option value="EINS">EINS</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="name">Peminatan</label>
-              <input
-                type="text"
-                name="peminatan"
-                class="form-control"
-                placeholder="Peminatan"
-                required
-              />
+              <select
+               name="peminatan"
+               class="form-control"
+               required>
+              <option value="">Pilih Peminatan</option>
+              <option value="EISD">EISD</option>
+              <option value="EDE">EDE</option>
+              <option value="SAG">SAG</option>
+              <option value="ERP">ERP</option>
+              <option value="EIM">EIM</option> 
+              </select>
             </div>
+
 
             <button
               type="submit"
