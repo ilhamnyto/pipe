@@ -26,17 +26,17 @@
                 {% if tukar.status == 'Disetujui' %}
                 <tr>
                   <td>1</td>
-                  <td>Ilham Nuryanto</td>
-                  <td>Dadang Sunandar</td>
-                  <td>May 23, 2021, 8:48 p.m.</td>
+                  <td>{{ tukar.mahasiswa1.fullname }}</td>
+                  <td>{{ tukar.mahasiswa2.fullname }}</td>
+                  <td>{{ tukar.created_at }}</td>
                   <td>Approved</td>
                 </tr>
                 {% elif tukar.status == 'Ditolak I' or tukar.status == 'Ditolak II' %}
                 <tr>
                   <td>1</td>
-                  <td>Ilham Nuryanto</td>
-                  <td>Dadang Sunandar</td>
-                  <td>May 23, 2021, 8:48 p.m.</td>
+                  <td>{{ tukar.mahasiswa1.fullname }}</td>
+                  <td>{{ tukar.mahasiswa2.fullname }}</td>
+                  <td>{{ tukar.created_at }}</td>
                   <td>Declined</td>
                 </tr>
                 {% else %}
