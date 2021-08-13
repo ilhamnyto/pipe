@@ -10,6 +10,13 @@
       <div class="row">
         <div class="col">
           <form action="/api/update-data" method="POST">
+
+          <div class="form-group">
+          <span>Format pengisian Nilai yaitu dengan rentang angka 0 hingga 4 apabila terdapat koma (,) maka pengisian menggunakan titik (.)</span>
+          <br>
+          <span><b>Contoh : 3.5</b></span>
+          </div>
+          
             {% csrf_token %}
             <input type="hidden" name="id" value="{{nilai.id}}" />
             <div class="form-group">
@@ -269,7 +276,7 @@
           >
           
           <div class="form-group">
-          <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Dosen yang akan diimport <b>BELUM ADA</b> di Tabel Data Dosen agar tidak terjadi Duplikasi Data</span>
+          <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Mahasiswa yang akan diimport <b>BELUM ADA</b> di Tabel Data Mahasiswa agar tidak terjadi Duplikasi Data</span>
           <br><br>
           <span>Format pengisian Nilai yaitu dengan rentang angka 0 hingga 4 apabila terdapat koma (,) maka pengisian menggunakan titik (.)</span>
           <br>
@@ -316,7 +323,7 @@
           <form action="/api/insert-data" method="POST">
 
           <div class="form-group">
-           <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Dosen yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Dosen agar tidak terjadi Duplikasi Data</span>
+           <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Mahasiswa yang akan ditambahkan <b>BELUM ADA</b> di Tabel Data Mahasiswa agar tidak terjadi Duplikasi Data</span>
           <br><br>
           <span>Format pengisian Nilai yaitu dengan rentang angka 0 hingga 4 apabila terdapat koma (,) maka pengisian menggunakan titik (.)</span>
           <br>

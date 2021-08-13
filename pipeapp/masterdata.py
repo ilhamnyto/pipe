@@ -60,7 +60,7 @@ def insertData(request):
       peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
-      keprof = Keprof(nim=request.POST['nim'], name=request.POST['name'], keprof=request.POST['keprofesian'])
+      keprof = Keprof(nim=request.POST['nim'], name=request.POST['name'], keprof=request.POST['keprofesian'], kategori=request.POST['kategori'])
       keprof.save()
       return redirect('datakeprof')
 
@@ -109,6 +109,7 @@ def updateData(request):
       keprof.nim = request.POST['nim']
       keprof.name = request.POST['name']
       keprof.keprof = request.POST['keprofesian']
+      keprof.kategori = request.POST['kategori']
       keprof.save()
       return redirect('datakeprof')
 

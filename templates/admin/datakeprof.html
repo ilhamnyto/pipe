@@ -31,6 +31,7 @@
                   <th>NIM</th>
                   <th>Nama</th>
                   <th>Keprofesian</th>
+                  <th>Kategori</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -41,6 +42,7 @@
                   <td>{{keprof.nim}}</td>
                   <td>{{keprof.name}}</td>
                   <td>{{keprof.keprof}}</td>
+                  <td>{{keprof.kategori}}</td>
                   <td class="d-flex align-items-center">
                    <form action="/api/delete-data" method="POST">
                       {% csrf_token %}

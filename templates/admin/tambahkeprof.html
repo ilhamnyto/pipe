@@ -49,6 +49,19 @@
               </select>
             </div>
 
+            <div class="form-group">
+              <label for="keprofesian">Kategori</label>
+              <select
+               name="kategori"
+               class="form-control"
+               required>
+              <option value="{{keprof.kategori}}">SAAT INI : {{keprof.kategori}}</option>
+              <option value="KORDAS">KORDAS</option>
+              <option value="ASISTEN">ASISTEN</option>
+              <option value="ANGGOTA">ANGGOTA</option>
+              </select>
+            </div>
+
             <button
               type="submit"
               class="submit-button mt-5"
@@ -85,6 +98,8 @@
 
           <div class="form-group">
            <span><b>Keterangan</b> : </span><span class="text-danger">Pastikan data Keprofesian yang akan diimport <b>BELUM ADA</b> di Tabel Data Keprofesian agar tidak terjadi Duplikasi Data</span>
+           <br><br>
+           <span><b>Kategori</b> : KORDAS / ASISTEN / ANGGOTA</span>
           </div>
 
             {% csrf_token %}
@@ -163,6 +178,19 @@
               <option value="SAG">SAG</option>
               <option value="ERP">ERP</option>
               <option value="EIM">EIM</option> 
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="keprofesian">Kategori</label>
+              <select
+               name="kategori"
+               class="form-control"
+               required>
+              <option value="">Pilih Kategori</option>
+              <option value="KORDAS">KORDAS</option>
+              <option value="ASISTEN">ASISTEN</option>
+              <option value="ANGGOTA">ANGGOTA</option>
               </select>
             </div>
 
