@@ -59,6 +59,15 @@ def pengajuankedosen(request):
       return redirect('pindah')
     elif request.POST['status'] == 'Pengajuan II' and request.POST['decision'] == 'approve':
       tukar.status = 'Disetujui'
+      mahasiswa1 = Profile.objects.get(username=tukar.mahasiswa1.username)
+      mahasiswa2 = Profile.objects.get(username=tukar.mahasiswa2.username)
+      print(mahasiswa1.peminatan)
+      print(mahasiswa2.peminatan)
+      peminatan = mahasiswa1.peminatan
+      mahasiswa1.peminatan = mahasiswa2.peminatan
+      mahasiswa2.peminatan = peminatan
+      mahasiswa1.save()
+      mahasiswa2.save()
       tukar.save()
       return redirect('pindah')
     elif request.POST['status'] == 'Pengajuan II' and request.POST['decision'] == 'decline':
@@ -71,12 +80,10 @@ def statusbatch(request):
   status = StatusServer.objects.get(name='Batch Pendaftaran')
   if request.method == 'POST':
     if request.POST['status'] == 'enable':
-      print(request.POST['status'])
       status.isAvailable = True
       status.save()
       return redirect('seleksipeminatan')
     else:
-      print(request.POST['status'])
       status.isAvailable = False
       status.save()
       return redirect('seleksipeminatan')
@@ -96,7 +103,6 @@ def plotting(request):
   if request.method == 'POST':
     seleksi = Seleksi.objects.all().order_by('-score1')
     for s in seleksi:
-      print(s.studentid)
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
       elif list(seleksi).index(s) + 1 > s.pilihan1.kuota:

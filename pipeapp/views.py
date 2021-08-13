@@ -207,7 +207,6 @@ def pindah(request):
     return render(request, 'pindah.html', {"user": user, "userdata": userdata, "tukar": tukar})
   else:
     tukaran = TukarPeminatan.objects.filter(Q(mahasiswa1__peminatan=user.peminatan) | (Q(mahasiswa2__peminatan=user.peminatan) and ~Q(status="Pengajuan I"))).order_by('-created_at')
-    print(tukaran)
     return render(request, 'pindah.html', {"user": user, "tukaran": tukaran})
 # dosen dan admin
 
