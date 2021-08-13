@@ -1,5 +1,5 @@
 from pipeapp.seleksi import hitung
-from pipeapp.models import Batch, Dosen, Keprof, Nilai, Peminatan, Profile, Seleksi, StatusServer, TukarPeminatan
+from pipeapp.models import Batch, Bobot, Dosen, Keprof, Nilai, Peminatan, Profile, Seleksi, StatusServer, TukarPeminatan
 from django.shortcuts import redirect, render
 from .decorator import login_required, is_authenticated, role_required
 from django.db.models import Q, Count
@@ -160,6 +160,7 @@ def hasilseleksi(request):
 @role_required(allowed_roles=['ADMIN'])
 def seleksiresult(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
+
   latestbatch = Batch.objects.filter(id=id)
   if latestbatch:
     result = Seleksi.objects.filter(batch=latestbatch[0])
@@ -186,6 +187,36 @@ def hitungnilai(request, id):
     return render(request, 'penghitungannilai.html', {'user': user, "seleksi": fulldata, 'allbatch': batch, 'latest': latestbatch[0]})
   else:
     return render(request, 'penghitungannilai.html', {'user': user})
+
+@login_required()
+@role_required(allowed_roles=['ADMIN'])
+def pengaturan(request):
+  user = Profile.objects.get(username=request.session['user_login'])
+  peminatan =Peminatan.objects.all()
+  bobot = Bobot.objects.get(id=1)
+
+  matkul = [
+  "RPB",
+  "PROBSTAT",
+  "BASDAT",
+  "DWBI",
+  "OOP",
+  "APSI",
+  "ALPRO",
+  "WEB",
+  "EA",
+  "MANLAY",
+  "SE",
+  "SCM",
+  "AKUNTANSI",
+  "MANPROSI",
+  "DESJAR",
+  "MANJARKOM",
+  "SISOP",
+  "KSI",
+]
+
+  return render(request, 'pengaturan.html', {'user': user, 'bobot': bobot, "peminatan" : peminatan, "matkul": matkul})
 
 # mahasiswa dan dosen
 

@@ -1,5 +1,5 @@
 from django.db.models.expressions import F
-from .models import Batch, Keprof, Nilai, Seleksi, Peminatan, Profile, TukarPeminatan, StatusServer
+from .models import Batch, Bobot, Keprof, Nilai, Seleksi, Peminatan, Profile, TukarPeminatan, StatusServer
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count
@@ -61,8 +61,6 @@ def pengajuankedosen(request):
       tukar.status = 'Disetujui'
       mahasiswa1 = Profile.objects.get(username=tukar.mahasiswa1.username)
       mahasiswa2 = Profile.objects.get(username=tukar.mahasiswa2.username)
-      print(mahasiswa1.peminatan)
-      print(mahasiswa2.peminatan)
       peminatan = mahasiswa1.peminatan
       mahasiswa1.peminatan = mahasiswa2.peminatan
       mahasiswa2.peminatan = peminatan
@@ -101,29 +99,51 @@ def createbatch(request):
 
 def plotting(request):
   if request.method == 'POST':
-    seleksi = Seleksi.objects.all().order_by('-score1')
-    for s in seleksi:
+    ede = Seleksi.objects.filter(pilihan1='EDE', result__isnull=True).order_by('-score1')
+    eisd = Seleksi.objects.filter(pilihan1='EISD', result__isnull=True).order_by('-score1')
+    sag = Seleksi.objects.filter(pilihan1='SAG', result__isnull=True).order_by('-score1')
+    eim = Seleksi.objects.filter(pilihan1='EIM', result__isnull=True).order_by('-score1')
+    erp = Seleksi.objects.filter(pilihan1='ERP', result__isnull=True).order_by('-score1')
+
+    for s in sag:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
-      elif list(seleksi).index(s) + 1 > s.pilihan1.kuota:
-        data = Seleksi.objects.get(studentid=s.studentid)
-        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
-        data.result = s.pilihan2
-        mahasiswa.peminatan = s.pilihan2
-        data.save()
-        mahasiswa.save()
+      elif s.pilihan1.kuota <= 0:
+        pass
       else:
         data = Seleksi.objects.get(studentid=s.studentid)
         mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
+        peminatan = Peminatan.objects.get(peminatancode=s.pilihan1.peminatancode)
         data.result = s.pilihan1
         mahasiswa.peminatan = s.pilihan1
+        peminatan.kuota -= 1
+        peminatan.save()
         data.save()
         mahasiswa.save()
+
+    pilihan2 = Seleksi.objects.filter(result__isnull=True)
+    for s in pilihan2:
+      if s.score1 <= 0.0 and s.score2 <= 0.0 :
+        pass
+      elif s.pilihan2.kuota <= 0:
+        pass
+      else:
+        data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
+        peminatan = Peminatan.objects.get(peminatancode=s.pilihan2.peminatancode)
+        data.result = s.pilihan2
+        mahasiswa.peminatan = s.pilihan2
+        peminatan.kuota -= 1
+        peminatan.save()
+        data.save()
+        mahasiswa.save()
+
 
     return redirect('penghitungannilai')
 
 def hitung(request, latestbatch):
-  seleksi = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__pilihan1__kuota', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__pilihan2__kuota')
+  bobot = Bobot.objects.get(id=1)
+  seleksi = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch, peminatan__isnull=True).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__pilihan1__kuota', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__pilihan2__kuota')
   ede = Peminatan.objects.get(peminatancode='EDE')
   eisd = Peminatan.objects.get(peminatancode='EISD')
   sag = Peminatan.objects.get(peminatancode='SAG')
@@ -137,52 +157,71 @@ def hitung(request, latestbatch):
     if s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Data Engineering':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(ede.prasyarat1.lower()) + F(ede.prasyarat2.lower()) + F(ede.prasyarat3.lower()) + F(ede.prasyarat4.lower())).values('nilai')
       if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
+        data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
         data.score1 = 0
       
-      if keprof and keprof[0].keprof == 'DASPRO':
-        data.score1 += 2
+      if keprof and keprof[0].keprof == 'DASPRO' and keprof[0].kategori == 'ASISTEN':
+        data.score1 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'DASPRO' and keprof[0].kategori == 'KORDAS':
+        data.score1 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'DASPRO' and keprof[0].kategori == 'ANGGOTA':
+        data.score1 += bobot.anggota
 
     elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Resource Planning':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(erp.prasyarat1.lower()) + F(erp.prasyarat2.lower()) + F(erp.prasyarat3.lower()) + F(erp.prasyarat4.lower())).values('nilai')
       if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
+        data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
         data.score1 = 0
 
-      if keprof and keprof[0].keprof == 'ERP':
-        data.score1 += 2
+      if keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ASISTEN':
+        data.score1 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'KORDAS':
+        data.score1 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ANGGOTA':
+        data.score1 += bobot.anggota
 
     elif s['seleksi_student__pilihan1__peminatanname'] == 'System Architecture and Governance':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(sag.prasyarat1.lower()) + F(sag.prasyarat2.lower()) + F(sag.prasyarat3.lower()) + F(sag.prasyarat4.lower())).values('nilai')
       if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
+        data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
         data.score1 = 0
-
-      if keprof and keprof[0].keprof == 'SAG':
-        data.score1 += 2
+      if keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'ASISTEN':
+        data.score1 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'KORDAS':
+        data.score1 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'ANGGOTA':
+        data.score1 += bobot.anggota
 
     elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Intelligent System Development':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eisd.prasyarat1.lower()) + F(eisd.prasyarat2.lower()) + F(eisd.prasyarat3.lower()) + F(eisd.prasyarat4.lower())).values('nilai')
       if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
+        data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
         data.score1 = 0
 
-      if keprof and keprof[0].keprof == 'EISD':
-        data.score1 += 2
+      if keprof and keprof[0].keprof == 'ESD' and keprof[0].kategori == 'ASISTEN':
+        data.score1 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'ESD' and keprof[0].kategori == 'KORDAS':
+        data.score1 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'ESD' and keprof[0].kategori == 'ANGGOTA':
+        data.score1 += bobot.anggota
 
     elif s['seleksi_student__pilihan1__peminatanname'] == 'Enterprise Infrastructure Management':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eim.prasyarat1.lower()) + F(eim.prasyarat2.lower()) + F(eim.prasyarat3.lower()) + F(eim.prasyarat4.lower())).values('nilai')
       if nilai and nilai[0]:
-        data.score1 = nilai[0]['nilai'] + 1
+        data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
         data.score1 = 0
 
-      if keprof and keprof[0].keprof == 'SISJAR':
-        data.score1 += 2
+      if keprof and keprof[0].keprof == 'EIM' and keprof[0].kategori == 'ASISTEN':
+        data.score1 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'EIM' and keprof[0].kategori == 'KORDAS':
+        data.score1 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'EIM' and keprof[0].kategori == 'ANGGOTA':
+        data.score1 += bobot.anggota
 
     if s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Data Engineering':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(ede.prasyarat1.lower()) + F(ede.prasyarat2.lower()) + F(ede.prasyarat3.lower()) + F(ede.prasyarat4.lower())).values('nilai')
@@ -191,8 +230,12 @@ def hitung(request, latestbatch):
       else:
         data.score2 = 0
 
-      if keprof and keprof[0].keprof == 'DASPRO':
-        data.score2 += 2
+      if keprof and keprof[0].keprof == 'DASPRO' and keprof[0].kategori == 'ASISTEN':
+        data.score2 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'DASPRO' and keprof[0].kategori == 'KORDAS':
+        data.score2 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'DASPRO' and keprof[0].kategori == 'ANGGOTA':
+        data.score2 += bobot.anggota
 
     elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Resource Planning':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(erp.prasyarat1.lower()) + F(erp.prasyarat2.lower()) + F(erp.prasyarat3.lower()) + F(erp.prasyarat4.lower())).values('nilai')
@@ -201,8 +244,12 @@ def hitung(request, latestbatch):
       else:
         data.score2 = 0
 
-      if keprof and keprof[0].keprof == 'ERP':
-        data.score2 += 2
+      if keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ASISTEN':
+        data.score2 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'KORDAS':
+        data.score2 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ANGGOTA':
+        data.score2 += bobot.anggota
 
     elif s['seleksi_student__pilihan2__peminatanname'] == 'System Architecture and Governance':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(sag.prasyarat1.lower()) + F(sag.prasyarat2.lower()) + F(sag.prasyarat3.lower()) + F(sag.prasyarat4.lower())).values('nilai')
@@ -210,9 +257,13 @@ def hitung(request, latestbatch):
         data.score2 = nilai[0]['nilai']
       else:
         data.score2 = 0
-
-      if keprof and keprof[0].keprof == 'SAG':
-        data.score2 += 2
+      
+      if keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'ASISTEN':
+        data.score2 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'KORDAS':
+        data.score2 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'ANGGOTA':
+        data.score2 += bobot.anggota
 
     elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Intelligent System Development':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eisd.prasyarat1.lower()) + F(eisd.prasyarat2.lower()) + F(eisd.prasyarat3.lower()) + F(eisd.prasyarat4.lower())).values('nilai')
@@ -221,8 +272,12 @@ def hitung(request, latestbatch):
       else:
         data.score2 = 0
 
-      if keprof and keprof[0].keprof == 'EISD':
-        data.score2 += 2
+      if keprof and keprof[0].keprof == 'ESD' and keprof[0].kategori == 'ASISTEN':
+        data.score2 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'ESD' and keprof[0].kategori == 'KORDAS':
+        data.score2 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'ESD' and keprof[0].kategori == 'ANGGOTA':
+        data.score2 += bobot.anggota
 
     elif s['seleksi_student__pilihan2__peminatanname'] == 'Enterprise Infrastructure Management':
       nilai = Nilai.objects.filter(Q(nim=s['numberid'])).annotate(nilai=F(eim.prasyarat1.lower()) + F(eim.prasyarat2.lower()) + F(eim.prasyarat3.lower()) + F(eim.prasyarat4.lower())).values('nilai')
@@ -231,11 +286,62 @@ def hitung(request, latestbatch):
       else:
         data.score2 = 0
 
-      if keprof and keprof[0].keprof == 'EIM':
-        data.score2 += 2
+      if keprof and keprof[0].keprof == 'EIM' and keprof[0].kategori == 'ASISTEN':
+        data.score2 += bobot.asisten
+      elif keprof and keprof[0].keprof == 'EIM' and keprof[0].kategori == 'KORDAS':
+        data.score2 += bobot.kordas
+      elif keprof and keprof[0].keprof == 'EIM' and keprof[0].kategori == 'ANGGOTA':
+        data.score2 += bobot.anggota
 
     data.save()
 
-  fulldata = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__score1', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__score2', 'seleksi_student__result').order_by('-seleksi_student__score1')
+  fulldata = Profile.objects.filter(role='MAHASISWA', seleksi_student__batch=latestbatch, peminatan__isnull=True).values('numberid', 'fullname', 'seleksi_student__pilihan1__peminatanname', 'seleksi_student__score1', 'seleksi_student__pilihan2__peminatanname', 'seleksi_student__score2', 'seleksi_student__result').order_by('-seleksi_student__score1')
 
   return fulldata
+
+def pengaturanapi(request):
+  if request.method == 'POST':
+    ede = Peminatan.objects.get(peminatancode='EDE')
+    eisd = Peminatan.objects.get(peminatancode='EISD')
+    sag = Peminatan.objects.get(peminatancode='SAG')
+    eim = Peminatan.objects.get(peminatancode='EIM')
+    erp = Peminatan.objects.get(peminatancode='ERP')
+    bobot = Bobot.objects.get(id=1)
+
+    ede.prasyarat1 = request.POST['EDE1']
+    ede.prasyarat2 = request.POST['EDE2']
+    ede.prasyarat3 = request.POST['EDE3']
+    ede.prasyarat4 = request.POST['EDE4']
+
+    eisd.prasyarat1 = request.POST['EISD1']
+    eisd.prasyarat2 = request.POST['EISD2']
+    eisd.prasyarat3 = request.POST['EISD3']
+    eisd.prasyarat4 = request.POST['EISD4']
+
+    sag.prasyarat1 = request.POST['SAG1']
+    sag.prasyarat2 = request.POST['SAG2']
+    sag.prasyarat3 = request.POST['SAG3']
+    sag.prasyarat4 = request.POST['SAG4']
+
+    eim.prasyarat1 = request.POST['EIM1']
+    eim.prasyarat2 = request.POST['EIM2']
+    eim.prasyarat3 = request.POST['EIM3']
+    eim.prasyarat4 = request.POST['EIM4']
+
+    erp.prasyarat1 = request.POST['ERP1']
+    erp.prasyarat2 = request.POST['ERP2']
+    erp.prasyarat3 = request.POST['ERP3']
+    erp.prasyarat4 = request.POST['ERP4']
+
+    bobot.pilihan1 = request.POST['pilihan1']
+    bobot.kordas = request.POST['kordas']
+    bobot.asisten = request.POST['asisten']
+    bobot.anggota = request.POST['anggota']
+
+    bobot.save()
+    ede.save()
+    eisd.save()
+    sag.save()
+    eim.save()
+    erp.save()
+    return redirect('pengaturan')

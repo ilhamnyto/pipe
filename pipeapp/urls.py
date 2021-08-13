@@ -34,6 +34,7 @@ urlpatterns = [
   path('hasil-seleksi/<int:id>', views.seleksiresult, name='seleksiresult'),
   path('penghitungan-nilai', views.penghitungannilai, name='penghitungannilai'),
   path('penghitungan-nilai/<int:id>', views.hitungnilai, name='hitungnilai'),
+  path('pengaturan', views.pengaturan, name='pengaturan'),
       # admin dan dosen
   path('bi-dashboard', views.bidashboard, name='bidashboard'),
   path('bi-dashboard/data', views.bidata, name='bidata'),
@@ -56,6 +57,7 @@ urlpatterns = [
   path('api/update-data', masterdata.updateData, name='api-updatedata'),
   path('api/import-data', masterdata.importData, name='api-importdata'),
   path('api/export-data/<int:id>', masterdata.exportData, name='api-exportdata'),
+  path('api/pengaturan', seleksi.pengaturanapi, name='api-pengaturan'),
 
     #   TA
   path('api/bi/overall', bidash.getdataoverall, name='api-bi-overall'),

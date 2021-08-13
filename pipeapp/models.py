@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import IntegerField
 from decimal import Decimal
 
 
@@ -28,7 +27,6 @@ PENGAJUAN_CHOICES = [
 
 ROLE_CHOICES = [
   ("MAHASISWA", "MAHASISWA"),
-  ("DOSEN", "DOSEN"),
   ("DOSEN PEMBINA", "DOSEN PEMBINA"),
   ("ADMIN", "ADMIN"),
 ]
@@ -60,6 +58,12 @@ KEPROF_CHOICES = [
   ("SAG", "SAG"),
   ("ERP", "ERP"),
   ("EIM", "EIM"),
+]
+
+KEPROF_KATEGORI = [
+  ("KORDAS", "KORDAS"),
+  ("ASISTEN", "ASISTEN"),
+  ("ANGGOTA", "ANGGOTA"),
 ]
 
 # PIPE APP
@@ -96,6 +100,8 @@ class Keprof(models.Model):
   nim = models.CharField(max_length=255, null=True)
   name = models.CharField(max_length=255, null=True)
   keprof = models.CharField(max_length=255, choices=KEPROF_CHOICES, blank=True)
+  kategori = models.CharField(max_length=255, choices=KEPROF_KATEGORI, blank=True)
+  
 
 class Nilai(models.Model):
   nim = models.CharField(max_length=255, blank=True, null=True)
@@ -141,6 +147,12 @@ class TukarPeminatan(models.Model):
   mahasiswa2 = models.ForeignKey('Profile', on_delete=CASCADE, related_name='mahasiswadua')
   status = models.CharField(max_length=255, null=True, choices=PENGAJUAN_CHOICES)
   created_at = models.DateTimeField(auto_now_add=True)
+
+class Bobot(models.Model):
+  kordas = models.IntegerField(blank=True, null=True, default=0)
+  asisten = models.IntegerField(blank=True, null=True, default=0)
+  anggota = models.IntegerField(blank=True, null=True, default=0)
+  pilihan1 = models.IntegerField(blank=True, null=True, default=0)
 
 
   
