@@ -190,7 +190,7 @@ def hitungnilai(request, id):
 # mahasiswa dan dosen
 
 @login_required()
-@role_required(allowed_roles=['MAHASISWA', 'DOSEN'])
+@role_required(allowed_roles=['MAHASISWA', 'DOSEN PEMBINA', 'DOSEN'])
 def pindah(request):
   user = Profile.objects.get(username=request.session['user_login'])
   if user.role == 'MAHASISWA':
