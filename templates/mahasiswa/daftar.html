@@ -13,7 +13,7 @@
           <form action="/api/daftar-peminatan" method="POST">
             {% csrf_token %}
             {% if error %}
-            <span class="text-danger">Pilihan 1 dan pilihan 2 tidak boleh sama.</span>
+            <span class="text-danger">{{error}}</span>
             {% elif not serverstatus.isAvailable %}
             <span class="text-danger">Pendaftaran Peminatan pada batch ini belum dibuka atau sudah ditutup.</span>
             {% endif %}
@@ -49,7 +49,17 @@
               </select>
             </div>
             <input type="hidden" name="batch" value="{{batch.id}}">
-            {% if seleksistatus or not serverstatus.isAvailable %}
+            {% if not seleksistatus.0.result and serverstatus.isAvailable%}
+            <button
+              type="submit"
+              class="submit-button danger"
+              name="reset"
+              value="true"
+            >
+              <span>Reset</span>
+              <i class="bx bxs-chevrons-right"></i>
+            </button>
+            {% elif seleksistatus or not serverstatus.isAvailable %}
             <button type="submit" class="submit-button btn-secondary" disabled>
               <span>Daftar</span>
               <i class="bx bxs-chevrons-right"></i>

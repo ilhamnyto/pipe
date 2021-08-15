@@ -78,6 +78,9 @@ class Peminatan(models.Model):
   prasyarat4 = models.CharField(max_length=255, choices=MATKUL_CHOICES, blank=True, null=True)
   kuota = models.IntegerField(blank=True, null=True, default=0)
 
+  def __str__(self):
+   return f'{self.peminatancode} - {self.peminatanname}'
+
 class Profile(models.Model):
   numberid = models.CharField(max_length=255, null=True)
   username = models.CharField(max_length=255)
@@ -91,16 +94,25 @@ class Profile(models.Model):
   faculty = models.CharField(max_length=255, null=True, blank=True)
   peminatan = models.ForeignKey('Peminatan', null=True, on_delete=models.SET_NULL, blank=True, related_name='user_peminatan')
 
+  def __str__(self):
+   return f'{self.numberid} - {self.fullname}'
+
 class Dosen(models.Model):
   name = models.CharField(max_length=255, null=True)
   kelompok = models.CharField(max_length=255,choices=KELOMPOK_CHOICES ,null=True, blank=True)
   peminatan = models.CharField(max_length=255,choices=PEMINATAN_CHOICES ,null=True, blank=True)
+
+  def __str__(self):
+   return f'{self.name} - {self.peminatan}'
 
 class Keprof(models.Model):
   nim = models.CharField(max_length=255, null=True)
   name = models.CharField(max_length=255, null=True)
   keprof = models.CharField(max_length=255, choices=KEPROF_CHOICES, blank=True)
   kategori = models.CharField(max_length=255, choices=KEPROF_KATEGORI, blank=True)
+
+  def __str__(self):
+   return f'{self.nim} - {self.name}'
   
 
 class Nilai(models.Model):
@@ -125,9 +137,15 @@ class Nilai(models.Model):
   sisop = models.DecimalField(null=True, max_digits=2, decimal_places=1, blank=True, default=0)
   ksi = models.DecimalField(null=True, max_digits=2, decimal_places=1, blank=True, default=0)
 
+  def __str__(self):
+   return f'{self.nim} - {self.name}'
+
 class Batch(models.Model):
   batchnum = models.CharField(max_length=255, unique=True)
   created_at = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+   return f'Batch - {self.batchnum}'
 
 class Seleksi(models.Model):
   studentid = models.ForeignKey('Profile', on_delete=CASCADE, related_name='seleksi_student')
@@ -138,9 +156,15 @@ class Seleksi(models.Model):
   batch = models.ForeignKey('Batch', on_delete=models.SET_NULL, null=True, blank=True, related_name='batchnumber')
   result = models.ForeignKey('Peminatan', on_delete=models.SET_NULL, null=True, blank=True, related_name='result_peminatan')
 
+  def __str__(self):
+   return self.studentid
+
 class StatusServer(models.Model):
   name = models.CharField(max_length=100)
   isAvailable = models.BooleanField(default=True)
+
+  def __str__(self):
+   return self.name
 
 class TukarPeminatan(models.Model):
   mahasiswa1 = models.ForeignKey('Profile', on_delete=CASCADE, related_name='mahasiswasatu')
@@ -148,11 +172,15 @@ class TukarPeminatan(models.Model):
   status = models.CharField(max_length=255, null=True, choices=PENGAJUAN_CHOICES)
   created_at = models.DateTimeField(auto_now_add=True)
 
+  def __str__(self):
+   return self.mahasiswa1.numberid
+
 class Bobot(models.Model):
   kordas = models.IntegerField(blank=True, null=True, default=0)
   asisten = models.IntegerField(blank=True, null=True, default=0)
   anggota = models.IntegerField(blank=True, null=True, default=0)
   pilihan1 = models.IntegerField(blank=True, null=True, default=0)
+
 
 
   

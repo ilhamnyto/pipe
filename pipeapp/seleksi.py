@@ -6,13 +6,26 @@ from django.db.models import Q, Count
 
 def daftarpeminatan(request):
   user = Profile.objects.get(username=request.session['user_login'])
+  eins = ['SAG', 'ERP', 'EIM']
+  cybernetics = ['EISD', 'EDE']
+  
   if request.method == 'POST':
-    if request.POST['pilihan1'] == request.POST['pilihan2']:
+    if 'reset' in request.POST:
+      seleksi = Seleksi.objects.get(studentid__username=request.session['user_login'])
+      seleksi.delete()
+      return redirect('daftar')
+    elif request.POST['pilihan1'] == request.POST['pilihan2']:
       peminatan = Peminatan.objects.all()
       batch = Batch.objects.last()
       seleksistatus = Seleksi.objects.filter(studentid=user.numberid)
       serverstatus = StatusServer.objects.get(name='Batch Pendaftaran')
-      return render(request, 'daftar.html', {'user': user, 'peminatan': peminatan, 'batch': batch, 'seleksistatus': seleksistatus, "serverstatus": serverstatus, 'error': True})
+      return render(request, 'daftar.html', {'user': user, 'peminatan': peminatan, 'batch': batch, 'seleksistatus': seleksistatus, "serverstatus": serverstatus, 'error': "Pilihan 1 dan pilihan 2 tidak boleh sama."})
+    elif (request.POST['pilihan1'] in eins and request.POST['pilihan2'] in eins) or (request.POST['pilihan1'] in cybernetics and request.POST['pilihan2'] in cybernetics):
+      peminatan = Peminatan.objects.all()
+      batch = Batch.objects.last()
+      seleksistatus = Seleksi.objects.filter(studentid=user.numberid)
+      serverstatus = StatusServer.objects.get(name='Batch Pendaftaran')
+      return render(request, 'daftar.html', {'user': user, 'peminatan': peminatan, 'batch': batch, 'seleksistatus': seleksistatus, "serverstatus": serverstatus, 'error': "Pilihan 1 dan pilihan 2 tidak boleh dari kelompok keahlian yang sama."})
     else:
       batch = Batch.objects.get(id=request.POST['batch'])
       pilihan1 = Peminatan.objects.get(peminatancode=request.POST['pilihan1'])
