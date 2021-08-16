@@ -49,7 +49,7 @@
               </select>
             </div>
             <input type="hidden" name="batch" value="{{batch.id}}">
-            {% if not seleksistatus.0.result and serverstatus.isAvailable%}
+            {% if seleksistatus and not seleksistatus.0.result and serverstatus.isAvailable%}
             <button
               type="submit"
               class="submit-button danger"

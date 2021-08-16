@@ -157,7 +157,7 @@ class Seleksi(models.Model):
   result = models.ForeignKey('Peminatan', on_delete=models.SET_NULL, null=True, blank=True, related_name='result_peminatan')
 
   def __str__(self):
-   return self.studentid
+   return f'{self.studentid.numberid} - {self.studentid.fullname}'
 
 class StatusServer(models.Model):
   name = models.CharField(max_length=100)
