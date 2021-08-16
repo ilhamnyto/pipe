@@ -1,3 +1,4 @@
+{% load static %}
 {% block main %}
 <div class="row mb-3">
   <div class="col">
@@ -66,7 +67,8 @@
   </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="{% static 'assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script>
