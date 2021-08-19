@@ -74,17 +74,17 @@ WSGI_APPLICATION = 'pipe.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'df52anouucpo1v',
+        'NAME': 'pipe_test',
 
-        'USER': 'xflrotuhigtqrv',
+        'USER': 'pipe',
 
-        'PASSWORD': '7ce85844eb725ce394364f3f08bc1948fc5c60056fd51083d78a0d054cb05231',
+        'PASSWORD': 'pipe2021',
 
-        'HOST': 'ec2-52-1-20-236.compute-1.amazonaws.com',
+        'HOST': 'db-oss.onlinefri.id',
 
-        'PORT': '5432',
+        'PORT': '3308',
     }
 }
 
