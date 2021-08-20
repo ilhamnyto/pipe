@@ -24,7 +24,7 @@
               <tbody>
                 
                 {% for tukar in tukaran %} 
-                {% if tukar.status == 'Disetujui' %}
+                {% if tukar.status == 'Disetujui' or tukar.status == 'Pengajuan II' %}
                 <tr>
                   <td>1</td>
                   <td>{{ tukar.mahasiswa1.fullname }}</td>
