@@ -16,11 +16,11 @@ def deleteData(request):
       erp = Peminatan.objects.get(peminatancode='ERP')
       sag = Peminatan.objects.get(peminatancode='SAG')
 
-      ede.kuota = Dosen.objects.filter(peminatan='EDE').count()
-      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count()
-      eim.kuota = Dosen.objects.filter(peminatan='EIM').count()
-      erp.kuota = Dosen.objects.filter(peminatan='ERP').count()
-      sag.kuota = Dosen.objects.filter(peminatan='SAG').count()
+      ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * 10
+      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * 10
+      eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * 10
+      erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * 10
+      sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * 10
 
       ede.save()
       eisd.save()
@@ -45,7 +45,7 @@ def insertData(request):
     if request.POST['data'] == 'DOSEN':
       dosen = Dosen(name=request.POST['name'], kelompok=request.POST['kelompok'], peminatan=request.POST['peminatan'])
       dosen.save()
-      jumlah = Dosen.objects.filter(peminatan=request.POST['peminatan']).count()
+      jumlah = Dosen.objects.filter(peminatan=request.POST['peminatan']).count() * 10
       peminatan = Peminatan.objects.get(peminatancode=request.POST['peminatan'])
       peminatan.kuota = jumlah
       peminatan.save()
@@ -99,11 +99,11 @@ def updateData(request):
       erp = Peminatan.objects.get(peminatancode='ERP')
       sag = Peminatan.objects.get(peminatancode='SAG')
 
-      ede.kuota = Dosen.objects.filter(peminatan='EDE').count()
-      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count()
-      eim.kuota = Dosen.objects.filter(peminatan='EIM').count()
-      erp.kuota = Dosen.objects.filter(peminatan='ERP').count()
-      sag.kuota = Dosen.objects.filter(peminatan='SAG').count()
+      ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * 10
+      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * 10
+      eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * 10
+      erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * 10
+      sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * 10
 
       ede.save()
       eisd.save()
@@ -166,11 +166,11 @@ def importData(request):
         erp = Peminatan.objects.get(peminatancode='ERP')
         sag = Peminatan.objects.get(peminatancode='SAG')
 
-        ede.kuota = Dosen.objects.filter(peminatan='EDE').count()
-        eisd.kuota = Dosen.objects.filter(peminatan='EISD').count()
-        eim.kuota = Dosen.objects.filter(peminatan='EIM').count()
-        erp.kuota = Dosen.objects.filter(peminatan='ERP').count()
-        sag.kuota = Dosen.objects.filter(peminatan='SAG').count()
+        ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * 10
+        eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * 10
+        eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * 10
+        erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * 10
+        sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * 10
 
         ede.save()
         eisd.save()
@@ -212,6 +212,24 @@ def truncateData(request):
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
       Dosen.objects.all().delete()
+
+      ede = Peminatan.objects.get(peminatancode='EDE')
+      eisd = Peminatan.objects.get(peminatancode='EISD')
+      eim = Peminatan.objects.get(peminatancode='EIM')
+      erp = Peminatan.objects.get(peminatancode='ERP')
+      sag = Peminatan.objects.get(peminatancode='SAG')
+
+      ede.kuota = 0
+      eisd.kuota = 0
+      eim.kuota = 0
+      erp.kuota = 0
+      sag.kuota = 0
+
+      ede.save()
+      eisd.save()
+      eim.save()
+      erp.save()
+      sag.save()
       return redirect('datadosen')
     elif request.POST['data'] == 'NILAI':
       Nilai.objects.all().delete()
