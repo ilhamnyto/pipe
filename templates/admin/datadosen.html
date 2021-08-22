@@ -39,8 +39,8 @@
                 <tr>
                   <td>{{forloop.counter}}</td>
                   <td>{{dosen.name}}</td>
-                  <td>{{dosen.peminatan}}</td>
                   <td>{{dosen.kelompok}}</td>
+                  <td>{{dosen.peminatan}}</td>
                   <td class="d-flex align-items-center">
                     <form action="/api/delete-data" method="POST">
                       {% csrf_token %}
