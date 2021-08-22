@@ -77,6 +77,7 @@ class Peminatan(models.Model):
   prasyarat3 = models.CharField(max_length=255, choices=MATKUL_CHOICES, blank=True, null=True)
   prasyarat4 = models.CharField(max_length=255, choices=MATKUL_CHOICES, blank=True, null=True)
   kuota = models.IntegerField(blank=True, null=True, default=0)
+  sisakuota = models.IntegerField(blank=True, null=True, default=0)
 
   def __str__(self):
    return f'{self.peminatancode} - {self.peminatanname}'

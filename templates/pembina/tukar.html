@@ -1,0 +1,79 @@
+{% load static %}
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Tukar Peminatan</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="dttable" width="100%">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Mahasiswa 1</th>
+                  <th>Mahasiswa 2</th>
+                  <th>Pengajuan</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                {% for tukar in tukaran %} 
+                {% if tukar.status == 'Disetujui' or tukar.status == 'Pengajuan II' %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ tukar.mahasiswa1.fullname }}</td>
+                  <td>{{ tukar.mahasiswa2.fullname }}</td>
+                  <td>{{ tukar.created_at }}</td>
+                  <td>Approved</td>
+                </tr>
+                {% elif tukar.status == 'Ditolak I' or tukar.status == 'Ditolak II' %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ tukar.mahasiswa1.fullname }}</td>
+                  <td>{{ tukar.mahasiswa2.fullname }}</td>
+                  <td>{{ tukar.created_at }}</td>
+                  <td>Declined</td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ tukar.mahasiswa1.fullname }}</td>
+                  <td>{{ tukar.mahasiswa2.fullname }}</td>
+                  <td>{{ tukar.created_at }}</td>
+                  <td>
+                    <form action="/api/pengajuan-tukar" method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="tukarid" value="{{tukar.id}}">
+                      <input type="hidden" name="status" value="{{tukar.status}}">
+                      <button class="btn btn-sm btn-primary" name="decision" value="approve">Approve</button>
+                      <button class="btn btn-sm btn-danger" name="decision" value="decline">Decline</button>
+                    </form>
+                  </td>
+                </tr>
+                {% endif %} 
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#dttable").DataTable();
+  });
+</script>
+{% endblock %}

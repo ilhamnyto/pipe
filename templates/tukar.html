@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PIPE | Daftar Mahasiswa</title>
+    <title>PIPE | Tukar Peminatan</title>
     <link
       href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       rel="stylesheet"
@@ -25,6 +25,7 @@
       rel="stylesheet"
       href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css"
     />
+
     <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/mahasiswa.css' %}" />
   </head>
@@ -57,14 +58,20 @@
       {% endif %}
       {% endblock %}
     </div>
-
+    
     <main class="px-4">
-      {% block main %} {% include 'pembina/pindah.html' %} 
+      {% block main %} 
+      {% if user.role == 'MAHASISWA' %}
+      {% include 'mahasiswa/tukar.html' %}
+      {% elif user.role == 'DOSEN' or user.role == 'DOSEN PEMBINA' %}
+      {% include 'pembina/tukar.html' %}
+      {% endif %}
       {% endblock %}
     </main>
 
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   
     <script src="{% static 'assets/js/script.js' %}"></script>
   </body>
 </html>

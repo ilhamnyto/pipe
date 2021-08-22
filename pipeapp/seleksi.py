@@ -1,5 +1,5 @@
 from django.db.models.expressions import F
-from .models import Batch, Bobot, Keprof, Nilai, Seleksi, Peminatan, Profile, TukarPeminatan, StatusServer
+from .models import Batch, Bobot, Dosen, Keprof, Nilai, Seleksi, Peminatan, Profile, TukarPeminatan, StatusServer
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count
@@ -41,11 +41,11 @@ def daftarpeminatan(request):
       "message": "method is not allowed"
     }})
 
-def pengajuanpindah(request):
+def pengajuantukar(request):
   if 'reset' in request.POST:
     mahasiswa1 = Profile.objects.get(username=request.session['user_login'])
     TukarPeminatan.objects.get(Q(mahasiswa1=mahasiswa1) or Q(mahasiswa2=mahasiswa1)).delete()
-    return redirect('pindah')
+    return redirect('tukar')
   else:
     mahasiswa1 = Profile.objects.get(username=request.session['user_login'])
     mahasiswa2 = Profile.objects.filter(fullname=request.POST['mahasiswadua'])
@@ -57,6 +57,15 @@ def pengajuanpindah(request):
       )
       tukar.save()
 
+    return redirect('tukar')
+
+def pindahpeminatan(request):
+  if request.method == 'POST':
+    user = Profile.objects.get(username=request.session['user_login'])
+    mahasiswa = Profile.objects.get(numberid=request.POST['mahasiswa'])
+    mahasiswa.peminatan = user.peminatan
+    mahasiswa.save()
+
     return redirect('pindah')
 
 def pengajuankedosen(request):
@@ -65,11 +74,11 @@ def pengajuankedosen(request):
     if request.POST['status'] == 'Pengajuan I' and request.POST['decision'] == 'approve':
       tukar.status = 'Pengajuan II'
       tukar.save()
-      return redirect('pindah')
+      return redirect('tukar')
     elif request.POST['status'] == 'Pengajuan I' and request.POST['decision'] == 'decline':
       tukar.status = 'Ditolak I'
       tukar.save()
-      return redirect('pindah')
+      return redirect('tukar')
     elif request.POST['status'] == 'Pengajuan II' and request.POST['decision'] == 'approve':
       tukar.status = 'Disetujui'
       mahasiswa1 = Profile.objects.get(username=tukar.mahasiswa1.username)
@@ -80,12 +89,12 @@ def pengajuankedosen(request):
       mahasiswa1.save()
       mahasiswa2.save()
       tukar.save()
-      return redirect('pindah')
+      return redirect('tukar')
     elif request.POST['status'] == 'Pengajuan II' and request.POST['decision'] == 'decline':
       tukar.status = 'Ditolak II'
       tukar.save()
-      return redirect('pindah')
-    return redirect('pindah')
+      return redirect('tukar')
+    return redirect('tukar')
 
 def statusbatch(request):
   status = StatusServer.objects.get(name='Batch Pendaftaran')
@@ -118,10 +127,28 @@ def plotting(request):
     eim = Seleksi.objects.filter(pilihan1='EIM', result__isnull=True).order_by('-score1')
     erp = Seleksi.objects.filter(pilihan1='ERP', result__isnull=True).order_by('-score1')
 
+    edekuota = Peminatan.objects.get(peminatancode='EDE')
+    eisdkuota = Peminatan.objects.get(peminatancode='EISD')
+    eimkuota = Peminatan.objects.get(peminatancode='EIM')
+    erpkuota = Peminatan.objects.get(peminatancode='ERP')
+    sagkuota = Peminatan.objects.get(peminatancode='SAG')
+
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() - Seleksi.objects.filter(result__peminatancode='SAG').count()
+
+    edekuota.save()
+    eisdkuota.save()
+    eimkuota.save()
+    erpkuota.save()
+    sagkuota.save()
+
     for s in sag:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
-      elif s.pilihan1.kuota <= 0:
+      elif s.pilihan1.sisakuota <= 0:
         pass
       else:
         data = Seleksi.objects.get(studentid=s.studentid)
@@ -129,7 +156,71 @@ def plotting(request):
         peminatan = Peminatan.objects.get(peminatancode=s.pilihan1.peminatancode)
         data.result = s.pilihan1
         mahasiswa.peminatan = s.pilihan1
-        peminatan.kuota -= 1
+        peminatan.sisakuota -= 1
+        peminatan.save()
+        data.save()
+        mahasiswa.save()
+
+    for s in ede:
+      if s.score1 <= 0.0 and s.score2 <= 0.0 :
+        pass
+      elif s.pilihan1.sisakuota <= 0:
+        pass
+      else:
+        data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
+        peminatan = Peminatan.objects.get(peminatancode=s.pilihan1.peminatancode)
+        data.result = s.pilihan1
+        mahasiswa.peminatan = s.pilihan1
+        peminatan.sisakuota -= 1
+        peminatan.save()
+        data.save()
+        mahasiswa.save()
+
+    for s in eisd:
+      if s.score1 <= 0.0 and s.score2 <= 0.0 :
+        pass
+      elif s.pilihan1.sisakuota <= 0:
+        pass
+      else:
+        data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
+        peminatan = Peminatan.objects.get(peminatancode=s.pilihan1.peminatancode)
+        data.result = s.pilihan1
+        mahasiswa.peminatan = s.pilihan1
+        peminatan.sisakuota -= 1
+        peminatan.save()
+        data.save()
+        mahasiswa.save()
+
+    for s in eim:
+      if s.score1 <= 0.0 and s.score2 <= 0.0 :
+        pass
+      elif s.pilihan1.sisakuota <= 0:
+        pass
+      else:
+        data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
+        peminatan = Peminatan.objects.get(peminatancode=s.pilihan1.peminatancode)
+        data.result = s.pilihan1
+        mahasiswa.peminatan = s.pilihan1
+        peminatan.sisakuota -= 1
+        peminatan.save()
+        data.save()
+        mahasiswa.save()
+
+    for s in erp:
+      if s.score1 <= 0.0 and s.score2 <= 0.0 :
+        pass
+      elif s.pilihan1.sisakuota <= 0:
+        pass
+      else:
+        data = Seleksi.objects.get(studentid=s.studentid)
+        mahasiswa = Profile.objects.get(numberid=s.studentid.numberid)
+        peminatan = Peminatan.objects.get(peminatancode=s.pilihan1.peminatancode)
+        data.result = s.pilihan1
+        mahasiswa.peminatan = s.pilihan1
+        peminatan.sisakuota -= 1
         peminatan.save()
         data.save()
         mahasiswa.save()
@@ -138,7 +229,7 @@ def plotting(request):
     for s in pilihan2:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
-      elif s.pilihan2.kuota <= 0:
+      elif s.pilihan2.sisakuota <= 0:
         pass
       else:
         data = Seleksi.objects.get(studentid=s.studentid)
@@ -146,7 +237,7 @@ def plotting(request):
         peminatan = Peminatan.objects.get(peminatancode=s.pilihan2.peminatancode)
         data.result = s.pilihan2
         mahasiswa.peminatan = s.pilihan2
-        peminatan.kuota -= 1
+        peminatan.sisakuota -= 1
         peminatan.save()
         data.save()
         mahasiswa.save()
