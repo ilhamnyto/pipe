@@ -1,4 +1,5 @@
 from django.db.models.aggregates import Count
+from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from .models import Batch, Dosen, Nilai, Peminatan, Keprof, Profile, Seleksi
@@ -9,14 +10,29 @@ def deleteData(request):
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
       Dosen.objects.get(id=request.POST['id']).delete()
+      ede = Peminatan.objects.get(peminatancode='EDE')
+      eisd = Peminatan.objects.get(peminatancode='EISD')
+      eim = Peminatan.objects.get(peminatancode='EIM')
+      erp = Peminatan.objects.get(peminatancode='ERP')
+      sag = Peminatan.objects.get(peminatancode='SAG')
+
+      ede.kuota = Dosen.objects.filter(peminatan='EDE').count()
+      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count()
+      eim.kuota = Dosen.objects.filter(peminatan='EIM').count()
+      erp.kuota = Dosen.objects.filter(peminatan='ERP').count()
+      sag.kuota = Dosen.objects.filter(peminatan='SAG').count()
+
+      ede.save()
+      eisd.save()
+      eim.save()
+      erp.save()
+      sag.save()
       return redirect('datadosen')
     elif request.POST['data'] == 'NILAI':
       Nilai.objects.get(id=request.POST['id']).delete()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
       peminatan = Peminatan.objects.get(peminatancode=request.POST['id'])
-      print(peminatan)
-      print(peminatan.peminatancode)
       peminatan.delete()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
@@ -29,6 +45,10 @@ def insertData(request):
     if request.POST['data'] == 'DOSEN':
       dosen = Dosen(name=request.POST['name'], kelompok=request.POST['kelompok'], peminatan=request.POST['peminatan'])
       dosen.save()
+      jumlah = Dosen.objects.filter(peminatan=request.POST['peminatan']).count()
+      peminatan = Peminatan.objects.get(peminatancode=request.POST['peminatan'])
+      peminatan.kuota = jumlah
+      peminatan.save()
       return redirect('datadosen')
     elif request.POST['data'] == 'NILAI':
       nilai = Nilai(
@@ -56,7 +76,7 @@ def insertData(request):
       nilai.save()
       return redirect('datamahasiswa')
     elif request.POST['data'] == 'PEMINATAN':
-      peminatan = Peminatan(peminatancode=request.POST['kodepeminatan'], peminatanname=request.POST['namapeminatan'], kelompokkeahlian=request.POST['kelompokkeahlian'], kuota=request.POST['kuota'])
+      peminatan = Peminatan(peminatancode=request.POST['kodepeminatan'], peminatanname=request.POST['namapeminatan'], kelompokkeahlian=request.POST['kelompokkeahlian'])
       peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
@@ -72,6 +92,25 @@ def updateData(request):
       dosen.kelompok = request.POST['kelompok']
       dosen.peminatan = request.POST['peminatan']
       dosen.save()
+      
+      ede = Peminatan.objects.get(peminatancode='EDE')
+      eisd = Peminatan.objects.get(peminatancode='EISD')
+      eim = Peminatan.objects.get(peminatancode='EIM')
+      erp = Peminatan.objects.get(peminatancode='ERP')
+      sag = Peminatan.objects.get(peminatancode='SAG')
+
+      ede.kuota = Dosen.objects.filter(peminatan='EDE').count()
+      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count()
+      eim.kuota = Dosen.objects.filter(peminatan='EIM').count()
+      erp.kuota = Dosen.objects.filter(peminatan='ERP').count()
+      sag.kuota = Dosen.objects.filter(peminatan='SAG').count()
+
+      ede.save()
+      eisd.save()
+      eim.save()
+      erp.save()
+      sag.save()
+      
       return redirect('datadosen')
     elif request.POST['data'] == 'NILAI':
       nilai = Nilai.objects.get(id=request.POST['id'])
@@ -101,7 +140,6 @@ def updateData(request):
       peminatan = Peminatan.objects.get(peminatancode=request.POST['id'])
       peminatan.peminatanname = request.POST['namapeminatan']
       peminatan.kelompokkeahlian=request.POST['kelompokkeahlian']
-      peminatan.kuota=request.POST['kuota']
       peminatan.save()
       return redirect('datapeminatan')
     elif request.POST['data'] == 'KEPROF':
@@ -121,6 +159,24 @@ def importData(request):
         dosen = pd.read_excel(request.FILES['file'])
         dosen.columns = map(str.lower, dosen.columns)
         dosen.to_sql('pipeapp_dosen', con=engine, index=False, if_exists="append", method='multi')
+
+        ede = Peminatan.objects.get(peminatancode='EDE')
+        eisd = Peminatan.objects.get(peminatancode='EISD')
+        eim = Peminatan.objects.get(peminatancode='EIM')
+        erp = Peminatan.objects.get(peminatancode='ERP')
+        sag = Peminatan.objects.get(peminatancode='SAG')
+
+        ede.kuota = Dosen.objects.filter(peminatan='EDE').count()
+        eisd.kuota = Dosen.objects.filter(peminatan='EISD').count()
+        eim.kuota = Dosen.objects.filter(peminatan='EIM').count()
+        erp.kuota = Dosen.objects.filter(peminatan='ERP').count()
+        sag.kuota = Dosen.objects.filter(peminatan='SAG').count()
+
+        ede.save()
+        eisd.save()
+        eim.save()
+        erp.save()
+        sag.save()
         return redirect('datadosen')
       except Exception:
         return render(request, 'tambahdosen.html', {'user': user, "error" : "File tidak sesuai."})
@@ -168,7 +224,6 @@ def truncateData(request):
       return redirect('datakeprof')
 
 def exportData(request, id):
-  user = Profile.objects.get(username=request.session['user_login'])
   latestbatch = Batch.objects.filter(id=id)
   if latestbatch:
     results = pd.DataFrame.from_records(Seleksi.objects.filter(batch=latestbatch[0]).values('studentid__numberid', 'studentid__fullname', 'pilihan1_id', 'pilihan2_id', 'score1', 'score2', 'result_id'))
@@ -179,3 +234,12 @@ def exportData(request, id):
     return response
   else:
     return redirect('hasilseleksi')
+
+def exportMahasiswa(request):
+  user = Profile.objects.get(username=request.session['user_login'])
+  results = pd.DataFrame.from_records(Profile.objects.filter(Q(role='MAHASISWA') & Q(peminatan=user.peminatan)).values('numberid', 'fullname'))
+  results.columns = ['NIM', 'Nama']
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename=peminatan.csv'
+  results.to_csv(path_or_buf=response,sep=',',float_format='%.2f', index=False, decimal=".")
+  return response

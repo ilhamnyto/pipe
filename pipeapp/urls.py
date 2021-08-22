@@ -14,8 +14,11 @@ urlpatterns = [
   path('', views.home, name="home"),
       # mahasiswa
   path('daftar-peminatan', views.daftar, name="daftar"),
-      # mahasiswa dan dosen
+      # dosen
+  path('daftar-mahasiswa', views.daftarmahasiswa, name="daftarmahasiswa"),
   path('pindah-peminatan', views.pindah, name="pindah"),
+      # mahasiswa dan dosen
+  path('tukar-peminatan', views.tukar, name="tukar"),
       # admin
   path('data-mahasiswa', views.datamahasiswa, name='datamahasiswa'),
   path('data-dosen', views.datadosen, name='datadosen'),
@@ -44,8 +47,9 @@ urlpatterns = [
   path('api/auth/login', auth.login, name='login'),
   path('api/auth/logout', auth.logout, name='logout'),
   path('api/daftar-peminatan', seleksi.daftarpeminatan, name='api-daftar-peminatan'),
-  path('api/pindah-peminatan', seleksi.pengajuanpindah, name='api-pengajuan-pindah'),
-  path('api/pengajuan-pindah', seleksi.pengajuankedosen, name='api-pengajuan-pindah-dosen'),
+  path('api/tukar-peminatan', seleksi.pengajuantukar, name='api-pengajuan-tukar'),
+  path('api/pengajuan-tukar', seleksi.pengajuankedosen, name='api-pengajuan-tukar-dosen'),
+  path('api/pindah-peminatan', seleksi.pindahpeminatan, name='api-pindah-peminatan'),
   path('api/login-status', api.loginstatus, name='api-login-status'),
   path('api/batch-status', seleksi.statusbatch, name='api-batch-status'),
   path('api/batch-create', seleksi.createbatch, name='api-create-batch'),
@@ -57,6 +61,7 @@ urlpatterns = [
   path('api/update-data', masterdata.updateData, name='api-updatedata'),
   path('api/import-data', masterdata.importData, name='api-importdata'),
   path('api/export-data/<int:id>', masterdata.exportData, name='api-exportdata'),
+  path('api/export-mahasiswa', masterdata.exportMahasiswa, name='api-exportmahasiswa'),
   path('api/pengaturan', seleksi.pengaturanapi, name='api-pengaturan'),
 
     #   TA

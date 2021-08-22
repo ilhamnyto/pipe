@@ -40,6 +40,26 @@ def daftar(request):
   serverstatus = StatusServer.objects.get(name='Batch Pendaftaran')
   return render(request, 'daftar.html', {'user': user, 'peminatan': peminatan, 'batch': batch, 'seleksistatus': seleksistatus, "serverstatus": serverstatus})
 
+#  dosen
+
+@login_required()
+@role_required(allowed_roles=['DOSEN PEMBINA'])
+def pindah(request):
+  user = Profile.objects.get(username=request.session['user_login'])
+  mahasiswa = Seleksi.objects.filter(~Q(result=user.peminatan) & Q(studentid__peminatan=user.peminatan))
+  users = Profile.objects.filter(role='MAHASISWA').exclude(Q(username=user.username) and Q(peminatan=user.peminatan))
+  userdata = {}
+  for u in list(users):
+      userdata[f'{u.numberid} - {u.fullname}'] = u.numberid
+  
+  return render(request, 'pindah.html', {'user': user, 'mahasiswa': mahasiswa, 'userdata': userdata})
+
+def daftarmahasiswa(request):
+  user = Profile.objects.get(username=request.session['user_login'])
+  mahasiswa = Profile.objects.filter(Q(role='MAHASISWA') & Q(peminatan=user.peminatan) & Q(peminatan__isnull=False))
+  print(mahasiswa)
+  return render(request, 'daftarmahasiswa.html', {'user': user, 'mahasiswa': mahasiswa})
+
 # admin
 
 @login_required()
@@ -165,7 +185,7 @@ def seleksiresult(request, id):
   if latestbatch:
     result = Seleksi.objects.filter(batch=latestbatch[0])
     batch = Batch.objects.all().exclude(id=latestbatch[0].id)
-    peminatan = Seleksi.objects.filter(batch=latestbatch[0]).select_related('result').values('result').annotate(count=Count('studentid')).values('result', 'count', 'result__kuota').order_by()
+    peminatan = Seleksi.objects.filter(batch=latestbatch[0]).select_related('result').values('result').annotate(count=Count('studentid')).values('result', 'count', 'result__kuota', 'result__sisakuota').order_by()
     return render(request, 'hasilseleksi.html', {'user': user, "result": result, 'allbatch': batch, 'latest': latestbatch[0], "peminatan":peminatan})
   else:
     return render(request, 'hasilseleksi.html', {'user': user})
@@ -194,7 +214,7 @@ def pengaturan(request):
   user = Profile.objects.get(username=request.session['user_login'])
   peminatan =Peminatan.objects.all()
   bobot = Bobot.objects.get(id=1)
-
+  
   matkul = [
   "RPB",
   "PROBSTAT",
@@ -222,11 +242,11 @@ def pengaturan(request):
 
 @login_required()
 @role_required(allowed_roles=['MAHASISWA', 'DOSEN PEMBINA', 'DOSEN'])
-def pindah(request):
+def tukar(request):
   user = Profile.objects.get(username=request.session['user_login'])
   if user.role == 'MAHASISWA':
     tukar = TukarPeminatan.objects.filter(Q(mahasiswa1=user) or Q(mahasiswa2=user))
-    users = Profile.objects.filter(role='MAHASISWA').exclude(Q(username=user.username) and Q(peminatan=user.peminatan))
+    users = Profile.objects.filter(role='MAHASISWA').exclude(Q(username=user.username) and Q(peminatan=user.peminatan) and Q(peminatan__isnull=True))
     userdata = {}
     for u in list(users):
       if u.peminatan:
@@ -235,10 +255,10 @@ def pindah(request):
         userdata["{0} - {1}".format(u.fullname, 'Belum ada peminatan')] = u.fullname
 
     
-    return render(request, 'pindah.html', {"user": user, "userdata": userdata, "tukar": tukar})
+    return render(request, 'tukar.html', {"user": user, "userdata": userdata, "tukar": tukar})
   else:
     tukaran = TukarPeminatan.objects.filter(Q(mahasiswa1__peminatan=user.peminatan) | (Q(mahasiswa2__peminatan=user.peminatan) and ~Q(status="Pengajuan I"))).order_by('-created_at')
-    return render(request, 'pindah.html', {"user": user, "tukaran": tukaran})
+    return render(request, 'tukar.html', {"user": user, "tukaran": tukaran})
 # dosen dan admin
 
 @login_required()

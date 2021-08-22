@@ -1,0 +1,67 @@
+{% block main %}
+<div class="row mb-3">
+  <div class="col">
+    <h1>Daftar Mahasiswa Peminatan {{user.peminatan.peminatanname}}</h1>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-xl-3 ml-auto d-flex justify-content-end">
+    {% if mahasiswa %}
+    <a
+      href="/api/export-mahasiswa"
+      class="btn btn-sm btn-primary px-3 py-2 d-flex align-items-center"
+    >
+      <i class="bx bxs-caret-right-square mr-2"></i>Export
+    </a>
+    {% else %}
+    <button
+      class="btn btn-sm btn-secondary px-3 py-2 d-flex align-items-center"
+      disabled
+    >
+      <i class="bx bxs-caret-right-square mr-2"></i>Export
+    </button>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="card p-4">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive p-2">
+            <table class="table borderless" id="tablemahasiswa" width="100%">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>NIM</th>
+                  <th>Nama</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for m in mahasiswa %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{m.numberid}}</td>
+                  <td>{{m.fullname}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#tablemahasiswa").DataTable();
+  });
+</script>
+
+{% endblock %}
