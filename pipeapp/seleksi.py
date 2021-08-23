@@ -133,17 +133,19 @@ def plotting(request):
     erpkuota = Peminatan.objects.get(peminatancode='ERP')
     sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() - Seleksi.objects.filter(result__peminatancode='EDE').count()
-    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() - Seleksi.objects.filter(result__peminatancode='EISD').count()
-    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() - Seleksi.objects.filter(result__peminatancode='EIM').count()
-    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() - Seleksi.objects.filter(result__peminatancode='ERP').count()
-    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() - Seleksi.objects.filter(result__peminatancode='SAG').count()
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
     edekuota.save()
     eisdkuota.save()
     eimkuota.save()
     erpkuota.save()
     sagkuota.save()
+
+    print(sagkuota.sisakuota)
 
     for s in sag:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
