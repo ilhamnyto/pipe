@@ -292,7 +292,13 @@ def tukar(request):
     return render(request, 'tukar.html', {"user": user, "userdata": userdata, "tukar": tukar})
   else:
     tukaran = TukarPeminatan.objects.filter(Q(mahasiswa1__peminatan=user.peminatan) | (Q(mahasiswa2__peminatan=user.peminatan) and ~Q(status="Pengajuan I"))).order_by('-created_at')
-    return render(request, 'tukar.html', {"user": user, "tukaran": tukaran})
+    pembina = 'None'
+    if TukarPeminatan.objects.filter(mahasiswa1__peminatan=user.peminatan):
+      pembina = 'satu'
+    elif TukarPeminatan.objects.filter(mahasiswa1__peminatan=user.peminatan):
+      pembina = 'dua'
+
+    return render(request, 'tukar.html', {"user": user, "tukaran": tukaran, 'pembina': pembina})
 # dosen dan admin
 
 @login_required()

@@ -24,13 +24,21 @@
               <tbody>
                 
                 {% for tukar in tukaran %} 
-                {% if tukar.status == 'Disetujui' or tukar.status == 'Pengajuan II' %}
+                {% if tukar.status == 'Disetujui' or tukar.status == 'Pengajuan II' and pembina == 'satu' %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
                   <td>{{ tukar.mahasiswa1.fullname }}</td>
                   <td>{{ tukar.mahasiswa2.fullname }}</td>
                   <td>{{ tukar.created_at }}</td>
                   <td>Approved</td>
+                </tr>
+                {% elif tukar.status == 'Disetujui' and pembina == 'dua' %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ tukar.mahasiswa1.fullname }}</td>
+                  <td>{{ tukar.mahasiswa2.fullname }}</td>
+                  <td>{{ tukar.created_at }}</td>
+                  <td>Declined</td>
                 </tr>
                 {% elif tukar.status == 'Ditolak I' or tukar.status == 'Ditolak II' %}
                 <tr>
