@@ -87,6 +87,23 @@ def datamahasiswa(request):
 @role_required(allowed_roles=['ADMIN'])
 def datapeminatan(request):
   user = Profile.objects.get(username=request.session['user_login'])
+  edekuota = Peminatan.objects.get(peminatancode='EDE')
+  eisdkuota = Peminatan.objects.get(peminatancode='EISD')
+  eimkuota = Peminatan.objects.get(peminatancode='EIM')
+  erpkuota = Peminatan.objects.get(peminatancode='ERP')
+  sagkuota = Peminatan.objects.get(peminatancode='SAG')
+
+  edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
+  eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
+  eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
+  erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
+  sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+
+  edekuota.save()
+  eisdkuota.save()
+  eimkuota.save()
+  erpkuota.save()
+  sagkuota.save()
   peminatanlist = Peminatan.objects.all()
   return render(request, 'datapeminatan.html', {'user': user, "peminatanlist": peminatanlist})
 
@@ -180,9 +197,26 @@ def hasilseleksi(request):
 @role_required(allowed_roles=['ADMIN'])
 def seleksiresult(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
-
+  
   latestbatch = Batch.objects.filter(id=id)
   if latestbatch:
+    edekuota = Peminatan.objects.get(peminatancode='EDE')
+    eisdkuota = Peminatan.objects.get(peminatancode='EISD')
+    eimkuota = Peminatan.objects.get(peminatancode='EIM')
+    erpkuota = Peminatan.objects.get(peminatancode='ERP')
+    sagkuota = Peminatan.objects.get(peminatancode='SAG')
+
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+
+    edekuota.save()
+    eisdkuota.save()
+    eimkuota.save()
+    erpkuota.save()
+    sagkuota.save()
     result = Seleksi.objects.filter(batch=latestbatch[0])
     batch = Batch.objects.all().exclude(id=latestbatch[0].id)
     peminatan = Seleksi.objects.filter(batch=latestbatch[0]).select_related('result').values('result').annotate(count=Count('studentid')).values('result', 'count', 'result__kuota', 'result__sisakuota').order_by()
@@ -258,7 +292,13 @@ def tukar(request):
     return render(request, 'tukar.html', {"user": user, "userdata": userdata, "tukar": tukar})
   else:
     tukaran = TukarPeminatan.objects.filter(Q(mahasiswa1__peminatan=user.peminatan) | (Q(mahasiswa2__peminatan=user.peminatan) and ~Q(status="Pengajuan I"))).order_by('-created_at')
-    return render(request, 'tukar.html', {"user": user, "tukaran": tukaran})
+    pembina = 'None'
+    if TukarPeminatan.objects.filter(mahasiswa1__peminatan=user.peminatan):
+      pembina = 'satu'
+    elif TukarPeminatan.objects.filter(mahasiswa1__peminatan=user.peminatan):
+      pembina = 'dua'
+
+    return render(request, 'tukar.html', {"user": user, "tukaran": tukaran, 'pembina': pembina})
 # dosen dan admin
 
 @login_required()
