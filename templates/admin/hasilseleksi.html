@@ -78,7 +78,7 @@
 
 <div class="row mt-5 mb-3">
   <div class="col">
-    <h1>Statistik Peminatan - {{latest.batchnum}}</h1>
+    <h1>Statistik Peminatan</h1>
   </div>
 </div>
 
@@ -95,7 +95,6 @@
                   <th>Peminatan</th>
                   <th>Kuota</th>
                   <th>Jumlah Mahasiswa</th>
-                  <th>Sisa Kuota</th>
                 </tr>
               </thead>
               <tbody>
@@ -105,7 +104,6 @@
                   <td>{{p.result}}</td>
                   <td>{{p.result__kuota}}</td>
                   <td>{{p.count}}</td>
-                  <td>{{p.result__sisakuota}}</td>
                 </tr>
                 {% endfor %}
               </tbody>
