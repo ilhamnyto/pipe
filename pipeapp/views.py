@@ -200,6 +200,23 @@ def seleksiresult(request, id):
   
   latestbatch = Batch.objects.filter(id=id)
   if latestbatch:
+    edekuota = Peminatan.objects.get(peminatancode='EDE')
+    eisdkuota = Peminatan.objects.get(peminatancode='EISD')
+    eimkuota = Peminatan.objects.get(peminatancode='EIM')
+    erpkuota = Peminatan.objects.get(peminatancode='ERP')
+    sagkuota = Peminatan.objects.get(peminatancode='SAG')
+
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+
+    edekuota.save()
+    eisdkuota.save()
+    eimkuota.save()
+    erpkuota.save()
+    sagkuota.save()
     result = Seleksi.objects.filter(batch=latestbatch[0])
     batch = Batch.objects.all().exclude(id=latestbatch[0].id)
     peminatan = Seleksi.objects.filter(batch=latestbatch[0]).select_related('result').values('result').annotate(count=Count('studentid')).values('result', 'count', 'result__kuota', 'result__sisakuota').order_by()
