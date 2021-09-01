@@ -1,21 +1,23 @@
 {% block main %}
 <div class="row mb-3">
   <div class="col">
-    <h1>Data Keprofesian</h1>
+    <h1>Data Keanggotaan Lab Riset</h1>
   </div>
 </div>
 <div class="row">
   <div class="col-xl-4 ml-auto mb-4 d-flex justify-content-end">
     <form action="/api/truncate-data" method="POST">
       {% csrf_token %}
+      {% if user.role == 'DOSEN PEMBINA' %}
       <button class="btn btn-sm btn-danger px-3 py-2 mr-3 d-flex" name="data" value="KEPROF" onclick="return confirm('WARNING : Anda yakin mau menghapus semua data ini? Mohon berhati-hati karena data yang dihapus tidak dapat dikembalikan.')">
         <i class="bx bxs-trash mr-2"></i>Truncate Data
       </button>
     </form>
-  
+    
     <a href="/data-keprof/add" class="text-white btn btn-sm btn-primary py-2">
       <i class="bx bxs-user-plus mr-2"></i>Insert Data
     </a>
+    {% endif %}
   </div>
 </div>
 <div class="row">
@@ -30,9 +32,11 @@
                   <th>No.</th>
                   <th>NIM</th>
                   <th>Nama</th>
-                  <th>Keprofesian</th>
+                  <th>Lab Riset</th>
                   <th>Kategori</th>
+                  {% if user.role == 'DOSEN PEMBINA' %}
                   <th>Action</th>
+                  {% endif %}
                 </tr>
               </thead>
               <tbody>
@@ -43,6 +47,7 @@
                   <td>{{keprof.name}}</td>
                   <td>{{keprof.keprof}}</td>
                   <td>{{keprof.kategori}}</td>
+                  {% if user.role == 'DOSEN PEMBINA' %}
                   <td class="d-flex align-items-center">
                    <form action="/api/delete-data" method="POST">
                       {% csrf_token %}
@@ -56,9 +61,10 @@
                       </button>
                     </form>
                     <a class="btn btn-sm btn-primary" href="/data-keprof/edit/{{keprof.id}}"
-                      >Edit</a
+                    >Edit</a
                     >
                   </td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
                
