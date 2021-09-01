@@ -53,11 +53,11 @@ MATKUL_CHOICES = [
 ]
 
 KEPROF_CHOICES = [
-  ("DASPRO", "DASPRO"),
-  ("SISJAR", "SISJAR"),
-  ("SAG", "SAG"),
-  ("ERP", "ERP"),
+  ("EDE", "EDE"),
   ("EIM", "EIM"),
+  ("SAG", "SAG"),
+  ("ESS", "ESS"),
+  ("EISD", "EISD"),
 ]
 
 KEPROF_KATEGORI = [

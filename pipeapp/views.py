@@ -70,11 +70,23 @@ def datadosen(request):
   return render(request, 'datadosen.html', {'user': user, "dosenlist": dosenlist})
 
 @login_required()
-@role_required(allowed_roles=['ADMIN'])
+@role_required(allowed_roles=['ADMIN', 'DOSEN PEMBINA'])
 def datakeprof(request):
   user = Profile.objects.get(username=request.session['user_login'])
-  keproflist = Keprof.objects.all()
-  return render(request, 'datakeprof.html', {'user': user, "keproflist": keproflist})
+  if user.role == 'ADMIN':
+    keproflist = Keprof.objects.all()
+    return render(request, 'datakeprof.html', {'user': user, "keproflist": keproflist})
+  elif user.role == 'DOSEN PEMBINA':
+    keprof_list = {
+      "EDE": "EDE",
+      "EIM": "EIM",
+      "SAG": "SAG",
+      "ERP": "ESS",
+      "EISD": "EISD"
+    }
+
+    keproflist = Keprof.objects.filter(keprof=keprof_list[user.peminatan.peminatancode])
+    return render(request, 'datakeprof.html', {'user': user, "keproflist": keproflist})
 
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
@@ -114,7 +126,7 @@ def tambahdosen(request):
   return render(request, 'tambahdosen.html', {'user': user})
 
 @login_required()
-@role_required(allowed_roles=['ADMIN'])
+@role_required(allowed_roles=['ADMIN', 'DOSEN PEMBINA'])
 def tambahkeprof(request):
   user = Profile.objects.get(username=request.session['user_login'])
   return render(request, 'tambahkeprof.html', {'user': user})
@@ -142,7 +154,7 @@ def editdosen(request, id):
     return render(request, 'tambahdosen.html', {'user': user})
 
 @login_required()
-@role_required(allowed_roles=['ADMIN'])
+@role_required(allowed_roles=['ADMIN', 'DOSEN PEMBINA'])
 def editkeprof(request, id):
   user = Profile.objects.get(username=request.session['user_login'])
   keprof = Keprof.objects.filter(id=id)
