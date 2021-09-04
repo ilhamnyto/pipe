@@ -265,7 +265,7 @@ def hitung(request, latestbatch):
       if nilai and nilai[0]:
         data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
-        data.score1 = 0
+        data.score1 = bobot.pilihan1
       
       if keprof and keprof[0].keprof == 'EDE' and keprof[0].kategori == 'ASISTEN':
         data.score1 += bobot.asisten
@@ -279,13 +279,13 @@ def hitung(request, latestbatch):
       if nilai and nilai[0]:
         data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
-        data.score1 = 0
+        data.score1 = bobot.pilihan1
 
-      if keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ASISTEN':
+      if keprof and keprof[0].keprof == 'ESS' and keprof[0].kategori == 'ASISTEN':
         data.score1 += bobot.asisten
-      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'KORDAS':
+      elif keprof and keprof[0].keprof == 'ESS' and keprof[0].kategori == 'KORDAS':
         data.score1 += bobot.kordas
-      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ANGGOTA':
+      elif keprof and keprof[0].keprof == 'ESS' and keprof[0].kategori == 'ANGGOTA':
         data.score1 += bobot.anggota
 
     elif s['seleksi_student__pilihan1__peminatanname'] == 'System Architecture and Governance':
@@ -293,7 +293,7 @@ def hitung(request, latestbatch):
       if nilai and nilai[0]:
         data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
-        data.score1 = 0
+        data.score1 = bobot.pilihan1
       if keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'ASISTEN':
         data.score1 += bobot.asisten
       elif keprof and keprof[0].keprof == 'SAG' and keprof[0].kategori == 'KORDAS':
@@ -306,7 +306,7 @@ def hitung(request, latestbatch):
       if nilai and nilai[0]:
         data.score1 = nilai[0]['nilai'] + bobot.pilihan1
       else:
-        data.score1 = 0
+        data.score1 = bobot.pilihan1
 
       if keprof and keprof[0].keprof == 'EISD' and keprof[0].kategori == 'ASISTEN':
         data.score1 += bobot.asisten
@@ -350,11 +350,11 @@ def hitung(request, latestbatch):
       else:
         data.score2 = 0
 
-      if keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ASISTEN':
+      if keprof and keprof[0].keprof == 'ESS' and keprof[0].kategori == 'ASISTEN':
         data.score2 += bobot.asisten
-      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'KORDAS':
+      elif keprof and keprof[0].keprof == 'ESS' and keprof[0].kategori == 'KORDAS':
         data.score2 += bobot.kordas
-      elif keprof and keprof[0].keprof == 'ERP' and keprof[0].kategori == 'ANGGOTA':
+      elif keprof and keprof[0].keprof == 'ESS' and keprof[0].kategori == 'ANGGOTA':
         data.score2 += bobot.anggota
 
     elif s['seleksi_student__pilihan2__peminatanname'] == 'System Architecture and Governance':
