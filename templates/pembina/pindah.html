@@ -16,7 +16,7 @@
             onsubmit="submission(event)"
           >
             {% csrf_token %}
-
+            <span><b>Keterangan</b> : </span><span class="text-danger">Mahasiswa yang dapat dipindahkan maksimal <b>10</b> mahasiswa. </span>
             <div class="form-group" style="width: 100%">
               <label for="mahasiswadua">Mahasiswa yang ingin dipindahkan</label>
               {% if user.peminatan %}
