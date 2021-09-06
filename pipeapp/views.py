@@ -105,11 +105,11 @@ def datapeminatan(request):
   erpkuota = Peminatan.objects.get(peminatancode='ERP')
   sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-  edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
-  eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
-  eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
-  erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
-  sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+  edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 7 - Seleksi.objects.filter(result__peminatancode='EDE').count()
+  eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 7 - Seleksi.objects.filter(result__peminatancode='EISD').count()
+  eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 7 - Seleksi.objects.filter(result__peminatancode='EIM').count()
+  erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 7 - Seleksi.objects.filter(result__peminatancode='ERP').count()
+  sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 7 - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
   edekuota.save()
   eisdkuota.save()
@@ -218,11 +218,11 @@ def seleksiresult(request, id):
     erpkuota = Peminatan.objects.get(peminatancode='ERP')
     sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
-    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
-    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
-    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
-    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 7 - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 7 - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 7 - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 7 - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 7 - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
     edekuota.save()
     eisdkuota.save()
