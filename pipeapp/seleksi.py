@@ -119,14 +119,16 @@ def createbatch(request):
     return redirect('seleksipeminatan')
   return redirect('seleksipeminatan')
 
-def plotting(request):
+def plotting(request, id):
   if request.method == 'POST':
     bobot = Bobot.objects.get(id=1)
-    ede = Seleksi.objects.filter(pilihan1='EDE', result__isnull=True).order_by('-score1')
-    eisd = Seleksi.objects.filter(pilihan1='EISD', result__isnull=True).order_by('-score1')
-    sag = Seleksi.objects.filter(pilihan1='SAG', result__isnull=True).order_by('-score1')
-    eim = Seleksi.objects.filter(pilihan1='EIM', result__isnull=True).order_by('-score1')
-    erp = Seleksi.objects.filter(pilihan1='ERP', result__isnull=True).order_by('-score1')
+    batch = Batch.objects.get(id=id)
+    print(batch)
+    ede = Seleksi.objects.filter(pilihan1='EDE', result__isnull=True, batch=batch).order_by('-score1')
+    eisd = Seleksi.objects.filter(pilihan1='EISD', result__isnull=True, batch=batch).order_by('-score1')
+    sag = Seleksi.objects.filter(pilihan1='SAG', result__isnull=True, batch=batch).order_by('-score1')
+    eim = Seleksi.objects.filter(pilihan1='EIM', result__isnull=True, batch=batch).order_by('-score1')
+    erp = Seleksi.objects.filter(pilihan1='ERP', result__isnull=True, batch=batch).order_by('-score1')
 
     edekuota = Peminatan.objects.get(peminatancode='EDE')
     eisdkuota = Peminatan.objects.get(peminatancode='EISD')
@@ -145,8 +147,6 @@ def plotting(request):
     eimkuota.save()
     erpkuota.save()
     sagkuota.save()
-
-    print(sagkuota.sisakuota)
 
     for s in sag:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
@@ -228,7 +228,7 @@ def plotting(request):
         data.save()
         mahasiswa.save()
 
-    pilihan2 = Seleksi.objects.filter(result__isnull=True)
+    pilihan2 = Seleksi.objects.filter(result__isnull=True, batch=batch)
     for s in pilihan2:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
