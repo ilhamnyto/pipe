@@ -119,13 +119,16 @@ def createbatch(request):
     return redirect('seleksipeminatan')
   return redirect('seleksipeminatan')
 
-def plotting(request):
+def plotting(request, id):
   if request.method == 'POST':
-    ede = Seleksi.objects.filter(pilihan1='EDE', result__isnull=True).order_by('-score1')
-    eisd = Seleksi.objects.filter(pilihan1='EISD', result__isnull=True).order_by('-score1')
-    sag = Seleksi.objects.filter(pilihan1='SAG', result__isnull=True).order_by('-score1')
-    eim = Seleksi.objects.filter(pilihan1='EIM', result__isnull=True).order_by('-score1')
-    erp = Seleksi.objects.filter(pilihan1='ERP', result__isnull=True).order_by('-score1')
+    bobot = Bobot.objects.get(id=1)
+    batch = Batch.objects.get(id=id)
+    print(batch)
+    ede = Seleksi.objects.filter(pilihan1='EDE', result__isnull=True, batch=batch).order_by('-score1')
+    eisd = Seleksi.objects.filter(pilihan1='EISD', result__isnull=True, batch=batch).order_by('-score1')
+    sag = Seleksi.objects.filter(pilihan1='SAG', result__isnull=True, batch=batch).order_by('-score1')
+    eim = Seleksi.objects.filter(pilihan1='EIM', result__isnull=True, batch=batch).order_by('-score1')
+    erp = Seleksi.objects.filter(pilihan1='ERP', result__isnull=True, batch=batch).order_by('-score1')
 
     edekuota = Peminatan.objects.get(peminatancode='EDE')
     eisdkuota = Peminatan.objects.get(peminatancode='EISD')
@@ -133,19 +136,17 @@ def plotting(request):
     erpkuota = Peminatan.objects.get(peminatancode='ERP')
     sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 7 - Seleksi.objects.filter(result__peminatancode='EDE').count()
-    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 7 - Seleksi.objects.filter(result__peminatancode='EISD').count()
-    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 7 - Seleksi.objects.filter(result__peminatancode='EIM').count()
-    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 7 - Seleksi.objects.filter(result__peminatancode='ERP').count()
-    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 7 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
     edekuota.save()
     eisdkuota.save()
     eimkuota.save()
     erpkuota.save()
     sagkuota.save()
-
-    print(sagkuota.sisakuota)
 
     for s in sag:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
@@ -227,7 +228,7 @@ def plotting(request):
         data.save()
         mahasiswa.save()
 
-    pilihan2 = Seleksi.objects.filter(result__isnull=True)
+    pilihan2 = Seleksi.objects.filter(result__isnull=True, batch=batch)
     for s in pilihan2:
       if s.score1 <= 0.0 and s.score2 <= 0.0 :
         pass
@@ -417,11 +418,19 @@ def pengaturanapi(request):
     bobot.kordas = request.POST['kordas']
     bobot.asisten = request.POST['asisten']
     bobot.anggota = request.POST['anggota']
+    bobot.kuotadosen = request.POST['kuotadosen']
 
-    bobot.save()
+
+    sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * int(request.POST['kuotadosen'])
+    ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * int(request.POST['kuotadosen'])
+    eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * int(request.POST['kuotadosen'])
+    eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * int(request.POST['kuotadosen'])
+    erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * int(request.POST['kuotadosen'])
+
     ede.save()
     eisd.save()
     sag.save()
     eim.save()
     erp.save()
+    bobot.save()
     return redirect('pengaturan')

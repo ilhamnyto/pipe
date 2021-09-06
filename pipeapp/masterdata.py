@@ -2,13 +2,14 @@ from django.db.models.aggregates import Count
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
-from .models import Batch, Dosen, Nilai, Peminatan, Keprof, Profile, Seleksi
+from .models import Batch, Bobot, Dosen, Nilai, Peminatan, Keprof, Profile, Seleksi
 import pandas as pd
 from.dburl import engine
 
 def deleteData(request):
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
+      bobot = Bobot.objects.get(id=1)
       Dosen.objects.get(id=request.POST['id']).delete()
       ede = Peminatan.objects.get(peminatancode='EDE')
       eisd = Peminatan.objects.get(peminatancode='EISD')
@@ -16,11 +17,11 @@ def deleteData(request):
       erp = Peminatan.objects.get(peminatancode='ERP')
       sag = Peminatan.objects.get(peminatancode='SAG')
 
-      ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * 7
-      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * 7
-      eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * 7
-      erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * 7
-      sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * 7
+      ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen
+      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen
+      eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen
+      erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen
+      sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen
 
       ede.save()
       eisd.save()
@@ -43,9 +44,10 @@ def deleteData(request):
 def insertData(request):
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
+      bobot = Bobot.objects.get(id=1)
       dosen = Dosen(name=request.POST['name'], kelompok=request.POST['kelompok'], peminatan=request.POST['peminatan'])
       dosen.save()
-      jumlah = Dosen.objects.filter(peminatan=request.POST['peminatan']).count() * 7
+      jumlah = Dosen.objects.filter(peminatan=request.POST['peminatan']).count() * bobot.kuotadosen
       peminatan = Peminatan.objects.get(peminatancode=request.POST['peminatan'])
       peminatan.kuota = jumlah
       peminatan.save()
@@ -87,6 +89,7 @@ def insertData(request):
 def updateData(request):
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
+      bobot = Bobot.objects.get(id=1)
       dosen = Dosen.objects.get(id=request.POST['id'])
       dosen.name = request.POST['name']
       dosen.kelompok = request.POST['kelompok']
@@ -99,11 +102,11 @@ def updateData(request):
       erp = Peminatan.objects.get(peminatancode='ERP')
       sag = Peminatan.objects.get(peminatancode='SAG')
 
-      ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * 7
-      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * 7
-      eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * 7
-      erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * 7
-      sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * 7
+      ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen
+      eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen
+      eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen
+      erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen
+      sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen
 
       ede.save()
       eisd.save()
@@ -156,6 +159,7 @@ def importData(request):
   if request.method == 'POST':
     if request.POST['data'] == 'DOSEN':
       try:
+        bobot = Bobot.objects.get(id=1)
         dosen = pd.read_excel(request.FILES['file'])
         dosen.columns = map(str.lower, dosen.columns)
         dosen.to_sql('pipeapp_dosen', con=engine, index=False, if_exists="append", method='multi')
@@ -166,11 +170,11 @@ def importData(request):
         erp = Peminatan.objects.get(peminatancode='ERP')
         sag = Peminatan.objects.get(peminatancode='SAG')
 
-        ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * 7
-        eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * 7
-        eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * 7
-        erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * 7
-        sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * 7
+        ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen
+        eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen
+        eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen
+        erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen
+        sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen
 
         ede.save()
         eisd.save()

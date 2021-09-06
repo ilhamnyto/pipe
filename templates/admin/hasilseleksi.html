@@ -29,6 +29,13 @@
       <i class="bx bxs-caret-right-square mr-2"></i>Export
     </button>
     {% endif %}
+    <a href="/api/reset-seleksi/{{latest.id}}"
+    onclick="return confirm('WARNING : Proses ini akan me-reset hasil plotting peminatan.')"
+      class="btn btn-sm btn-danger px-3 py-2 d-flex align-items-center ml-2"
+      disabled
+    >
+      <i class="bx bxs-caret-right-square mr-2"></i>Reset
+  </a>
   </div>
 </div>
 <div class="row">

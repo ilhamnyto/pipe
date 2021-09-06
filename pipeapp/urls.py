@@ -53,7 +53,7 @@ urlpatterns = [
   path('api/login-status', api.loginstatus, name='api-login-status'),
   path('api/batch-status', seleksi.statusbatch, name='api-batch-status'),
   path('api/batch-create', seleksi.createbatch, name='api-create-batch'),
-  path('api/plotting', seleksi.plotting, name='api-plotting'),
+  path('api/plotting/<int:id>', seleksi.plotting, name='api-plotting'),
   path('api/upload-data', bidash.uploadfile, name='api-uploadfile'),
   path('api/delete-data', masterdata.deleteData, name='api-deletedata'),
   path('api/insert-data', masterdata.insertData, name='api-insertdata'),
@@ -63,6 +63,7 @@ urlpatterns = [
   path('api/export-data/<int:id>', masterdata.exportData, name='api-exportdata'),
   path('api/export-mahasiswa', masterdata.exportMahasiswa, name='api-exportmahasiswa'),
   path('api/pengaturan', seleksi.pengaturanapi, name='api-pengaturan'),
+  path('api/reset-seleksi/<int:id>', views.resetseleksi, name='api-reset-seleksi'),
 
     #   TA
   path('api/bi/overall', bidash.getdataoverall, name='api-bi-overall'),

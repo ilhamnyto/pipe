@@ -98,6 +98,7 @@ def datamahasiswa(request):
 @login_required()
 @role_required(allowed_roles=['ADMIN'])
 def datapeminatan(request):
+  bobot = Bobot.objects.get(id=1)
   user = Profile.objects.get(username=request.session['user_login'])
   edekuota = Peminatan.objects.get(peminatancode='EDE')
   eisdkuota = Peminatan.objects.get(peminatancode='EISD')
@@ -105,11 +106,11 @@ def datapeminatan(request):
   erpkuota = Peminatan.objects.get(peminatancode='ERP')
   sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-  edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 7 - Seleksi.objects.filter(result__peminatancode='EDE').count()
-  eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 7 - Seleksi.objects.filter(result__peminatancode='EISD').count()
-  eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 7 - Seleksi.objects.filter(result__peminatancode='EIM').count()
-  erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 7 - Seleksi.objects.filter(result__peminatancode='ERP').count()
-  sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 7 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+  edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EDE').count()
+  eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EISD').count()
+  eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EIM').count()
+  erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='ERP').count()
+  sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
   edekuota.save()
   eisdkuota.save()
@@ -212,17 +213,18 @@ def seleksiresult(request, id):
   
   latestbatch = Batch.objects.filter(id=id)
   if latestbatch:
+    bobot = Bobot.objects.get(id=1)
     edekuota = Peminatan.objects.get(peminatancode='EDE')
     eisdkuota = Peminatan.objects.get(peminatancode='EISD')
     eimkuota = Peminatan.objects.get(peminatancode='EIM')
     erpkuota = Peminatan.objects.get(peminatancode='ERP')
     sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 7 - Seleksi.objects.filter(result__peminatancode='EDE').count()
-    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 7 - Seleksi.objects.filter(result__peminatancode='EISD').count()
-    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 7 - Seleksi.objects.filter(result__peminatancode='EIM').count()
-    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 7 - Seleksi.objects.filter(result__peminatancode='ERP').count()
-    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 7 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
     edekuota.save()
     eisdkuota.save()
@@ -333,3 +335,11 @@ def binilai(request):
 
   return render(request, 'binilai.html', {'user': user})
 
+@login_required()
+@role_required(allowed_roles=['ADMIN'])
+def resetseleksi(request, id):
+  batch = Batch.objects.get(id=id)
+  Seleksi.objects.filter(batch=batch).update(result=None)
+  Profile.objects.filter(seleksi_student__batch=batch).update(peminatan=None)
+
+  return redirect(f'/hasil-seleksi/{id}')

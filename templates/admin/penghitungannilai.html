@@ -13,7 +13,7 @@
       {% endfor %}
     </select>
     {% if seleksi.0.seleksi_student__result == None %}
-    <form action="/api/plotting" method="POST">
+    <form action="/api/plotting/{{latest.id}}" method="POST">
       {% csrf_token %}
       <button
         type="submit"
