@@ -181,6 +181,8 @@ class Bobot(models.Model):
   asisten = models.IntegerField(blank=True, null=True, default=0)
   anggota = models.IntegerField(blank=True, null=True, default=0)
   pilihan1 = models.IntegerField(blank=True, null=True, default=0)
+  kuotadosen = models.IntegerField(blank=True, null=True, default=0)
+  
 
 
 

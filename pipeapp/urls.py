@@ -63,6 +63,7 @@ urlpatterns = [
   path('api/export-data/<int:id>', masterdata.exportData, name='api-exportdata'),
   path('api/export-mahasiswa', masterdata.exportMahasiswa, name='api-exportmahasiswa'),
   path('api/pengaturan', seleksi.pengaturanapi, name='api-pengaturan'),
+  path('api/reset-seleksi/<int:id>', views.resetseleksi, name='api-reset-seleksi'),
 
     #   TA
   path('api/bi/overall', bidash.getdataoverall, name='api-bi-overall'),

@@ -121,6 +121,7 @@ def createbatch(request):
 
 def plotting(request):
   if request.method == 'POST':
+    bobot = Bobot.objects.get(id=1)
     ede = Seleksi.objects.filter(pilihan1='EDE', result__isnull=True).order_by('-score1')
     eisd = Seleksi.objects.filter(pilihan1='EISD', result__isnull=True).order_by('-score1')
     sag = Seleksi.objects.filter(pilihan1='SAG', result__isnull=True).order_by('-score1')
@@ -133,11 +134,11 @@ def plotting(request):
     erpkuota = Peminatan.objects.get(peminatancode='ERP')
     sagkuota = Peminatan.objects.get(peminatancode='SAG')
 
-    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * 10 - Seleksi.objects.filter(result__peminatancode='EDE').count()
-    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * 10 - Seleksi.objects.filter(result__peminatancode='EISD').count()
-    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * 10 - Seleksi.objects.filter(result__peminatancode='EIM').count()
-    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * 10 - Seleksi.objects.filter(result__peminatancode='ERP').count()
-    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * 10 - Seleksi.objects.filter(result__peminatancode='SAG').count()
+    edekuota.sisakuota = Dosen.objects.filter(peminatan='EDE').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EDE').count()
+    eisdkuota.sisakuota = Dosen.objects.filter(peminatan='EISD').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EISD').count()
+    eimkuota.sisakuota = Dosen.objects.filter(peminatan='EIM').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='EIM').count()
+    erpkuota.sisakuota = Dosen.objects.filter(peminatan='ERP').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='ERP').count()
+    sagkuota.sisakuota = Dosen.objects.filter(peminatan='SAG').count() * bobot.kuotadosen - Seleksi.objects.filter(result__peminatancode='SAG').count()
 
     edekuota.save()
     eisdkuota.save()
@@ -417,11 +418,19 @@ def pengaturanapi(request):
     bobot.kordas = request.POST['kordas']
     bobot.asisten = request.POST['asisten']
     bobot.anggota = request.POST['anggota']
+    bobot.kuotadosen = request.POST['kuotadosen']
 
-    bobot.save()
+
+    sag.kuota = Dosen.objects.filter(peminatan='SAG').count() * int(request.POST['kuotadosen'])
+    ede.kuota = Dosen.objects.filter(peminatan='EDE').count() * int(request.POST['kuotadosen'])
+    eisd.kuota = Dosen.objects.filter(peminatan='EISD').count() * int(request.POST['kuotadosen'])
+    eim.kuota = Dosen.objects.filter(peminatan='EIM').count() * int(request.POST['kuotadosen'])
+    erp.kuota = Dosen.objects.filter(peminatan='ERP').count() * int(request.POST['kuotadosen'])
+
     ede.save()
     eisd.save()
     sag.save()
     eim.save()
     erp.save()
+    bobot.save()
     return redirect('pengaturan')
